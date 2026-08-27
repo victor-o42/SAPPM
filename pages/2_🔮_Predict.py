@@ -1,7 +1,7 @@
 """
 Student Performance Prediction Page
-Provides input controls for academic indicators, generates real-time predictions,
-renders probability distribution charts, and syncs records to Supabase.
+Provides intuitive input controls, 1-click test presets, real-time predictions,
+interactive probability distributions, and Supabase synchronization.
 """
 
 import streamlit as st
@@ -20,23 +20,62 @@ apply_global_styles()
 st.title("🔮 Student Grade Prediction & Risk Assessment")
 st.markdown("Enter the student's study metrics and continuous assessment scores to generate an AI performance forecast.")
 
+# Quick Test Presets
+pcol1, pcol2, pcol3, pcol4 = st.columns([1.2, 1, 1, 1])
+with pcol1:
+    st.markdown("<div style='padding-top: 6px; font-size: 0.85rem; color: #94A3B8; font-weight: 600;'>QUICK TEST PRESETS:</div>", unsafe_allow_html=True)
+with pcol2:
+    if st.button("🌟 Top Student (Grade A)", use_container_width=True):
+        st.session_state["p_hours"] = 22.0
+        st.session_state["p_att"] = 96.0
+        st.session_state["p_part"] = 9.0
+        st.session_state["p_score"] = 92.0
+        st.session_state["p_name"] = "Alex Johnson"
+        st.session_state["p_matric"] = "CSC/2026/001"
+with pcol3:
+    if st.button("⚖️ Average (Grade C)", use_container_width=True):
+        st.session_state["p_hours"] = 10.0
+        st.session_state["p_att"] = 75.0
+        st.session_state["p_part"] = 5.0
+        st.session_state["p_score"] = 62.0
+        st.session_state["p_name"] = "Jordan Taylor"
+        st.session_state["p_matric"] = "CSC/2026/045"
+with pcol4:
+    if st.button("⚠️ At Risk (Grade D/F)", use_container_width=True):
+        st.session_state["p_hours"] = 3.0
+        st.session_state["p_att"] = 50.0
+        st.session_state["p_part"] = 2.5
+        st.session_state["p_score"] = 42.0
+        st.session_state["p_name"] = "Morgan Lee"
+        st.session_state["p_matric"] = "CSC/2026/089"
+
+st.markdown("<br>", unsafe_allow_html=True)
+
 col_input, col_output = st.columns([1.1, 1.4], gap="large")
 
 with col_input:
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
     st.subheader("Student Details & Metrics")
     
-    student_name = st.text_input("Student Full Name (Optional)", placeholder="e.g. Victor Okafor", value="Student Candidate")
-    matric_number = st.text_input("Matriculation / ID Number", placeholder="e.g. U/2026/CSC/104")
+    student_name = st.text_input(
+        "Student Full Name (Optional)", 
+        value=st.session_state.get("p_name", "Student Candidate"),
+        placeholder="e.g. Victor Okafor"
+    )
+    matric_number = st.text_input(
+        "Matriculation / ID Number", 
+        value=st.session_state.get("p_matric", "U/2026/CSC/104"),
+        placeholder="e.g. U/2026/CSC/104"
+    )
     
-    st.markdown("<hr style='margin: 1rem 0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='margin: 1.2rem 0;'>", unsafe_allow_html=True)
     st.markdown("#### Academic & Behavioral Indicators")
 
     study_hours = st.slider(
         "Weekly Self Study Hours",
         min_value=0.0,
         max_value=40.0,
-        value=15.0,
+        value=st.session_state.get("p_hours", 15.0),
         step=0.5,
         help="Average hours the student spends on independent study each week."
     )
@@ -45,7 +84,7 @@ with col_input:
         "Attendance Percentage (%)",
         min_value=0.0,
         max_value=100.0,
-        value=85.0,
+        value=st.session_state.get("p_att", 85.0),
         step=1.0,
         help="Percentage of scheduled lectures and practicals attended."
     )
@@ -54,7 +93,7 @@ with col_input:
         "Class Participation Score (0 - 10)",
         min_value=0.0,
         max_value=10.0,
-        value=7.0,
+        value=st.session_state.get("p_part", 7.0),
         step=0.5,
         help="Engagement score in questions, discussions, and laboratory sessions."
     )
@@ -63,18 +102,18 @@ with col_input:
         "Total Assessment & Quiz Score (0 - 100)",
         min_value=0.0,
         max_value=100.0,
-        value=75.0,
+        value=st.session_state.get("p_score", 75.0),
         step=0.5,
         help="Cumulative score from assignments, tests, and quizzes."
     )
 
-    predict_btn = st.button("Generate Performance Forecast", use_container_width=True, type="primary")
+    predict_btn = st.button("🚀 Generate Performance Forecast", use_container_width=True, type="primary")
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col_output:
     if predict_btn or "last_prediction" in st.session_state:
         if predict_btn:
-            with st.spinner("Analyzing student metrics with XGBoost..."):
+            with st.spinner("Evaluating student metrics with XGBoost..."):
                 user_id = st.session_state.get("user", {}).id if hasattr(st.session_state.get("user"), "id") else None
                 result = predict_student_grade(
                     study_hours=study_hours,
@@ -105,7 +144,7 @@ with col_output:
             )
             st.markdown(f"""
                 <div style="text-align: center; margin-top: 0.5rem;">
-                    <div style="font-size: 0.8rem; color: #94A3B8; margin-bottom: 0.25rem;">ASSESSED RISK</div>
+                    <div style="font-size: 0.8rem; color: #94A3B8; margin-bottom: 0.25rem; font-weight: 600;">ASSESSED RISK</div>
                     <span class="{badge_class}">{result['risk_level']}</span>
                 </div>
             """, unsafe_allow_html=True)
@@ -113,8 +152,8 @@ with col_output:
         st.markdown("<hr style='margin: 1.2rem 0;'>", unsafe_allow_html=True)
         
         # Actionable Recommendation
-        st.markdown(f"**Academic Advisor Note:** {result['recommendation']}")
-        st.caption("✅ Record automatically synchronized with Supabase database.")
+        st.markdown(f"**📌 Academic Advisor Note:** {result['recommendation']}")
+        st.caption("✅ Record automatically logged to Supabase cloud database.")
         st.markdown('</div>', unsafe_allow_html=True)
 
         # Plotly Probability Distribution Chart
@@ -124,9 +163,9 @@ with col_output:
         grades = list(result["grade_distribution"].keys())
         probs = list(result["grade_distribution"].values())
         
-        # Color the bars nicely with the predicted grade highlighted
+        # Gradient colors highlighting predicted grade
         bar_colors = [
-            "#3B82F6" if g == result["predicted_grade"] else "rgba(148, 163, 184, 0.4)"
+            "#4F46E5" if g == result["predicted_grade"] else "rgba(148, 163, 184, 0.25)"
             for g in grades
         ]
 
@@ -154,4 +193,4 @@ with col_output:
         st.markdown('</div>', unsafe_allow_html=True)
 
     else:
-        st.info("👈 Adjust student metrics on the left and click **'Generate Performance Forecast'** to view prediction results.")
+        st.info("👈 Adjust student metrics on the left or choose a **Quick Test Preset** to generate a performance forecast.")
