@@ -1,0 +1,59 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment Variables & Credentials
+.env
+.env.local
+.env.*.local
+*.secrets
+
+# IDE & Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# AI Agent Skills & Config (Local IDE only)
+.agents/
+skills-lock.json
+
+# Project documentation & reference files (ignore user uploads / defense docs)
+*.docx
+*.doc
+*.pdf
+*.pptx
+*.ppt
+project_doc_extracted.txt
+
+# OS Generated files
+.DS_Store
+Thumbs.db
