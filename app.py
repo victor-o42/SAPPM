@@ -1,150 +1,170 @@
+"""
+Main Application Entrypoint for S.A.P.P.M
+Handles user authentication state, global styling, staff profile header,
+and navigation routing across pages.
+"""
+
 import streamlit as st
-import pandas as pd
-import joblib
-import matplotlib.pyplot as plt
-import shap
+from src.ui.styles import apply_global_styles
+from src.ui.auth_ui import render_auth_modal
+from src.auth import sign_out_staff
 
-# Load trained model and label encoder
-model = joblib.load("models/best_model.pkl")
-encoder = joblib.load("models/best_label_encoder.pkl")
-
-# Create SHAP explainer
-explainer = shap.TreeExplainer(model)
-
-# Page configuration
 st.set_page_config(
-    page_title="Student Performance Prediction System",
-    layout="centered"
+    page_title="S.A.P.P.M - Student Academic Performance Prediction Model",
+    page_icon="🎓",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# App title
-st.title("Student Academic Performance Prediction System")
+# Apply our design system styles
+apply_global_styles()
 
-st.markdown("""
-This system predicts a student's academic grade using Machine Learning.
-It also explains why the prediction was made using Explainable AI (SHAP).
-""")
+# Check authentication state in session
+is_auth = st.session_state.get("authenticated", False)
+profile = st.session_state.get("profile", {})
 
-# Sidebar inputs
-st.sidebar.header("Enter Student Information")
+# Top Navigation Bar / User Profile Status
+if is_auth:
+    header_col1, header_col2 = st.columns([3, 1])
+    with header_col1:
+        st.markdown(f"""
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 6px 12px; color: #60A5FA; font-weight: 700; font-size: 0.85rem;">
+                    STAFF PORTAL
+                </div>
+                <div style="color: #F8FAFC; font-weight: 600; font-size: 0.95rem;">
+                    👤 {profile.get('full_name', 'Staff Member')} <span style="color: #94A3B8; font-weight: 400;">({profile.get('staff_id', 'STF-01')})</span>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+    with header_col2:
+        if st.button("🚪 Sign Out", use_container_width=True):
+            sign_out_staff()
+            st.session_state["authenticated"] = False
+            st.session_state["user"] = None
+            st.session_state["profile"] = None
+            st.rerun()
 
-study_hours = st.sidebar.slider(
-    "Weekly Self Study Hours",
-    min_value=0.0,
-    max_value=40.0,
-    value=10.0
-)
+# If user is not signed in, show welcome hero and login/signup card
+if not is_auth:
+    st.markdown("""
+        <div class="hero-container">
+            <span class="hero-badge">Institutional Machine Learning System</span>
+            <h1 class="hero-title">Student Academic Performance<br>Prediction Model (S.A.P.P.M)</h1>
+            <p class="hero-subtitle">
+                An intelligent academic decision-support platform designed to predict student grade outcomes,
+                detect at-risk learners early, and deliver actionable insights with Explainable AI.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
 
-attendance = st.sidebar.slider(
-    "Attendance Percentage",
-    min_value=0.0,
-    max_value=100.0,
-    value=75.0
-)
+    # Render Staff Login / Signup Form
+    render_auth_modal()
 
-participation = st.sidebar.slider(
-    "Class Participation",
-    min_value=0.0,
-    max_value=10.0,
-    value=5.0
-)
+    st.markdown("<hr>", unsafe_allow_html=True)
+    
+    # Overview Cards below the login card
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown("""
+            <div class="stat-card">
+                <div class="stat-value" style="color: #60A5FA;">1,000,000</div>
+                <div class="stat-label">Trained Dataset Records</div>
+            </div>
+        """, unsafe_allow_html=True)
+    with col2:
+        st.markdown("""
+            <div class="stat-card">
+                <div class="stat-value" style="color: #34D399;">99.81%</div>
+                <div class="stat-label">Prediction Accuracy</div>
+            </div>
+        """, unsafe_allow_html=True)
+    with col3:
+        st.markdown("""
+            <div class="stat-card">
+                <div class="stat-value" style="color: #FBBF24;">PostgreSQL</div>
+                <div class="stat-label">Cloud Database (Supabase)</div>
+            </div>
+        """, unsafe_allow_html=True)
 
-total_score = st.sidebar.slider(
-    "Total Score",
-    min_value=0.0,
-    max_value=100.0,
-    value=50.0
-)
+else:
+    # When signed in, present the Dashboard Home
+    st.markdown("""
+        <div class="hero-container" style="padding-top: 1rem;">
+            <h1 class="hero-title">Welcome to the S.A.P.P.M Portal</h1>
+            <p class="hero-subtitle">
+                Select an action below or use the sidebar navigation to run predictions,
+                view SHAP explainability charts, or inspect historical records.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
 
-# Prediction button
-if st.button("Predict Grade"):
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.markdown("""
+            <div class="stat-card">
+                <div class="stat-value" style="color: #60A5FA;">1,000,000</div>
+                <div class="stat-label">Trained Records</div>
+            </div>
+        """, unsafe_allow_html=True)
+    with col2:
+        st.markdown("""
+            <div class="stat-card">
+                <div class="stat-value" style="color: #34D399;">99.81%</div>
+                <div class="stat-label">XGBoost Accuracy</div>
+            </div>
+        """, unsafe_allow_html=True)
+    with col3:
+        st.markdown("""
+            <div class="stat-card">
+                <div class="stat-value" style="color: #A78BFA;">4 Features</div>
+                <div class="stat-label">Core Predictors</div>
+            </div>
+        """, unsafe_allow_html=True)
+    with col4:
+        st.markdown("""
+            <div class="stat-card">
+                <div class="stat-value" style="color: #FBBF24;">Active</div>
+                <div class="stat-label">Supabase Sync</div>
+            </div>
+        """, unsafe_allow_html=True)
 
-    # Create dataframe for prediction
-    student_data = pd.DataFrame([{
-        "weekly_self_study_hours": study_hours,
-        "attendance_percentage": attendance,
-        "class_participation": participation,
-        "total_score": total_score
-    }])
+    st.markdown("<hr>", unsafe_allow_html=True)
 
-    # Make prediction
-    prediction = model.predict(student_data)
+    # Action Cards
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown("""
+            <div class="glass-card">
+                <h3 style="color: #60A5FA; margin-top:0;">🔮 Run Prediction</h3>
+                <p style="color: #94A3B8; font-size: 0.92rem; line-height: 1.6;">
+                    Input a student's study hours, attendance, and scores to get an instant predicted grade, risk assessment, and recommendation.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+        if st.button("Launch Predictor", key="btn_pred", use_container_width=True):
+            st.switch_page("pages/2_🔮_Predict.py")
 
-    # Prediction probabilities
-    probabilities = model.predict_proba(student_data)
+    with c2:
+        st.markdown("""
+            <div class="glass-card">
+                <h3 style="color: #34D399; margin-top:0;">📈 Model Benchmarks</h3>
+                <p style="color: #94A3B8; font-size: 0.92rem; line-height: 1.6;">
+                    Compare evaluation metrics across XGBoost, Random Forest, and Logistic Regression algorithms stored in Supabase.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+        if st.button("View Benchmarks", key="btn_bench", use_container_width=True):
+            st.switch_page("pages/4_📈_Model_Analytics.py")
 
-    # Decode predicted label
-    predicted_grade = encoder.inverse_transform(prediction)
-
-    # Risk Level Logic
-    grade = predicted_grade[0]
-
-    if grade in ["A", "B"]:
-        risk_level = "LOW RISK"
-
-    elif grade == "C":
-        risk_level = "MEDIUM RISK"
-
-    else:
-        risk_level = "HIGH RISK"
-
-    # Confidence score
-    confidence = probabilities.max() * 100
-
-    # Display prediction result
-    st.success(f"Predicted Grade: {predicted_grade[0]}")  
-    st.warning(f"Risk Level: {risk_level}")
-        
-    st.info(f"Prediction Confidence: {confidence:.2f}%")
-
-    # Display probability chart
-    st.subheader("Grade Prediction Probabilities")
-
-    grades = encoder.classes_
-
-    fig, ax = plt.subplots()
-
-    ax.bar(grades, probabilities[0])
-
-    ax.set_xlabel("Grades")
-    ax.set_ylabel("Probability")
-    ax.set_title("Prediction Probability Distribution")
-
-    st.pyplot(fig)
-
-    # SHAP Explainability
-    st.subheader("SHAP Prediction Explanation")
-
-    shap_values = explainer.shap_values(student_data)
-
-    shap_fig, shap_ax = plt.subplots()
-
-    shap.summary_plot(
-        shap_values,
-        student_data,
-        plot_type="bar",
-        show=False
-    )
-
-    st.pyplot(shap_fig)
-
-# Feature Importance Section
-st.subheader("Feature Importance")
-
-importance = model.feature_importances_
-
-features = [
-    "Study Hours",
-    "Attendance",
-    "Participation",
-    "Total Score"
-]
-
-fig2, ax2 = plt.subplots()
-
-ax2.bar(features, importance)
-
-ax2.set_ylabel("Importance")
-ax2.set_title("Model Feature Importance")
-
-st.pyplot(fig2)
+    with c3:
+        st.markdown("""
+            <div class="glass-card">
+                <h3 style="color: #F472B6; margin-top:0;">🗄️ Student Records</h3>
+                <p style="color: #94A3B8; font-size: 0.92rem; line-height: 1.6;">
+                    Search, filter, inspect, and export historical student predictions and risk levels logged to the cloud database.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+        if st.button("Browse Records", key="btn_recs", use_container_width=True):
+            st.switch_page("pages/5_🗄️_Student_Records.py")
