@@ -1,31 +1,38 @@
 """
 Student Performance Prediction Page
-Provides intuitive input controls, 1-click test presets, real-time predictions,
+Provides intuitive input controls, quick test presets, real-time predictions,
 interactive probability distributions, and Supabase synchronization.
 """
 
 import streamlit as st
 import plotly.graph_objects as go
 from src.ui.styles import apply_global_styles
+from src.ui.icons import icon
 from src.services.prediction_service import predict_student_grade
 
 st.set_page_config(
     page_title="Predict Performance - S.A.P.P.M",
-    page_icon="🔮",
     layout="wide"
 )
 
 apply_global_styles()
 
-st.title("🔮 Student Grade Prediction & Risk Assessment")
-st.markdown("Enter the student's study metrics and continuous assessment scores to generate an AI performance forecast.")
+st.markdown(f"""
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem;">
+        <div style="background: rgba(99, 102, 241, 0.15); padding: 8px; border-radius: 10px; display: flex;">
+            {icon("target", size=24, color="#818CF8")}
+        </div>
+        <h1 style="margin: 0; font-size: 2.2rem; font-weight: 900; color: #FFFFFF; letter-spacing: -0.03em;">Student Grade Prediction & Risk Assessment</h1>
+    </div>
+    <p style="color: #94A3B8; font-size: 1rem; margin-bottom: 1.5rem;">Enter the student's study metrics and continuous assessment scores to generate an AI performance forecast.</p>
+""", unsafe_allow_html=True)
 
 # Quick Test Presets
 pcol1, pcol2, pcol3, pcol4 = st.columns([1.2, 1, 1, 1])
 with pcol1:
-    st.markdown("<div style='padding-top: 8px; font-size: 0.8rem; color: #94A3B8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;'>Test Presets:</div>", unsafe_allow_html=True)
+    st.markdown("<div style='padding-top: 8px; font-size: 0.8rem; color: #94A3B8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;'>Evaluation Presets:</div>", unsafe_allow_html=True)
 with pcol2:
-    if st.button("🌟 Top Student (Grade A)", use_container_width=True):
+    if st.button("High Tier (Grade A)", use_container_width=True):
         st.session_state["p_hours"] = 22.0
         st.session_state["p_att"] = 96.0
         st.session_state["p_part"] = 9.0
@@ -33,7 +40,7 @@ with pcol2:
         st.session_state["p_name"] = "Alex Johnson"
         st.session_state["p_matric"] = "CSC/2026/001"
 with pcol3:
-    if st.button("⚖️ Average (Grade C)", use_container_width=True):
+    if st.button("Median Tier (Grade C)", use_container_width=True):
         st.session_state["p_hours"] = 10.0
         st.session_state["p_att"] = 75.0
         st.session_state["p_part"] = 5.0
@@ -41,7 +48,7 @@ with pcol3:
         st.session_state["p_name"] = "Jordan Taylor"
         st.session_state["p_matric"] = "CSC/2026/045"
 with pcol4:
-    if st.button("⚠️ At Risk (Grade D/F)", use_container_width=True):
+    if st.button("At Risk Tier (Grade D/F)", use_container_width=True):
         st.session_state["p_hours"] = 3.0
         st.session_state["p_att"] = 50.0
         st.session_state["p_part"] = 2.5
@@ -111,7 +118,7 @@ with col_input:
         help="Cumulative score from assignments, tests, and quizzes."
     )
 
-    predict_btn = st.button("🚀 Generate Performance Forecast", use_container_width=True, type="primary")
+    predict_btn = st.button("Generate Performance Forecast", use_container_width=True, type="primary")
     st.markdown('</div></div>', unsafe_allow_html=True)
 
 with col_output:
@@ -132,7 +139,6 @@ with col_output:
         else:
             result = st.session_state["last_prediction"]
 
-        # Double-Bezel Results Summary Card
         badge_pill = (
             "risk-pill-low" if "LOW" in result["risk_level"]
             else "risk-pill-medium" if "MEDIUM" in result["risk_level"]
@@ -160,14 +166,13 @@ with col_output:
                         </div>
                     </div>
                     <div style="margin-top: 1.25rem; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 1rem;">
-                        <div style="font-size: 0.88rem; color: #E2E8F0; line-height: 1.6;"><strong>📌 Advisory Recommendation:</strong> {result['recommendation']}</div>
+                        <div style="font-size: 0.88rem; color: #E2E8F0; line-height: 1.6;"><strong>Advisory Recommendation:</strong> {result['recommendation']}</div>
                         <div style="font-size: 0.75rem; color: #34D399; margin-top: 0.4rem; font-weight: 600;">✓ Synced to Supabase Cloud Database</div>
                     </div>
                 </div>
             </div>
         """, unsafe_allow_html=True)
 
-        # Plotly Probability Distribution Chart in Double Bezel
         st.markdown("""
             <div class="bezel-shell">
                 <div class="bezel-core">
@@ -206,4 +211,4 @@ with col_output:
         st.markdown('</div></div>', unsafe_allow_html=True)
 
     else:
-        st.info("👈 Adjust student metrics on the left or select a **Quick Test Preset** above to generate an evaluation.")
+        st.info("Adjust student metrics on the left or select an evaluation preset to generate a forecast.")

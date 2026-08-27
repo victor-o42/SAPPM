@@ -1,45 +1,49 @@
 """
-S.A.P.P.M - High-End Agency-Tier Landing Page
-Engineered with Double-Bezel architecture, kinetic Bento Grid,
-Ethereal ambient lighting, and fluid navigation.
+S.A.P.P.M - Institutional Machine Learning Landing Page
+Engineered with Double-Bezel architecture, precision SVG iconography,
+and enterprise decision-support workflows.
 """
 
 import streamlit as st
 from src.ui.styles import apply_global_styles
+from src.ui.icons import icon
 
 st.set_page_config(
     page_title="S.A.P.P.M - Student Academic Performance Prediction",
-    page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Apply our agency design system
+# Apply agency design system
 apply_global_styles()
 
-# Floating Top Header Bar
-st.markdown("""
+# Floating Institutional Top Header
+st.markdown(f"""
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0 2rem 0;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, #4F46E5, #3B82F6); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);">🎓</div>
-            <span style="font-size: 1.25rem; font-weight: 900; letter-spacing: -0.03em; color: #FFFFFF;">S.A.P.P.M</span>
-            <span style="font-size: 0.72rem; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.35); color: #A5B4FC; padding: 3px 10px; border-radius: 9999px; font-weight: 700; letter-spacing: 0.05em;">ENTERPRISE AI</span>
+            <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #4F46E5, #3B82F6); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);">
+                {icon("academic", size=22, color="#FFFFFF")}
+            </div>
+            <div>
+                <div style="font-size: 1.2rem; font-weight: 900; letter-spacing: -0.03em; color: #FFFFFF; line-height: 1.1;">S.A.P.P.M</div>
+                <div style="font-size: 0.72rem; color: #818CF8; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">Decision Support System</div>
+            </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 5px 14px; border-radius: 9999px;">
+        <div style="display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 6px 16px; border-radius: 9999px;">
             <span style="width: 8px; height: 8px; background: #34D399; border-radius: 50%; display: inline-block; box-shadow: 0 0 12px #34D399;"></span>
-            <span style="font-size: 0.8rem; color: #E2E8F0; font-weight: 600; font-family: 'JetBrains Mono', monospace;">XGBoost 3.4 Online</span>
+            <span style="font-size: 0.8rem; color: #E2E8F0; font-weight: 600; font-family: 'JetBrains Mono', monospace;">XGBoost 3.4 Active</span>
         </div>
     </div>
 """, unsafe_allow_html=True)
 
 # Hero Section
-st.markdown("""
+st.markdown(f"""
     <div class="hero-container">
-        <span class="hero-eyebrow">✨ Next-Generation Academic Intelligence</span>
-        <h1 class="hero-headline">Predict Student Trajectories.<br>Intervene Before Final Exams.</h1>
+        <span class="hero-eyebrow">{icon("sparkles", size=14, color="#A5B4FC")} &nbsp;Next-Generation Academic Intelligence</span>
+        <h1 class="hero-headline">Predict Student Outcomes.<br>Intervene Before Semester Exams.</h1>
         <p class="hero-lead">
-            An institutional machine learning platform engineered with Extreme Gradient Boosting (XGBoost) and SHAP Explainable AI.
-            Accurately forecast student grade distributions with 99.81% precision to deliver proactive academic guidance.
+            An institutional predictive analytics platform engineered with Extreme Gradient Boosting (XGBoost) and SHAP Explainable AI.
+            Accurately forecast student grade trajectories with 99.81% accuracy to deliver proactive academic interventions.
         </p>
     </div>
 """, unsafe_allow_html=True)
@@ -49,11 +53,11 @@ bcol1, bcol2, bcol3 = st.columns([1, 1.4, 1])
 with bcol2:
     btn1, btn2 = st.columns(2)
     with btn1:
-        if st.button("🔮 Launch Predictor", use_container_width=True, type="primary"):
-            st.switch_page("pages/2_🔮_Predict.py")
+        if st.button("Launch Predictor", use_container_width=True, type="primary"):
+            st.switch_page("pages/2_Predict.py")
     with btn2:
-        if st.button("🔐 Staff Portal", use_container_width=True):
-            st.switch_page("pages/1_🔐_Staff_Portal.py")
+        if st.button("Staff Portal", use_container_width=True):
+            st.switch_page("pages/1_Staff_Portal.py")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -138,35 +142,39 @@ with m4:
 st.markdown("<br><br>", unsafe_allow_html=True)
 
 # Asymmetrical Bento Grid Showcase
-st.subheader("Architectural & Predictive Pillars")
+st.subheader("System Architecture & Capabilities")
 
 fcol1, fcol2 = st.columns(2, gap="large")
 
 with fcol1:
-    st.markdown("""
+    st.markdown(f"""
         <div class="bezel-shell">
             <div class="bezel-core">
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.75rem;">
-                    <span style="font-size: 1.6rem;">🔮</span>
+                    <div style="background: rgba(99, 102, 241, 0.15); padding: 8px; border-radius: 10px; display: flex;">
+                        {icon("cpu", size=22, color="#818CF8")}
+                    </div>
                     <h3 style="margin: 0; color: #FFFFFF; font-size: 1.3rem; font-weight: 800;">Multiclass Performance Forecast</h3>
                 </div>
                 <p style="color: #94A3B8; font-size: 0.95rem; line-height: 1.7;">
                     Trained across 800,000 training records using Extreme Gradient Boosting (XGBoost) with multiclass softmax loss.
-                    Generates fine-grained probability distributions across five grade categories: <strong>A, B, C, D, and F</strong>.
+                    Generates probability distributions across five grade categories: <strong>A, B, C, D, and F</strong>.
                 </p>
             </div>
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("""
+    st.markdown(f"""
         <div class="bezel-shell">
             <div class="bezel-core">
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.75rem;">
-                    <span style="font-size: 1.6rem;">🛡️</span>
+                    <div style="background: rgba(16, 185, 129, 0.15); padding: 8px; border-radius: 10px; display: flex;">
+                        {icon("shield", size=22, color="#34D399")}
+                    </div>
                     <h3 style="margin: 0; color: #FFFFFF; font-size: 1.3rem; font-weight: 800;">Early Warning Risk Stratification</h3>
                 </div>
                 <p style="color: #94A3B8; font-size: 0.95rem; line-height: 1.7;">
-                    Transfers academic advising from reactive measures to proactive early intervention:
+                    Transitions academic advising from reactive measures to proactive early intervention:
                     <br>• <strong style="color: #34D399;">Low Risk</strong>: Stable high-performing learners (Grades A/B).
                     <br>• <strong style="color: #FBBF24;">Medium Risk</strong>: Average tier students needing guidance (Grade C).
                     <br>• <strong style="color: #F87171;">High Risk</strong>: Critical academic danger requiring immediate tutoring (Grades D/F).
@@ -176,11 +184,13 @@ with fcol1:
     """, unsafe_allow_html=True)
 
 with fcol2:
-    st.markdown("""
+    st.markdown(f"""
         <div class="bezel-shell">
             <div class="bezel-core">
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.75rem;">
-                    <span style="font-size: 1.6rem;">📊</span>
+                    <div style="background: rgba(244, 114, 182, 0.15); padding: 8px; border-radius: 10px; display: flex;">
+                        {icon("chart", size=22, color="#F472B6")}
+                    </div>
                     <h3 style="margin: 0; color: #FFFFFF; font-size: 1.3rem; font-weight: 800;">Explainable AI (SHAP Interpretability)</h3>
                 </div>
                 <p style="color: #94A3B8; font-size: 0.95rem; line-height: 1.7;">
@@ -191,11 +201,13 @@ with fcol2:
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("""
+    st.markdown(f"""
         <div class="bezel-shell">
             <div class="bezel-core">
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.75rem;">
-                    <span style="font-size: 1.6rem;">🗄️</span>
+                    <div style="background: rgba(251, 191, 36, 0.15); padding: 8px; border-radius: 10px; display: flex;">
+                        {icon("database", size=22, color="#FBBF24")}
+                    </div>
                     <h3 style="margin: 0; color: #FFFFFF; font-size: 1.3rem; font-weight: 800;">Cloud Persistence & Audit Trail</h3>
                 </div>
                 <p style="color: #94A3B8; font-size: 0.95rem; line-height: 1.7;">
@@ -209,11 +221,13 @@ with fcol2:
 st.markdown("<br>", unsafe_allow_html=True)
 
 # 3-Tier System Architecture Card
-st.markdown("""
+st.markdown(f"""
     <div class="bezel-shell">
         <div class="bezel-core" style="background: linear-gradient(135deg, rgba(17, 24, 46, 0.95) 0%, rgba(9, 13, 26, 0.98) 100%);">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
-                <span style="font-size: 1.5rem;">📐</span>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem;">
+                <div style="background: rgba(99, 102, 241, 0.15); padding: 8px; border-radius: 10px; display: flex;">
+                    {icon("layers", size=22, color="#818CF8")}
+                </div>
                 <h3 style="color: #FFFFFF; font-size: 1.35rem; font-weight: 800; margin: 0;">3-Tier System Architecture & CRISP-DM Framework</h3>
             </div>
             <p style="color: #94A3B8; font-size: 0.95rem; line-height: 1.65;">
@@ -249,5 +263,5 @@ st.markdown("""
 
 fcol1, fcol2, fcol3 = st.columns([1.2, 1, 1.2])
 with fcol2:
-    if st.button("🚀 Start Evaluating Students", use_container_width=True, type="primary"):
-        st.switch_page("pages/2_🔮_Predict.py")
+    if st.button("Start Evaluating Students", use_container_width=True, type="primary"):
+        st.switch_page("pages/2_Predict.py")

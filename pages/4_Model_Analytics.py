@@ -8,18 +8,25 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from src.ui.styles import apply_global_styles
+from src.ui.icons import icon
 from src.services.prediction_service import fetch_model_registry
 
 st.set_page_config(
     page_title="Model Analytics - S.A.P.P.M",
-    page_icon="📈",
     layout="wide"
 )
 
 apply_global_styles()
 
-st.title("📈 Machine Learning Model Benchmarks")
-st.markdown("Comparative performance evaluation across the candidate algorithms trained on the student performance dataset.")
+st.markdown(f"""
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem;">
+        <div style="background: rgba(59, 130, 246, 0.15); padding: 8px; border-radius: 10px; display: flex;">
+            {icon("trending_up", size=24, color="#60A5FA")}
+        </div>
+        <h1 style="margin: 0; font-size: 2.2rem; font-weight: 900; color: #FFFFFF; letter-spacing: -0.03em;">Machine Learning Model Benchmarks</h1>
+    </div>
+    <p style="color: #94A3B8; font-size: 1rem; margin-bottom: 1.5rem;">Comparative performance evaluation across candidate algorithms trained on the student performance dataset.</p>
+""", unsafe_allow_html=True)
 
 with st.spinner("Fetching model benchmarks from Supabase..."):
     models = fetch_model_registry()
@@ -35,7 +42,7 @@ if models:
             st.markdown(f"""
                 <div class="bezel-shell" style="border-color: rgba(99, 102, 241, 0.45);">
                     <div class="bezel-core">
-                        <div style="font-size: 0.72rem; color: #818CF8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;">🏆 Champion Algorithm</div>
+                        <div style="font-size: 0.72rem; color: #818CF8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;">Champion Algorithm</div>
                         <h3 style="margin: 0.4rem 0 0.2rem 0; color: #FFFFFF; font-size: 1.2rem; font-weight: 800;">{models[0]['model_name']}</h3>
                         <div style="font-size: 2.5rem; font-weight: 900; color: #34D399; font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin: 0.5rem 0;">{models[0]['accuracy']:.2f}%</div>
                         <div style="font-size: 0.82rem; color: #94A3B8;">F1-Score: <strong style="color:#F8FAFC;">{models[0]['f1_score']:.2f}%</strong></div>

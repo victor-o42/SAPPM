@@ -5,24 +5,25 @@ Renders responsive login and signup cards for staff members with form validation
 
 import streamlit as st
 from src.auth import sign_in_staff, sign_up_staff
+from src.ui.icons import icon
 
 def render_auth_modal():
     """
-    Renders the staff login & registration portal with Double-Bezel styling.
+    Renders the staff login & registration portal with Double-Bezel styling and SVG icons.
     """
     col1, col2, col3 = st.columns([1, 2.2, 1])
     with col2:
-        st.markdown("""
+        st.markdown(f"""
             <div class="bezel-shell">
                 <div class="bezel-core">
                     <div style="text-align: center; margin-bottom: 1.5rem;">
-                        <span class="hero-eyebrow" style="margin-bottom: 0.85rem;">Institutional Access</span>
+                        <span class="hero-eyebrow" style="margin-bottom: 0.85rem;">{icon("lock", size=14, color="#A5B4FC")} &nbsp;Institutional Access</span>
                         <h2 style="font-size: 1.8rem; font-weight: 900; color: #FFFFFF; letter-spacing: -0.03em; margin: 0 0 0.4rem 0;">Staff Portal</h2>
                         <p style="font-size: 0.95rem; color: #94A3B8; margin: 0;">Sign in or register to access the prediction system & student records.</p>
                     </div>
         """, unsafe_allow_html=True)
 
-        tab_login, tab_signup = st.tabs(["🔑 Sign In", "📝 Create Staff Account"])
+        tab_login, tab_signup = st.tabs(["Sign In", "Create Staff Account"])
 
         # Sign In Tab
         with tab_login:

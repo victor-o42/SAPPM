@@ -7,18 +7,25 @@ and allows CSV data export for academic reporting.
 import streamlit as st
 import pandas as pd
 from src.ui.styles import apply_global_styles
+from src.ui.icons import icon
 from src.services.prediction_service import fetch_prediction_history
 
 st.set_page_config(
     page_title="Student Records - S.A.P.P.M",
-    page_icon="🗄️",
     layout="wide"
 )
 
 apply_global_styles()
 
-st.title("🗄️ Student Evaluation Records & Prediction Logs")
-st.markdown("Historical student evaluation logs synchronized with Supabase PostgreSQL.")
+st.markdown(f"""
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem;">
+        <div style="background: rgba(251, 191, 36, 0.15); padding: 8px; border-radius: 10px; display: flex;">
+            {icon("database", size=24, color="#FBBF24")}
+        </div>
+        <h1 style="margin: 0; font-size: 2.2rem; font-weight: 900; color: #FFFFFF; letter-spacing: -0.03em;">Student Evaluation Records & Database Logs</h1>
+    </div>
+    <p style="color: #94A3B8; font-size: 1rem; margin-bottom: 1.5rem;">Historical student evaluation logs synchronized with Supabase PostgreSQL cloud storage.</p>
+""", unsafe_allow_html=True)
 
 with st.spinner("Loading records from Supabase database..."):
     records = fetch_prediction_history(limit=100)
@@ -55,7 +62,7 @@ if records:
 
     fcol1, fcol2, fcol3 = st.columns([2, 1, 1])
     with fcol1:
-        search_query = st.text_input("🔍 Search Student Name or Matric No", placeholder="e.g. Victor or U/2026")
+        search_query = st.text_input("Search Student Name or Matric No", placeholder="e.g. Victor or U/2026")
     with fcol2:
         grade_filter = st.selectbox("Filter by Grade", ["All Grades", "A", "B", "C", "D", "F"])
     with fcol3:
@@ -132,7 +139,7 @@ if records:
 
     csv_data = filtered_df.to_csv(index=False).encode('utf-8')
     st.download_button(
-        label="📥 Export Filtered Records (CSV)",
+        label="Export Filtered Records (CSV)",
         data=csv_data,
         file_name="student_evaluation_records.csv",
         mime="text/csv"
