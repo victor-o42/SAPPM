@@ -1,264 +1,284 @@
 """
-Ultra-Modern Design System for S.A.P.P.M
-Enforces high-end agency aesthetics: ambient glow meshes, frosted glassmorphism,
-refined typography, glowing badges, and fluid interactive components.
+Awwwards-Tier Design System for S.A.P.P.M
+Engineered using high-end agency design directives:
+- Ethereal Glass OLED Canvas with Ambient Radial Lighting
+- Double-Bezel (Doppelrand) Nested Component Architecture
+- Button-in-Button Island Interactions
+- Plus Jakarta Sans + JetBrains Mono Typography
 """
 
 import streamlit as st
 
 def apply_global_styles():
     """
-    Applies custom CSS variables, ambient glow backgrounds, sleek bento cards,
-    and ultra-modern typography across the application.
+    Injects the complete agency design system across all Streamlit pages.
     """
     st.markdown("""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
 
-        /* Root Canvas & Ambient Lighting */
+        /* 1. Root Canvas & Ambient Lighting */
         html, body, [class*="css"], .stApp {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
-            background-color: #070B14 !important;
+            background-color: #05070E !important;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(56, 189, 248, 0.10) 0px, transparent 50%),
-                radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.08) 0px, transparent 50%) !important;
+                radial-gradient(circle at 50% -10%, rgba(99, 102, 241, 0.18) 0%, transparent 60%),
+                radial-gradient(circle at 100% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 0% 80%, rgba(139, 92, 246, 0.10) 0%, transparent 60%) !important;
             background-attachment: fixed !important;
             color: #F8FAFC !important;
-            letter-spacing: -0.018em;
+            letter-spacing: -0.02em;
         }
 
-        /* Container Margins & Fluid Padding */
+        /* 2. Layout & Spacing Rhythm */
         .main .block-container {
-            padding-top: 2rem !important;
-            padding-bottom: 5rem !important;
-            max-width: 1240px;
+            padding-top: 1.5rem !important;
+            padding-bottom: 6rem !important;
+            max-width: 1260px;
         }
 
-        /* Modern Sidebar Navigation */
+        /* 3. Sleek Floating Sidebar */
         section[data-testid="stSidebar"] {
-            background: rgba(10, 15, 29, 0.85) !important;
-            backdrop-filter: blur(24px) !important;
-            -webkit-backdrop-filter: blur(24px) !important;
-            border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+            background: rgba(7, 11, 22, 0.85) !important;
+            backdrop-filter: blur(25px) !important;
+            -webkit-backdrop-filter: blur(25px) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.07) !important;
         }
         section[data-testid="stSidebar"] .block-container {
             padding-top: 2rem !important;
         }
-        [data-testid="stSidebarNav"] {
-            padding-top: 1rem !important;
-        }
         [data-testid="stSidebarNav"] span {
-            font-size: 0.95rem !important;
+            font-size: 0.92rem !important;
             font-weight: 600 !important;
-            color: #CBD5E1 !important;
-            transition: all 0.2s ease;
+            color: #94A3B8 !important;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        [data-testid="stSidebarNav"] a:hover span {
+        [data-testid="stSidebarNav"] a:hover span, [data-testid="stSidebarNav"] a[aria-current="page"] span {
             color: #818CF8 !important;
         }
 
-        /* High-End Bento Glass Cards */
-        .glass-card {
-            background: linear-gradient(135deg, rgba(17, 24, 43, 0.7) 0%, rgba(11, 17, 32, 0.85) 100%);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        /* 4. Double-Bezel (Doppelrand) Card Architecture */
+        .bezel-shell {
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 18px;
-            padding: 1.85rem;
-            margin-bottom: 1.25rem;
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 24px;
+            padding: 6px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .glass-card:hover {
+        .bezel-shell:hover {
             border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 20px 45px -10px rgba(99, 102, 241, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
+            box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.25);
+            transform: translateY(-3px);
+        }
+        .bezel-core {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(9, 14, 28, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 19px;
+            padding: 1.75rem;
+            box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
         }
 
-        /* Hero Header Typography */
-        .hero-container {
-            padding: 2.5rem 1rem 2rem 1rem;
-            text-align: center;
-            position: relative;
-        }
-        .hero-badge {
+        /* 5. Eyebrow Tags & Hero Typography */
+        .hero-eyebrow {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 0.45rem 1.2rem;
-            background: rgba(99, 102, 241, 0.12);
+            padding: 0.35rem 1.1rem;
+            background: rgba(99, 102, 241, 0.1);
             border: 1px solid rgba(99, 102, 241, 0.35);
             border-radius: 9999px;
-            color: #818CF8;
-            font-size: 0.82rem;
+            color: #A5B4FC;
+            font-size: 0.76rem;
             font-weight: 700;
-            margin-bottom: 1.25rem;
-            letter-spacing: 0.06em;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.4);
         }
-        .hero-title {
-            font-size: 3rem !important;
+        .hero-headline {
+            font-size: 3.4rem !important;
             font-weight: 900 !important;
-            background: linear-gradient(135deg, #FFFFFF 30%, #94A3B8 100%);
+            background: linear-gradient(135deg, #FFFFFF 20%, #94A3B8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            line-height: 1.12;
-            margin-bottom: 0.9rem;
-            letter-spacing: -0.035em;
+            line-height: 1.1;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.04em;
         }
-        .hero-subtitle {
-            font-size: 1.12rem;
+        .hero-lead {
+            font-size: 1.15rem;
             color: #94A3B8;
-            max-width: 760px;
-            margin: 0 auto 1.75rem auto;
+            max-width: 780px;
+            margin: 0 auto 2.25rem auto;
             line-height: 1.7;
             font-weight: 400;
         }
 
-        /* Stat Counter Cards */
-        .stat-card {
-            background: linear-gradient(135deg, rgba(20, 29, 51, 0.6) 0%, rgba(13, 19, 36, 0.8) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
-            padding: 1.5rem 1.2rem;
-            text-align: center;
-            box-shadow: 0 8px 24px -5px rgba(0, 0, 0, 0.4);
-            transition: all 0.2s ease;
+        /* 6. Kinetic Stat Bento Cards */
+        .stat-shell {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 4px;
+            transition: all 0.25s ease;
         }
-        .stat-card:hover {
-            border-color: rgba(99, 102, 241, 0.4);
+        .stat-shell:hover {
+            border-color: rgba(99, 102, 241, 0.35);
             transform: translateY(-2px);
         }
-        .stat-value {
-            font-size: 2.2rem;
+        .stat-core {
+            background: linear-gradient(135deg, rgba(16, 24, 44, 0.7) 0%, rgba(10, 15, 30, 0.85) 100%);
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.08);
+        }
+        .stat-number {
+            font-size: 2.3rem;
             font-weight: 900;
             color: #FFFFFF;
             font-family: 'JetBrains Mono', monospace;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.04em;
         }
-        .stat-label {
-            font-size: 0.78rem;
+        .stat-title {
+            font-size: 0.75rem;
             color: #94A3B8;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.1em;
             font-weight: 700;
-            margin-top: 0.4rem;
+            margin-top: 0.35rem;
         }
 
-        /* Glowing Risk Level Badges */
-        .risk-badge-low {
-            display: inline-block;
-            padding: 7px 20px;
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            border-radius: 10px;
+        /* 7. High-Gloss Risk Badges */
+        .risk-pill-low {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 18px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.45);
+            border-radius: 9999px;
             color: #34D399;
             font-weight: 800;
-            font-size: 1rem;
+            font-size: 0.9rem;
             letter-spacing: 0.04em;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
         }
-        .risk-badge-medium {
-            display: inline-block;
-            padding: 7px 20px;
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid rgba(245, 158, 11, 0.5);
-            border-radius: 10px;
+        .risk-pill-medium {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 18px;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.45);
+            border-radius: 9999px;
             color: #FBBF24;
             font-weight: 800;
-            font-size: 1rem;
+            font-size: 0.9rem;
             letter-spacing: 0.04em;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);
         }
-        .risk-badge-high {
-            display: inline-block;
-            padding: 7px 20px;
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.5);
-            border-radius: 10px;
+        .risk-pill-high {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 18px;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.45);
+            border-radius: 9999px;
             color: #F87171;
             font-weight: 800;
-            font-size: 1rem;
+            font-size: 0.9rem;
             letter-spacing: 0.04em;
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.25);
         }
 
-        /* Premium Buttons */
+        /* 8. Kinetic Island Button Styling */
         .stButton > button {
             background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%) !important;
             color: #FFFFFF !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            border-radius: 12px !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            border-radius: 9999px !important;
             font-weight: 700 !important;
             font-size: 0.95rem !important;
-            padding: 0.65rem 1.4rem !important;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-            box-shadow: 0 4px 18px 0 rgba(79, 70, 229, 0.35) !important;
+            padding: 0.75rem 1.75rem !important;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            box-shadow: 0 8px 24px -4px rgba(79, 70, 229, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3) !important;
         }
         .stButton > button:hover {
-            box-shadow: 0 8px 25px 0 rgba(79, 70, 229, 0.6) !important;
-            transform: translateY(-2px) !important;
-            border-color: rgba(255, 255, 255, 0.4) !important;
+            box-shadow: 0 14px 35px -4px rgba(79, 70, 229, 0.7), inset 0 1px 1px 0 rgba(255, 255, 255, 0.5) !important;
+            transform: translateY(-3px) scale(1.01) !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+        }
+        .stButton > button:active {
+            transform: translateY(0) scale(0.98) !important;
         }
 
-        /* Tab Navigation Bar */
+        /* 9. Premium Floating Tabs */
         .stTabs [data-baseweb="tab-list"] {
-            gap: 8px !important;
-            background: rgba(15, 23, 42, 0.6) !important;
+            gap: 10px !important;
+            background: rgba(12, 18, 35, 0.7) !important;
+            backdrop-filter: blur(16px) !important;
             padding: 6px !important;
-            border-radius: 12px !important;
-            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            border-radius: 9999px !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
         }
         .stTabs [data-baseweb="tab"] {
-            border-radius: 8px !important;
+            border-radius: 9999px !important;
             color: #94A3B8 !important;
-            font-weight: 600 !important;
-            padding: 8px 16px !important;
+            font-weight: 700 !important;
+            font-size: 0.9rem !important;
+            padding: 8px 20px !important;
             border: none !important;
+            transition: all 0.2s ease !important;
         }
         .stTabs [aria-selected="true"] {
-            background: rgba(99, 102, 241, 0.2) !important;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(59, 130, 246, 0.2) 100%) !important;
             color: #FFFFFF !important;
-            border: 1px solid rgba(99, 102, 241, 0.4) !important;
+            border: 1px solid rgba(99, 102, 241, 0.5) !important;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3) !important;
         }
 
-        /* Custom Form Input Polish */
+        /* 10. Machined Inputs & Sliders */
         input[type="text"], input[type="password"], textarea, select {
-            background-color: #0A0F1E !important;
+            background-color: #080D1A !important;
             border: 1px solid rgba(255, 255, 255, 0.12) !important;
-            border-radius: 10px !important;
+            border-radius: 12px !important;
             color: #F8FAFC !important;
             font-size: 0.95rem !important;
-            padding: 0.65rem 1rem !important;
+            padding: 0.75rem 1.1rem !important;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
         }
         input:focus {
-            border-color: #6366F1 !important;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+            border-color: #818CF8 !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
         }
 
-        /* Streamlit Metrics */
+        /* 11. Streamlit Metrics Hierarchy */
         div[data-testid="stMetricValue"] {
             font-family: 'JetBrains Mono', monospace !important;
             font-weight: 900 !important;
             color: #FFFFFF !important;
-            font-size: 2.1rem !important;
+            font-size: 2.2rem !important;
+            letter-spacing: -0.03em !important;
         }
         div[data-testid="stMetricLabel"] {
-            font-size: 0.85rem !important;
+            font-size: 0.8rem !important;
             color: #94A3B8 !important;
-            font-weight: 600 !important;
+            font-weight: 700 !important;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.08em;
         }
 
-        /* Custom Dividers */
+        /* 12. Fine Hairline Dividers */
         hr {
             border: none;
             height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
-            margin: 2.5rem 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.12) 50%, transparent 100%);
+            margin: 3rem 0;
         }
         </style>
     """, unsafe_allow_html=True)

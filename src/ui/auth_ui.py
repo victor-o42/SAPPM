@@ -8,54 +8,19 @@ from src.auth import sign_in_staff, sign_up_staff
 
 def render_auth_modal():
     """
-    Renders the staff login & registration portal.
+    Renders the staff login & registration portal with Double-Bezel styling.
     """
-    st.markdown("""
-        <style>
-        .auth-container {
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 2.5rem;
-            background: rgba(18, 24, 38, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-        .auth-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #FFFFFF;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.3rem;
-            text-align: center;
-        }
-        .auth-subtitle {
-            font-size: 0.92rem;
-            color: #94A3B8;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        .auth-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: rgba(59, 130, 246, 0.15);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 9999px;
-            color: #60A5FA;
-            font-size: 0.78rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-    col1, col2, col3 = st.columns([1, 2.5, 1])
+    col1, col2, col3 = st.columns([1, 2.2, 1])
     with col2:
-        st.markdown('<div style="text-align: center;"><span class="auth-badge">Institutional Access</span></div>', unsafe_allow_html=True)
-        st.markdown('<h2 class="auth-title">Staff Portal</h2>', unsafe_allow_html=True)
-        st.markdown('<p class="auth-subtitle">Sign in or register to access the prediction system & student records.</p>', unsafe_allow_html=True)
+        st.markdown("""
+            <div class="bezel-shell">
+                <div class="bezel-core">
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <span class="hero-eyebrow" style="margin-bottom: 0.85rem;">Institutional Access</span>
+                        <h2 style="font-size: 1.8rem; font-weight: 900; color: #FFFFFF; letter-spacing: -0.03em; margin: 0 0 0.4rem 0;">Staff Portal</h2>
+                        <p style="font-size: 0.95rem; color: #94A3B8; margin: 0;">Sign in or register to access the prediction system & student records.</p>
+                    </div>
+        """, unsafe_allow_html=True)
 
         tab_login, tab_signup = st.tabs(["🔑 Sign In", "📝 Create Staff Account"])
 
@@ -114,3 +79,5 @@ def render_auth_modal():
                                 st.success("Account created successfully! You can now sign in.")
                             else:
                                 st.error(f"Registration failed: {res['message']}")
+
+        st.markdown('</div></div>', unsafe_allow_html=True)

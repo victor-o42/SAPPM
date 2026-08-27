@@ -18,14 +18,12 @@ st.set_page_config(
 apply_global_styles()
 
 st.title("🗄️ Student Evaluation Records & Prediction Logs")
-st.markdown("Historical student evaluation logs stored in Supabase PostgreSQL.")
+st.markdown("Historical student evaluation logs synchronized with Supabase PostgreSQL.")
 
-# Fetch records from Supabase
 with st.spinner("Loading records from Supabase database..."):
     records = fetch_prediction_history(limit=100)
 
 if records:
-    # Flatten records for DataFrame
     flattened = []
     for r in records:
         s_data = r.get("student_data") or {}
@@ -47,7 +45,14 @@ if records:
     
     df = pd.DataFrame(flattened)
 
-    # Search and Filter Toolbar
+    # Filter Toolbar in Double-Bezel
+    st.markdown("""
+        <div class="bezel-shell">
+            <div class="bezel-core">
+                <div style="font-size: 0.72rem; color: #818CF8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;">Search & Filter Matrix</div>
+                <h4 style="margin: 0.2rem 0 1rem 0; color: #FFFFFF; font-size: 1.15rem; font-weight: 800;">Query Student Database</h4>
+    """, unsafe_allow_html=True)
+
     fcol1, fcol2, fcol3 = st.columns([2, 1, 1])
     with fcol1:
         search_query = st.text_input("🔍 Search Student Name or Matric No", placeholder="e.g. Victor or U/2026")
@@ -55,6 +60,8 @@ if records:
         grade_filter = st.selectbox("Filter by Grade", ["All Grades", "A", "B", "C", "D", "F"])
     with fcol3:
         risk_filter = st.selectbox("Filter by Risk Level", ["All Risk Tiers", "LOW RISK", "MEDIUM RISK", "HIGH RISK"])
+
+    st.markdown('</div></div>', unsafe_allow_html=True)
 
     # Apply filters
     filtered_df = df.copy()
@@ -68,26 +75,61 @@ if records:
     if risk_filter != "All Risk Tiers":
         filtered_df = filtered_df[filtered_df["Risk Level"] == risk_filter]
 
-    # Summary metric pills
+    # Summary Stat Grid
     mcol1, mcol2, mcol3, mcol4 = st.columns(4)
     with mcol1:
-        st.metric("Total Records Found", len(filtered_df))
+        st.markdown(f"""
+            <div class="stat-shell">
+                <div class="stat-core">
+                    <div class="stat-number" style="color: #60A5FA;">{len(filtered_df)}</div>
+                    <div class="stat-title">Records Found</div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
     with mcol2:
         high_risk_count = (filtered_df["Risk Level"] == "HIGH RISK").sum()
-        st.metric("High Risk Count", high_risk_count)
+        st.markdown(f"""
+            <div class="stat-shell">
+                <div class="stat-core">
+                    <div class="stat-number" style="color: #F87171;">{high_risk_count}</div>
+                    <div class="stat-title">High Risk Tiers</div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
     with mcol3:
         avg_score = filtered_df["Total Score"].mean() if len(filtered_df) > 0 else 0
-        st.metric("Average Score", f"{avg_score:.1f}")
+        st.markdown(f"""
+            <div class="stat-shell">
+                <div class="stat-core">
+                    <div class="stat-number" style="color: #34D399;">{avg_score:.1f}</div>
+                    <div class="stat-title">Average Score</div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
     with mcol4:
         avg_conf = filtered_df["Confidence (%)"].mean() if len(filtered_df) > 0 else 0
-        st.metric("Average Confidence", f"{avg_conf:.1f}%")
+        st.markdown(f"""
+            <div class="stat-shell">
+                <div class="stat-core">
+                    <div class="stat-number" style="color: #A78BFA;">{avg_conf:.1f}%</div>
+                    <div class="stat-title">Avg Confidence</div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Table Display
+    # Table in Double-Bezel
+    st.markdown("""
+        <div class="bezel-shell">
+            <div class="bezel-core">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="margin: 0; color: #FFFFFF; font-size: 1.15rem; font-weight: 800;">Evaluation Records</h4>
+                </div>
+    """, unsafe_allow_html=True)
+    
     st.dataframe(filtered_df, use_container_width=True, hide_index=True)
 
-    # Export to CSV
     csv_data = filtered_df.to_csv(index=False).encode('utf-8')
     st.download_button(
         label="📥 Export Filtered Records (CSV)",
@@ -95,6 +137,7 @@ if records:
         file_name="student_evaluation_records.csv",
         mime="text/csv"
     )
+    st.markdown('</div></div>', unsafe_allow_html=True)
 
 else:
     st.info("No prediction logs recorded yet. Visit the **Predict** page to generate and store your first student evaluation.")
