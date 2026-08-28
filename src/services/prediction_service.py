@@ -4,6 +4,8 @@ Loads trained machine learning models, generates real-time predictions,
 calculates SHAP explainability values, and logs results to Supabase.
 """
 
+import warnings
+warnings.filterwarnings("ignore")
 import joblib
 import pandas as pd
 import numpy as np
