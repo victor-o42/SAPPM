@@ -10,7 +10,7 @@ import joblib
 import pandas as pd
 import numpy as np
 import shap
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, cast
 from src.db.supabase_client import get_supabase
 
 # Cache model and explainer in memory for instant inference
@@ -114,7 +114,9 @@ def predict_student_grade(
             "created_by": user_id
         }
         student_res = supabase.table("student_data").insert(student_row).execute()
-        student_id = student_res.data[0]["student_id"] if student_res.data else None
+        student_id = None
+        if student_res.data and isinstance(student_res.data[0], dict):
+            student_id = student_res.data[0].get("student_id")
 
         # 2. Insert into prediction_output
         if student_id:
@@ -164,7 +166,7 @@ def fetch_prediction_history(limit: int = 50) -> List[Dict[str, Any]]:
             .limit(limit)
             .execute()
         )
-        return res.data or []
+        return cast(List[Dict[str, Any]], res.data or [])
     except Exception as e:
         print(f"Error fetching history: {e}")
         return []
@@ -177,7 +179,7 @@ def fetch_model_registry() -> List[Dict[str, Any]]:
     try:
         supabase = get_supabase()
         res = supabase.table("model_info").select("*").order("accuracy", desc=True).execute()
-        return res.data or []
+        return cast(List[Dict[str, Any]], res.data or [])
     except Exception as e:
         print(f"Error fetching models: {e}")
         return []

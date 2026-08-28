@@ -1,25 +1,26 @@
 """
-S.A.P.P.M - Institutional Machine Learning Landing Page
-Engineered with Double-Bezel architecture, precision SVG iconography,
-and enterprise decision-support workflows.
+S.A.P.P.M - Next-Generation AI Intelligence Platform
+Integrates Interactive 3D Spline WebGL Scene, Spotlight Cursor Physics,
+Double-Bezel Architecture, and Real-Time ML Decision Workflows.
 """
 
 import streamlit as st
+import streamlit.components.v1 as components
 from src.ui.styles import apply_global_styles
 from src.ui.icons import icon
 
 st.set_page_config(
-    page_title="S.A.P.P.M - Student Academic Performance Prediction",
+    page_title="S.A.P.P.M - Academic Performance Intelligence",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Apply agency design system
+# Apply global agency design system
 apply_global_styles()
 
 # Floating Institutional Top Header
 st.markdown(f"""
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0 2rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0 1.5rem 0;">
         <div style="display: flex; align-items: center; gap: 12px;">
             <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #4F46E5, #3B82F6); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);">
                 {icon("academic", size=22, color="#FFFFFF")}
@@ -36,32 +37,242 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# Hero Section
-st.markdown(f"""
-    <div class="hero-container">
-        <span class="hero-eyebrow">{icon("sparkles", size=14, color="#A5B4FC")} &nbsp;Next-Generation Academic Intelligence</span>
-        <h1 class="hero-headline">Predict Student Outcomes.<br>Intervene Before Semester Exams.</h1>
-        <p class="hero-lead">
-            An institutional predictive analytics platform engineered with Extreme Gradient Boosting (XGBoost) and SHAP Explainable AI.
-            Accurately forecast student grade trajectories with 99.81% accuracy to deliver proactive academic interventions.
-        </p>
-    </div>
-""", unsafe_allow_html=True)
+# 3D Interactive Spline Hero with Dynamic Spotlight
+spline_hero_html = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.72/build/spline-viewer.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+        }
 
-# Hero Action Buttons
+        body {
+            background: transparent;
+            overflow: hidden;
+        }
+
+        /* Outer Double-Bezel Shell */
+        .hero-card {
+            position: relative;
+            width: 100%;
+            height: 520px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(6, 9, 20, 0.98) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+            display: flex;
+        }
+
+        /* Dynamic Mouse Spotlight */
+        .spotlight {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(56, 189, 248, 0.08) 40%, transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+            filter: blur(25px);
+            z-index: 1;
+        }
+
+        /* Left Hero Content */
+        .hero-left {
+            flex: 1.15;
+            padding: 3.5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .eyebrow-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+            padding: 0.4rem 1.1rem;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            border-radius: 9999px;
+            color: #A5B4FC;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .title-gradient {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.12;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #FFFFFF 20%, #CBD5E1 70%, #94A3B8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .desc-text {
+            color: #94A3B8;
+            font-size: 1.05rem;
+            line-height: 1.65;
+            max-width: 500px;
+            margin-bottom: 2rem;
+        }
+
+        .stats-badge-row {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .stat-mini-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 0.75rem 1.25rem;
+        }
+
+        .stat-mini-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #34D399;
+            line-height: 1.1;
+        }
+
+        .stat-mini-label {
+            font-size: 0.72rem;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 700;
+            margin-top: 0.2rem;
+        }
+
+        /* Right 3D Spline Canvas */
+        .hero-right {
+            flex: 1.25;
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        spline-viewer {
+            width: 100%;
+            height: 100%;
+            pointer-events: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero-card {
+                flex-direction: column;
+                height: 750px;
+            }
+            .hero-left {
+                padding: 2rem;
+            }
+            .hero-right {
+                height: 380px;
+            }
+            .title-gradient {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-card" id="heroCard">
+        <div class="spotlight" id="spotlight"></div>
+        
+        <div class="hero-left">
+            <div class="eyebrow-pill">
+                <span>✦</span> Interactive 3D Decision Support
+            </div>
+            <h1 class="title-gradient">
+                Predict Student Trajectories.
+            </h1>
+            <p class="desc-text">
+                Extreme Gradient Boosting (XGBoost) and SHAP Explainable AI for proactive institutional guidance and grade forecasting.
+            </p>
+            
+            <div class="stats-badge-row">
+                <div class="stat-mini-card">
+                    <div class="stat-mini-num">99.81%</div>
+                    <div class="stat-mini-label">Model Accuracy</div>
+                </div>
+                <div class="stat-mini-card">
+                    <div class="stat-mini-num" style="color: #60A5FA;">1M</div>
+                    <div class="stat-mini-label">Dataset Records</div>
+                </div>
+                <div class="stat-mini-card">
+                    <div class="stat-mini-num" style="color: #A78BFA;">&lt;15ms</div>
+                    <div class="stat-mini-label">Latency</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"></spline-viewer>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('heroCard');
+        const spotlight = document.getElementById('spotlight');
+
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            spotlight.style.left = `${x}px`;
+            spotlight.style.top = `${y}px`;
+            spotlight.style.opacity = '1';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            spotlight.style.opacity = '0';
+        });
+    </script>
+</body>
+</html>
+"""
+
+# Render 3D Spline Canvas Component
+components.html(spline_hero_html, height=540)
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+# Navigation Action Triggers
 bcol1, bcol2, bcol3 = st.columns([1, 1.4, 1])
 with bcol2:
     btn1, btn2 = st.columns(2)
     with btn1:
-        if st.button("Launch Predictor", use_container_width=True, type="primary"):
+        if st.button("Launch Prediction Studio", use_container_width=True, type="primary"):
             st.switch_page("pages/2_Predict.py")
     with btn2:
-        if st.button("Staff Portal", use_container_width=True):
+        if st.button("Staff Management Portal", use_container_width=True):
             st.switch_page("pages/1_Staff_Portal.py")
 
-st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("<hr>", unsafe_allow_html=True)
 
-# Double-Bezel Live Inference Preview
+# Live Output Preview in Double-Bezel
 st.markdown("""
     <div class="bezel-shell">
         <div class="bezel-core">
@@ -94,52 +305,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-st.markdown("<hr>", unsafe_allow_html=True)
-
-# Stat Bento Grid
-m1, m2, m3, m4 = st.columns(4)
-
-with m1:
-    st.markdown("""
-        <div class="stat-shell">
-            <div class="stat-core">
-                <div class="stat-number" style="color: #60A5FA;">1,000,000</div>
-                <div class="stat-title">Dataset Instances</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-with m2:
-    st.markdown("""
-        <div class="stat-shell">
-            <div class="stat-core">
-                <div class="stat-number" style="color: #34D399;">99.81%</div>
-                <div class="stat-title">XGBoost Accuracy</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-with m3:
-    st.markdown("""
-        <div class="stat-shell">
-            <div class="stat-core">
-                <div class="stat-number" style="color: #A78BFA;">4 Factors</div>
-                <div class="stat-title">Predictor Matrix</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-with m4:
-    st.markdown("""
-        <div class="stat-shell">
-            <div class="stat-core">
-                <div class="stat-number" style="color: #FBBF24;">&lt; 15 ms</div>
-                <div class="stat-title">Inference Speed</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
 
 # Asymmetrical Bento Grid Showcase
 st.subheader("System Architecture & Capabilities")
@@ -236,7 +402,7 @@ st.markdown(f"""
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-top: 1.25rem;">
                 <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 1.25rem;">
                     <div style="font-size: 0.8rem; color: #60A5FA; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;">Tier 1: Presentation</div>
-                    <div style="font-size: 0.9rem; color: #CBD5E1; margin-top: 0.35rem; line-height: 1.5;">Streamlit Web Studio with custom Double-Bezel glassmorphic design tokens.</div>
+                    <div style="font-size: 0.9rem; color: #CBD5E1; margin-top: 0.35rem; line-height: 1.5;">Streamlit Web Studio with interactive 3D WebGL Spline scenes and Double-Bezel cards.</div>
                 </div>
                 <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 1.25rem;">
                     <div style="font-size: 0.8rem; color: #34D399; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;">Tier 2: Application</div>
