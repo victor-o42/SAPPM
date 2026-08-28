@@ -3,6 +3,10 @@ About & System Documentation Page for S.A.P.P.M
 Presents background details, methodology, CRISP-DM lifecycle, and research scope.
 """
 
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import streamlit as st
 from src.ui.styles import apply_global_styles
 from src.ui.icons import icon

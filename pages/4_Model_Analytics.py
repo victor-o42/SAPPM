@@ -4,6 +4,10 @@ Displays live model registry data from Supabase, comparative charts,
 and evaluation metrics across candidate algorithms.
 """
 
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go

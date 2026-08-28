@@ -4,6 +4,10 @@ Provides intuitive input controls, quick test presets, real-time predictions,
 interactive probability distributions, and Supabase synchronization.
 """
 
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import streamlit as st
 import plotly.graph_objects as go
 from src.ui.styles import apply_global_styles

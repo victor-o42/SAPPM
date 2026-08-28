@@ -3,6 +3,10 @@ Staff Portal & Authentication Page for S.A.P.P.M
 Dedicated route for staff member login, registration, and session management.
 """
 
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import streamlit as st
 from src.ui.styles import apply_global_styles
 from src.ui.auth_ui import render_auth_modal

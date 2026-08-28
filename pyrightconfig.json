@@ -1,0 +1,14 @@
+{
+  "include": [
+    "src",
+    "app.py",
+    "pages"
+  ],
+  "extraPaths": [
+    ".",
+    "src"
+  ],
+  "reportMissingImports": "none",
+  "reportMissingTypeStubs": "none",
+  "typeCheckingMode": "off"
+}
