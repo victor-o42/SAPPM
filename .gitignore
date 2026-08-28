@@ -46,13 +46,23 @@ ENV/
 .agents/
 skills-lock.json
 
-# Project documentation & reference files (ignore user uploads / defense docs)
+# Project documentation & reference files
 *.docx
 *.doc
 *.pdf
 *.pptx
 *.ppt
 project_doc_extracted.txt
+
+# Media & Videos (User references)
+*.mp4
+*.mov
+*.webm
+*.avi
+*.mkv
+*.png
+*.jpg
+*.jpeg
 
 # OS Generated files
 .DS_Store
