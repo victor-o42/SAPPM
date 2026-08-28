@@ -1,6 +1,7 @@
 """
 S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
 Inspired by Roobinium Design:
+- Dynamic mouse-following radial spotlight shadow & glow
 - Floating glass island navbar with Login & Sign Up CTA pills
 - Clean, uncluttered centered typography with generous whitespace
 - Centerpiece 3D interactive robot tracking cursor with organic physics
@@ -34,7 +35,7 @@ st.markdown("""
 
     /* Canvas background */
     html, body, [class*="css"], .stApp {
-        background-color: #0B0E17 !important;
+        background-color: #070913 !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #FFFFFF !important;
         overflow-x: hidden !important;
@@ -48,7 +49,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Complete Roobinium-Style Hero Component (Navbar + Centered Typography + 3D Robot + Floating Micro-Cards)
+# Complete Roobinium-Style Hero Component with Spotlight Mouse Follower
 roobinium_hero_html = """
 <!DOCTYPE html>
 <html lang="en">
@@ -75,21 +76,37 @@ roobinium_hero_html = """
             position: relative;
         }
 
-        /* Ambient Lighting / Nebula Stars */
+        /* 1. Dynamic Cursor-Tracking Spotlight Glow */
+        .cursor-spotlight {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.16) 0%, rgba(56, 189, 248, 0.08) 35%, rgba(139, 92, 246, 0.03) 55%, transparent 70%);
+            filter: blur(40px);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            will-change: left, top;
+        }
+
+        /* Ambient Static Lighting */
         .ambient-glow {
             position: absolute;
-            top: 25%;
+            top: 20%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 800px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(56, 189, 248, 0.05) 50%, transparent 80%);
-            filter: blur(60px);
+            width: 900px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, rgba(56, 189, 248, 0.04) 50%, transparent 80%);
+            filter: blur(70px);
             pointer-events: none;
             z-index: 1;
         }
 
-        /* 1. Sleek Floating Island Navbar */
+        /* 2. Sleek Floating Island Navbar */
         .navbar-container {
             width: 100%;
             max-width: 1200px;
@@ -167,7 +184,7 @@ roobinium_hero_html = """
             box-shadow: 0 8px 25px rgba(255, 255, 255, 0.35);
         }
 
-        /* 2. Centered Minimalist Hero Header */
+        /* 3. Centered Minimalist Hero Header */
         .hero-section {
             text-align: center;
             padding-top: 2rem;
@@ -215,7 +232,7 @@ roobinium_hero_html = """
             box-shadow: 0 15px 40px rgba(255, 255, 255, 0.4);
         }
 
-        /* 3. 3D Spline Canvas Container */
+        /* 4. 3D Spline Canvas Container */
         .spline-stage {
             position: relative;
             width: 100%;
@@ -233,7 +250,7 @@ roobinium_hero_html = """
             pointer-events: auto;
         }
 
-        /* 4. Floating Frosted Glass Micro-Cards */
+        /* 5. Floating Frosted Glass Micro-Cards */
         .card-floating-left {
             position: absolute;
             left: calc(50% - 480px);
@@ -337,6 +354,8 @@ roobinium_hero_html = """
     </style>
 </head>
 <body>
+    <!-- Spotlight mouse-follower element -->
+    <div class="cursor-spotlight" id="spotlight"></div>
     <div class="ambient-glow"></div>
 
     <!-- 1. Sleek Floating Navbar -->
@@ -346,16 +365,16 @@ roobinium_hero_html = """
         </div>
 
         <div class="nav-menu">
-            <a class="nav-link" onclick="window.parent.postMessage({type: 'streamlit:setComponentValue', value: 'predict'}, '*')">Predict</a>
-            <a class="nav-link" onclick="window.parent.postMessage({type: 'streamlit:setComponentValue', value: 'explainability'}, '*')">Explainability</a>
-            <a class="nav-link" onclick="window.parent.postMessage({type: 'streamlit:setComponentValue', value: 'analytics'}, '*')">Analytics</a>
-            <a class="nav-link" onclick="window.parent.postMessage({type: 'streamlit:setComponentValue', value: 'records'}, '*')">Records</a>
-            <a class="nav-link" onclick="window.parent.postMessage({type: 'streamlit:setComponentValue', value: 'docs'}, '*')">Documentation</a>
+            <a class="nav-link" onclick="window.parent.location.href='/Predict'">Predict</a>
+            <a class="nav-link" onclick="window.parent.location.href='/Explainability'">Explainability</a>
+            <a class="nav-link" onclick="window.parent.location.href='/Model_Analytics'">Analytics</a>
+            <a class="nav-link" onclick="window.parent.location.href='/Student_Records'">Records</a>
+            <a class="nav-link" onclick="window.parent.location.href='/Documentation'">Documentation</a>
         </div>
 
         <div class="nav-actions">
-            <button class="btn-ghost" onclick="window.location.href='/Staff_Portal'">Login</button>
-            <button class="btn-pill-white" onclick="window.location.href='/Predict'">Launch Studio</button>
+            <button class="btn-ghost" onclick="window.parent.location.href='/Staff_Portal'">Login</button>
+            <button class="btn-pill-white" onclick="window.parent.location.href='/Predict'">Launch Studio</button>
         </div>
     </nav>
 
@@ -365,7 +384,7 @@ roobinium_hero_html = """
         <p class="hero-subtitle">
             Forecast student performance trajectories with 99.81% precision, powered by Extreme Gradient Boosting & SHAP.
         </p>
-        <button class="hero-cta" onclick="window.location.href='/Predict'">
+        <button class="hero-cta" onclick="window.parent.location.href='/Predict'">
             Evaluate Performance ↗
         </button>
     </section>
@@ -398,19 +417,48 @@ roobinium_hero_html = """
             </div>
         </div>
     </div>
+
+    <!-- Spotlight cursor physics tracking script -->
+    <script>
+        const spotlight = document.getElementById('spotlight');
+        let currentX = window.innerWidth / 2;
+        let currentY = window.innerHeight / 2;
+        let targetX = currentX;
+        let targetY = currentY;
+
+        document.addEventListener('mousemove', (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+            spotlight.style.opacity = '1';
+        });
+
+        document.addEventListener('mouseleave', () => {
+            spotlight.style.opacity = '0';
+        });
+
+        // Smooth physics interpolation loop
+        function animate() {
+            currentX += (targetX - currentX) * 0.12;
+            currentY += (targetY - currentY) * 0.12;
+            spotlight.style.left = `${currentX}px`;
+            spotlight.style.top = `${currentY}px`;
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
 </body>
 </html>
 """
 
-# Render Full-Height Hero Viewport
+# Render Full-Height Hero Viewport with Spotlight
 components.html(roobinium_hero_html, height=840)
 
-# Quick Streamlit Navigation Actions
+# Quick Streamlit Navigation Actions Below
 st.markdown("""
     <div style="max-width: 1100px; margin: 0 auto 4rem auto; padding: 0 1.5rem;">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
             <div style="background: rgba(18, 24, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 1.5rem; text-align: center;">
-                <div style="font-size: 0.75rem; color: #818CF8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Prediction Studio</div>
+                <div style="font-size: 0.75rem; color: #818CF8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Prediction Service</div>
                 <div style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF; margin: 0.4rem 0 1rem 0;">Student Forecast</div>
                 <a href="/Predict" target="_self" style="display: inline-block; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #FFFFFF; padding: 8px 18px; border-radius: 9999px; font-weight: 600; text-decoration: none; font-size: 0.85rem;">Open Predictor ↗</a>
             </div>
