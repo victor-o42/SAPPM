@@ -1,10 +1,14 @@
 """
-S.A.P.P.M - Next-Generation AI Intelligence Platform
-Engineered to match Blendr.ai & Roobinium Agency Standards:
-- Restored clean floating glass island navbar (no awkward badge)
-- Distinct non-repetitive metrics (Inference Speed on 3D card, Accuracy on stat strip)
-- Smooth IntersectionObserver scroll-driven fade-up animations
-- 3D interactive robot centerpiece with dynamic spotlight physics
+S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
+Full-Viewport Agency Experience:
+- Floating glass island navbar with direct links & CTA
+- Centered typography with Evaluate Performance action
+- Centerpiece 3D robot tracking cursor surrounded by 4 Roobinium frosted glass micro-cards:
+    1. Top-Left: Model Architecture (Multiclass XGBoost Engine)
+    2. Top-Right: Model Accuracy (99.81%)
+    3. Bottom-Left: Inference Speed (< 15ms)
+    4. Bottom-Right: Dataset Records (1,000,000)
+- Zero clutter / no bottom overflow
 """
 
 import streamlit as st
@@ -36,8 +40,9 @@ st.markdown("""
         background-color: #05070E !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #FFFFFF !important;
-        overflow-x: hidden !important;
-        scroll-behavior: smooth !important;
+        overflow: hidden !important;
+        height: 100vh !important;
+        width: 100vw !important;
     }
 
     .main .block-container {
@@ -48,15 +53,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Complete Blendr.ai + Roobinium + Finomac Experience
-complete_landing_html = """
+# Complete Roobinium 4-Card Hero Viewport
+roobinium_full_viewport_html = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.72/build/spline-viewer.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
 
         * {
             margin: 0;
@@ -66,20 +71,19 @@ complete_landing_html = """
             user-select: none;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
             background-color: #05070E;
             color: #FFFFFF;
             width: 100vw;
-            min-height: 100vh;
-            overflow-x: hidden;
+            height: 100vh;
+            overflow: hidden;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        /* 1. Dynamic Cursor-Tracking Spotlight Glow */
+        /* Dynamic Cursor Spotlight */
         .cursor-spotlight {
             position: fixed;
             width: 650px;
@@ -95,10 +99,10 @@ complete_landing_html = """
             will-change: left, top;
         }
 
-        /* Ambient Lighting */
+        /* Ambient Nebula Glow */
         .ambient-glow-top {
             position: absolute;
-            top: 15%;
+            top: 25%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 900px;
@@ -109,12 +113,12 @@ complete_landing_html = """
             z-index: 1;
         }
 
-        /* 2. Sleek Floating Island Navbar (Cleaned) */
+        /* 1. Sleek Floating Island Navbar */
         .navbar-container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 0 auto;
-            padding: 28px 32px;
+            padding: 24px 32px 10px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -128,6 +132,7 @@ complete_landing_html = """
             letter-spacing: -0.04em;
             color: #FFFFFF;
             text-decoration: none;
+            cursor: pointer;
         }
 
         .nav-menu {
@@ -185,10 +190,10 @@ complete_landing_html = """
             box-shadow: 0 8px 30px rgba(255, 255, 255, 0.35);
         }
 
-        /* 3. Centered Minimalist Hero Header */
+        /* 2. Centered Minimalist Hero Header */
         .hero-section {
             text-align: center;
-            padding-top: 2rem;
+            padding-top: 1rem;
             position: relative;
             z-index: 10;
             max-width: 900px;
@@ -196,21 +201,21 @@ complete_landing_html = """
         }
 
         .hero-title {
-            font-size: 4rem;
+            font-size: 3.6rem;
             font-weight: 900;
             letter-spacing: -0.04em;
             line-height: 1.12;
             color: #FFFFFF;
-            margin-bottom: 1.25rem;
+            margin-bottom: 0.75rem;
         }
 
         .hero-subtitle {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: #94A3B8;
             font-weight: 400;
             max-width: 600px;
-            margin: 0 auto 2.25rem auto;
-            line-height: 1.65;
+            margin: 0 auto 1.5rem auto;
+            line-height: 1.6;
         }
 
         .hero-cta {
@@ -218,8 +223,8 @@ complete_landing_html = """
             color: #05070E;
             border: none;
             border-radius: 9999px;
-            padding: 15px 38px;
-            font-size: 0.98rem;
+            padding: 14px 36px;
+            font-size: 0.95rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.25s ease;
@@ -233,12 +238,12 @@ complete_landing_html = """
             box-shadow: 0 15px 45px rgba(255, 255, 255, 0.4);
         }
 
-        /* 4. 3D Spline Canvas Container */
+        /* 3. 3D Spline Canvas Container with 4 Floating Cards */
         .spline-stage {
             position: relative;
             width: 100%;
-            height: 520px;
-            margin-top: -30px;
+            height: 540px;
+            margin-top: -15px;
             z-index: 5;
             display: flex;
             align-items: center;
@@ -251,45 +256,44 @@ complete_landing_html = """
             pointer-events: auto;
         }
 
-        /* 5. Floating Frosted Glass Micro-Cards */
-        .card-floating-left {
+        /* 4 Floating Roobinium Micro-Cards */
+        .floating-card {
             position: absolute;
-            left: calc(50% - 480px);
-            bottom: 80px;
             z-index: 20;
             background: rgba(18, 24, 40, 0.65);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
-            padding: 18px 24px;
-            width: 230px;
+            padding: 16px 22px;
+            width: 240px;
             box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
             transition: all 0.3s ease;
         }
-        .card-floating-left:hover {
-            border-color: rgba(255, 255, 255, 0.2);
+        .floating-card:hover {
+            border-color: rgba(255, 255, 255, 0.22);
             transform: translateY(-3px);
         }
 
-        .card-floating-right {
-            position: absolute;
-            right: calc(50% - 480px);
-            bottom: 80px;
-            z-index: 20;
-            background: rgba(18, 24, 40, 0.65);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 18px 24px;
-            width: 230px;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
-            transition: all 0.3s ease;
+        /* Positioning the 4 Cards Surrounding the Robot */
+        .card-top-left {
+            left: calc(50% - 500px);
+            top: 60px;
         }
-        .card-floating-right:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
+
+        .card-top-right {
+            right: calc(50% - 500px);
+            top: 60px;
+        }
+
+        .card-bottom-left {
+            left: calc(50% - 500px);
+            bottom: 60px;
+        }
+
+        .card-bottom-right {
+            right: calc(50% - 500px);
+            bottom: 60px;
         }
 
         .micro-tag {
@@ -319,13 +323,13 @@ complete_landing_html = """
             font-size: 1.05rem;
             font-weight: 700;
             color: #FFFFFF;
-            margin-top: 8px;
+            margin-top: 6px;
             line-height: 1.35;
         }
 
         .micro-stat {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.8rem;
+            font-size: 1.75rem;
             font-weight: 900;
             color: #FFFFFF;
             margin-top: 4px;
@@ -336,7 +340,7 @@ complete_landing_html = """
             height: 4px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 9999px;
-            margin-top: 10px;
+            margin-top: 8px;
             overflow: hidden;
         }
         .progress-fill {
@@ -346,229 +350,27 @@ complete_landing_html = """
             border-radius: 9999px;
         }
 
-        /* 6. Finomac-Style Minimalist Stat Strip */
-        .stats-strip-container {
-            max-width: 1100px;
-            margin: 4rem auto;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            padding: 3rem 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .stats-strip-container.in-view {
-            opacity: 1;
-            transform: translateY(0);
+        @media (max-width: 1100px) {
+            .card-top-left { left: 20px; top: 20px; }
+            .card-top-right { right: 20px; top: 20px; }
+            .card-bottom-left { left: 20px; bottom: 20px; }
+            .card-bottom-right { right: 20px; bottom: 20px; }
         }
 
-        .stat-strip-item {
-            text-align: center;
-        }
-
-        .stat-strip-num {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 3rem;
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            color: #FFFFFF;
-            line-height: 1.1;
-        }
-
-        .stat-strip-label {
-            font-size: 0.85rem;
-            color: #94A3B8;
-            font-weight: 600;
-            margin-top: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-
-        /* 7. Blendr.ai Cinematic Feature Showcase */
-        .features-container {
-            max-width: 1140px;
-            margin: 6rem auto;
-            padding: 0 2rem;
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 4rem auto;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .section-header.in-view {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .section-eyebrow {
-            font-size: 0.78rem;
-            font-weight: 800;
-            color: #818CF8;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            margin-bottom: 0.75rem;
-            display: inline-block;
-        }
-
-        .section-heading {
-            font-size: 2.8rem;
-            font-weight: 900;
-            letter-spacing: -0.03em;
-            line-height: 1.2;
-            color: #FFFFFF;
-        }
-
-        .feature-cinematic-card {
-            background: linear-gradient(135deg, rgba(16, 22, 38, 0.75) 0%, rgba(9, 13, 25, 0.9) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 28px;
-            padding: 3.5rem;
-            margin-bottom: 2.5rem;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 3rem;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .feature-cinematic-card.in-view {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .feature-cinematic-card:hover {
-            border-color: rgba(99, 102, 241, 0.4);
-            transform: translateY(-4px);
-            box-shadow: 0 35px 70px -15px rgba(99, 102, 241, 0.2);
-        }
-
-        .feature-card-content {
-            flex: 1.2;
-        }
-
-        .feature-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 14px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #CBD5E1;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            margin-bottom: 1.25rem;
-        }
-
-        .feature-card-title {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #FFFFFF;
-            letter-spacing: -0.03em;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-
-        .feature-card-desc {
-            color: #94A3B8;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            margin-bottom: 1.75rem;
-        }
-
-        .feature-card-cta {
-            color: #818CF8;
-            font-size: 0.95rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: gap 0.2s ease;
-        }
-        .feature-card-cta:hover {
-            gap: 10px;
-            color: #A5B4FC;
-        }
-
-        .feature-card-visual {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 20px;
-            padding: 2.5rem;
-            text-align: center;
-        }
-
-        /* 8. Blendr.ai Minimalist Closing Section & Footer */
-        .closing-section {
-            text-align: center;
-            padding: 6rem 2rem 4rem 2rem;
-            position: relative;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .closing-section.in-view {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .closing-title {
-            font-size: 3.2rem;
-            font-weight: 900;
-            letter-spacing: -0.03em;
-            color: #FFFFFF;
-            margin-bottom: 1rem;
-        }
-
-        .closing-subtitle {
-            font-size: 1.1rem;
-            color: #94A3B8;
-            margin-bottom: 2.5rem;
-        }
-
-        .footer-strip {
-            max-width: 1140px;
-            margin: 4rem auto 2rem auto;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #64748B;
-            font-size: 0.85rem;
-        }
-
-        @media (max-width: 950px) {
-            .hero-title { font-size: 2.6rem; }
-            .card-floating-left, .card-floating-right { display: none; }
-            .spline-stage { height: 400px; }
+        @media (max-width: 900px) {
+            .hero-title { font-size: 2.5rem; }
+            .floating-card { display: none; }
             .nav-menu { display: none; }
-            .stats-strip-container { grid-template-columns: 1fr; gap: 2rem; }
-            .feature-cinematic-card { flex-direction: column; padding: 2rem; }
-            .section-heading { font-size: 2.2rem; }
-            .closing-title { font-size: 2.3rem; }
+            .spline-stage { height: 400px; }
         }
     </style>
 </head>
 <body>
-    <!-- Spotlight mouse-follower -->
+    <!-- Dynamic Spotlight -->
     <div class="cursor-spotlight" id="spotlight"></div>
     <div class="ambient-glow-top"></div>
 
-    <!-- 1. Sleek Floating Navbar (Restored clean branding) -->
+    <!-- 1. Sleek Floating Navbar -->
     <nav class="navbar-container">
         <a class="nav-logo" onclick="window.parent.location.href='/'">
             <span>SAPPM</span>
@@ -588,7 +390,7 @@ complete_landing_html = """
         </div>
     </nav>
 
-    <!-- 2. Centered Minimalist Hero Header -->
+    <!-- 2. Centered Typography -->
     <section class="hero-section">
         <h1 class="hero-title">Elevate Academic Intelligence</h1>
         <p class="hero-subtitle">
@@ -599,122 +401,60 @@ complete_landing_html = """
         </button>
     </section>
 
-    <!-- 3. 3D Spline Canvas -->
+    <!-- 3. 3D Spline Centerpiece with 4 Floating Cards -->
     <div class="spline-stage">
         <spline-viewer id="splineViewer" url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"></spline-viewer>
         
-        <!-- Floating Left Card -->
-        <div class="card-floating-left">
+        <!-- 1. Top-Left Card: Model Architecture -->
+        <div class="floating-card card-top-left">
             <div class="micro-tag">
                 <span>Model Architecture</span>
                 <div class="arrow-chip">↗</div>
             </div>
-            <div class="micro-main-text">Multiclass XGBoost Engine</div>
+            <div class="micro-main-text">Multiclass XGBoost</div>
             <div class="progress-bar-wrap">
-                <div class="progress-fill"></div>
+                <div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, #6366F1, #818CF8);"></div>
             </div>
         </div>
 
-        <!-- Floating Right Card (Inference Speed - Non Repetitive) -->
-        <div class="card-floating-right">
+        <!-- 2. Top-Right Card: Model Accuracy -->
+        <div class="floating-card card-top-right">
+            <div class="micro-tag">
+                <span>Model Accuracy</span>
+                <div class="arrow-chip">↗</div>
+            </div>
+            <div class="micro-stat" style="color: #34D399;">99.81%</div>
+            <div class="progress-bar-wrap">
+                <div class="progress-fill" style="width: 99.8%; background: linear-gradient(90deg, #10B981, #34D399);"></div>
+            </div>
+        </div>
+
+        <!-- 3. Bottom-Left Card: Inference Speed -->
+        <div class="floating-card card-bottom-left">
             <div class="micro-tag">
                 <span>Inference Speed</span>
                 <div class="arrow-chip">↗</div>
             </div>
-            <div class="micro-stat">&lt; 15ms</div>
+            <div class="micro-stat" style="color: #60A5FA;">&lt; 15ms</div>
             <div class="progress-bar-wrap">
-                <div class="progress-fill" style="width: 98%;"></div>
+                <div class="progress-fill" style="width: 95%; background: linear-gradient(90deg, #3B82F6, #60A5FA);"></div>
+            </div>
+        </div>
+
+        <!-- 4. Bottom-Right Card: Trained Records -->
+        <div class="floating-card card-bottom-right">
+            <div class="micro-tag">
+                <span>Dataset Records</span>
+                <div class="arrow-chip">↗</div>
+            </div>
+            <div class="micro-stat" style="color: #FBBF24;">1,000,000</div>
+            <div class="progress-bar-wrap">
+                <div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, #F59E0B, #FBBF24);"></div>
             </div>
         </div>
     </div>
 
-    <!-- 4. Finomac Minimalist Stat Strip (Trained dataset & 99.81% accuracy) -->
-    <div class="stats-strip-container animate-on-scroll">
-        <div class="stat-strip-item">
-            <div class="stat-strip-num">1,000,000</div>
-            <div class="stat-strip-label">Trained Dataset Records</div>
-        </div>
-        <div class="stat-strip-item">
-            <div class="stat-strip-num" style="color: #34D399;">99.81%</div>
-            <div class="stat-strip-label">XGBoost Test Accuracy</div>
-        </div>
-        <div class="stat-strip-item">
-            <div class="stat-strip-num" style="color: #A78BFA;">4 Factors</div>
-            <div class="stat-strip-label">Predictor Indicators</div>
-        </div>
-    </div>
-
-    <!-- 5. Blendr.ai Cinematic Feature Showcases -->
-    <div class="features-container">
-        <div class="section-header animate-on-scroll">
-            <span class="section-eyebrow">Institutional Architecture</span>
-            <h2 class="section-heading">Everything You Need to Guide Student Success</h2>
-        </div>
-
-        <!-- Feature Card 1 -->
-        <div class="feature-cinematic-card animate-on-scroll">
-            <div class="feature-card-content">
-                <div class="feature-chip">✦ Predictive Intelligence</div>
-                <h3 class="feature-card-title">Multiclass Performance Forecasting</h3>
-                <p class="feature-card-desc">
-                    Trained across 800,000 records to generate fine-grained probability distributions across grades A, B, C, D, and F with 99.81% precision.
-                </p>
-                <a class="feature-card-cta" onclick="window.parent.location.href='/Predict'">Launch Predictor ↗</a>
-            </div>
-            <div class="feature-card-visual">
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 2.4rem; font-weight: 900; color: #34D399;">Grade A</div>
-                <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 4px; text-transform: uppercase; font-weight: 700;">99.81% Certainty</div>
-            </div>
-        </div>
-
-        <!-- Feature Card 2 -->
-        <div class="feature-cinematic-card animate-on-scroll">
-            <div class="feature-card-content">
-                <div class="feature-chip">✦ Explainable AI</div>
-                <h3 class="feature-card-title">Demystified SHAP Attribution</h3>
-                <p class="feature-card-desc">
-                    Eliminates black-box opacity. Quantifies exact Shapley factor contributions for attendance, study hours, and continuous assessments.
-                </p>
-                <a class="feature-card-cta" onclick="window.parent.location.href='/Explainability'">Inspect Attribution ↗</a>
-            </div>
-            <div class="feature-card-visual">
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.8rem; font-weight: 900; color: #818CF8;">SHAP +0.42</div>
-                <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 4px; text-transform: uppercase; font-weight: 700;">Dominant Positive Driver</div>
-            </div>
-        </div>
-
-        <!-- Feature Card 3 -->
-        <div class="feature-cinematic-card animate-on-scroll">
-            <div class="feature-card-content">
-                <div class="feature-chip">✦ Proactive Guidance</div>
-                <h3 class="feature-card-title">3-Tier Early Warning Stratification</h3>
-                <p class="feature-card-desc">
-                    Automatically tags learners into Low, Medium, and High Risk tiers to trigger early mentoring before final examinations.
-                </p>
-                <a class="feature-card-cta" onclick="window.parent.location.href='/Student_Records'">View Database Records ↗</a>
-            </div>
-            <div class="feature-card-visual">
-                <div style="display: inline-block; padding: 6px 18px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.5); border-radius: 9999px; color: #34D399; font-weight: 800; font-size: 1.1rem;">● LOW RISK</div>
-                <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 8px; text-transform: uppercase; font-weight: 700;">Proactive Categorisation</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 6. Closing CTA Section -->
-    <section class="closing-section animate-on-scroll">
-        <h2 class="closing-title">Ready to evaluate student performance?</h2>
-        <p class="closing-subtitle">Launch the predictor or access the staff portal to begin data-driven guidance.</p>
-        <button class="hero-cta" onclick="window.parent.location.href='/Predict'">
-            Evaluate Performance ↗
-        </button>
-
-        <div class="footer-strip">
-            <div>S.A.P.P.M — Academic Performance Intelligence</div>
-            <div>Powered by XGBoost, SHAP & Supabase</div>
-        </div>
-    </section>
-
-    <!-- Spotlight physics, smooth scroll reveal & watermark remover script -->
+    <!-- Spotlight physics & watermark remover script -->
     <script>
         const spotlight = document.getElementById('spotlight');
         let currentX = window.innerWidth / 2;
@@ -741,19 +481,6 @@ complete_landing_html = """
         }
         animate();
 
-        // IntersectionObserver for smooth scroll-driven reveals
-        const scrollObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('in-view');
-                }
-            });
-        }, { threshold: 0.15 });
-
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            scrollObserver.observe(el);
-        });
-
         const removeSplineLogo = () => {
             const viewer = document.getElementById('splineViewer');
             if (viewer && viewer.shadowRoot) {
@@ -772,5 +499,5 @@ complete_landing_html = """
 </html>
 """
 
-# Render Full-Page Blendr / Roobinium Experience
-components.html(complete_landing_html, height=2650, scrolling=False)
+# Render Full-Viewport Experience (Fixed 100vh)
+components.html(roobinium_full_viewport_html, height=920, scrolling=False)
