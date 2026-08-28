@@ -5,7 +5,7 @@ Inspired by Roobinium Design:
 - Floating glass island navbar with Login & Sign Up CTA pills
 - Clean, uncluttered centered typography with generous whitespace
 - Centerpiece 3D interactive robot tracking cursor with organic physics
-- Floating frosted glass micro-metric pills
+- Cleaned canvas with Spline badge removed
 """
 
 import streamlit as st
@@ -49,7 +49,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Complete Roobinium-Style Hero Component with Spotlight Mouse Follower
+# Complete Roobinium-Style Hero Component with Spotlight & Badge Removed
 roobinium_hero_html = """
 <!DOCTYPE html>
 <html lang="en">
@@ -391,12 +391,12 @@ roobinium_hero_html = """
 
     <!-- 3. 3D Spline Canvas -->
     <div class="spline-stage">
-        <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"></spline-viewer>
+        <spline-viewer id="splineViewer" url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"></spline-viewer>
         
         <!-- Floating Left Card -->
         <div class="card-floating-left">
             <div class="micro-tag">
-                <span>Model Precision</span>
+                <span>Model Architecture</span>
                 <div class="arrow-chip">↗</div>
             </div>
             <div class="micro-main-text">Multiclass XGBoost Engine</div>
@@ -408,7 +408,7 @@ roobinium_hero_html = """
         <!-- Floating Right Card -->
         <div class="card-floating-right">
             <div class="micro-tag">
-                <span>Dataset Accuracy</span>
+                <span>Model Accuracy</span>
                 <div class="arrow-chip">↗</div>
             </div>
             <div class="micro-stat">99.81%</div>
@@ -418,7 +418,7 @@ roobinium_hero_html = """
         </div>
     </div>
 
-    <!-- Spotlight cursor physics tracking script -->
+    <!-- Spotlight cursor physics & Spline logo remover script -->
     <script>
         const spotlight = document.getElementById('spotlight');
         let currentX = window.innerWidth / 2;
@@ -445,12 +445,28 @@ roobinium_hero_html = """
             requestAnimationFrame(animate);
         }
         animate();
+
+        // Remove Spline watermark badge automatically
+        const removeSplineLogo = () => {
+            const viewer = document.getElementById('splineViewer');
+            if (viewer && viewer.shadowRoot) {
+                const logo = viewer.shadowRoot.querySelector('#logo') || viewer.shadowRoot.querySelector('a[href*="spline"]');
+                if (logo) {
+                    logo.style.display = 'none';
+                    logo.style.opacity = '0';
+                    logo.style.pointerEvents = 'none';
+                    logo.remove();
+                }
+            }
+        };
+
+        setInterval(removeSplineLogo, 200);
     </script>
 </body>
 </html>
 """
 
-# Render Full-Height Hero Viewport with Spotlight
+# Render Full-Height Hero Viewport with Spotlight & Cleaned Badge
 components.html(roobinium_hero_html, height=840)
 
 # Quick Streamlit Navigation Actions Below
