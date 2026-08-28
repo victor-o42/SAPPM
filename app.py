@@ -1,11 +1,11 @@
 """
-S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
-Inspired by Roobinium Design:
-- Dynamic mouse-following radial spotlight shadow & glow
-- Floating glass island navbar with Login & Sign Up CTA pills
-- Clean, uncluttered centered typography with generous whitespace
-- Centerpiece 3D interactive robot tracking cursor with organic physics
-- Cleaned canvas with Spline badge removed
+S.A.P.P.M - Next-Generation AI Intelligence Platform
+Engineered to match Blendr.ai & Roobinium Agency Standards:
+- Floating glass island navbar
+- Interactive 3D robot centerpiece with dynamic spotlight physics
+- Minimalist metric counters (Finomac style)
+- Large cinematic feature showcases with eyebrow chips (Blendr style)
+- Minimalist closing CTA and footer
 """
 
 import streamlit as st
@@ -35,7 +35,7 @@ st.markdown("""
 
     /* Canvas background */
     html, body, [class*="css"], .stApp {
-        background-color: #070913 !important;
+        background-color: #05070E !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #FFFFFF !important;
         overflow-x: hidden !important;
@@ -49,15 +49,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Complete Roobinium-Style Hero Component with Spotlight & Badge Removed
-roobinium_hero_html = """
+# Complete Blendr.ai + Roobinium + Finomac Experience
+complete_landing_html = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.72/build/spline-viewer.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap');
 
         * {
             margin: 0;
@@ -68,7 +68,7 @@ roobinium_hero_html = """
         }
 
         body {
-            background-color: #070913;
+            background-color: #05070E;
             color: #FFFFFF;
             width: 100vw;
             min-height: 100vh;
@@ -79,11 +79,11 @@ roobinium_hero_html = """
         /* 1. Dynamic Cursor-Tracking Spotlight Glow */
         .cursor-spotlight {
             position: fixed;
-            width: 600px;
-            height: 600px;
+            width: 650px;
+            height: 650px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(99, 102, 241, 0.16) 0%, rgba(56, 189, 248, 0.08) 35%, rgba(139, 92, 246, 0.03) 55%, transparent 70%);
-            filter: blur(40px);
+            filter: blur(45px);
             pointer-events: none;
             transform: translate(-50%, -50%);
             z-index: 2;
@@ -92,16 +92,16 @@ roobinium_hero_html = """
             will-change: left, top;
         }
 
-        /* Ambient Static Lighting */
-        .ambient-glow {
+        /* Ambient Lighting */
+        .ambient-glow-top {
             position: absolute;
-            top: 20%;
+            top: 15%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 900px;
             height: 550px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, rgba(56, 189, 248, 0.04) 50%, transparent 80%);
-            filter: blur(70px);
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(56, 189, 248, 0.04) 50%, transparent 80%);
+            filter: blur(80px);
             pointer-events: none;
             z-index: 1;
         }
@@ -111,7 +111,7 @@ roobinium_hero_html = """
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 24px 32px;
+            padding: 28px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -120,24 +120,35 @@ roobinium_hero_html = """
         }
 
         .nav-logo {
-            font-size: 1.25rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
+            font-size: 1.3rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
             color: #FFFFFF;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+        }
+        .nav-logo-badge {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #818CF8;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            padding: 2px 8px;
+            border-radius: 9999px;
+            text-transform: uppercase;
         }
 
         .nav-menu {
             display: flex;
             align-items: center;
-            gap: 32px;
+            gap: 36px;
         }
 
         .nav-link {
             color: #94A3B8;
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             font-weight: 500;
             text-decoration: none;
             transition: color 0.2s ease;
@@ -156,8 +167,8 @@ roobinium_hero_html = """
         .btn-ghost {
             background: transparent;
             border: none;
-            color: #E2E8F0;
-            font-size: 0.9rem;
+            color: #CBD5E1;
+            font-size: 0.92rem;
             font-weight: 600;
             cursor: pointer;
             padding: 8px 16px;
@@ -169,19 +180,19 @@ roobinium_hero_html = """
 
         .btn-pill-white {
             background: #FFFFFF;
-            color: #070913;
+            color: #05070E;
             border: none;
             border-radius: 9999px;
-            padding: 10px 22px;
-            font-size: 0.9rem;
+            padding: 10px 24px;
+            font-size: 0.92rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 18px rgba(255, 255, 255, 0.2);
         }
         .btn-pill-white:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.35);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.35);
         }
 
         /* 3. Centered Minimalist Hero Header */
@@ -195,41 +206,41 @@ roobinium_hero_html = """
         }
 
         .hero-title {
-            font-size: 3.8rem;
-            font-weight: 800;
+            font-size: 4rem;
+            font-weight: 900;
             letter-spacing: -0.04em;
-            line-height: 1.15;
+            line-height: 1.12;
             color: #FFFFFF;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
         }
 
         .hero-subtitle {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: #94A3B8;
             font-weight: 400;
-            max-width: 580px;
-            margin: 0 auto 2rem auto;
-            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto 2.25rem auto;
+            line-height: 1.65;
         }
 
         .hero-cta {
             background: #FFFFFF;
-            color: #070913;
+            color: #05070E;
             border: none;
             border-radius: 9999px;
-            padding: 14px 34px;
-            font-size: 0.95rem;
-            font-weight: 700;
+            padding: 15px 38px;
+            font-size: 0.98rem;
+            font-weight: 800;
             cursor: pointer;
             transition: all 0.25s ease;
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 35px rgba(255, 255, 255, 0.25);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         .hero-cta:hover {
             transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 45px rgba(255, 255, 255, 0.4);
         }
 
         /* 4. 3D Spline Canvas Container */
@@ -345,23 +356,207 @@ roobinium_hero_html = """
             border-radius: 9999px;
         }
 
+        /* 6. Finomac-Style Minimalist Stat Ticker */
+        .stats-strip-container {
+            max-width: 1100px;
+            margin: 4rem auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 0 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 3rem 1rem;
+        }
+
+        .stat-strip-item {
+            text-align: center;
+        }
+
+        .stat-strip-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            color: #FFFFFF;
+            line-height: 1.1;
+        }
+
+        .stat-strip-label {
+            font-size: 0.85rem;
+            color: #94A3B8;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        /* 7. Blendr.ai Cinematic Feature Showcase */
+        .features-container {
+            max-width: 1140px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem auto;
+        }
+
+        .section-eyebrow {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #818CF8;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+        }
+
+        .section-heading {
+            font-size: 2.8rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            color: #FFFFFF;
+        }
+
+        .feature-cinematic-card {
+            background: linear-gradient(135deg, rgba(16, 22, 38, 0.75) 0%, rgba(9, 13, 25, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            padding: 3.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .feature-cinematic-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 35px 70px -15px rgba(99, 102, 241, 0.2);
+        }
+
+        .feature-card-content {
+            flex: 1.2;
+        }
+
+        .feature-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #CBD5E1;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+        }
+
+        .feature-card-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .feature-card-desc {
+            color: #94A3B8;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.75rem;
+        }
+
+        .feature-card-cta {
+            color: #818CF8;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: gap 0.2s ease;
+        }
+        .feature-card-cta:hover {
+            gap: 10px;
+            color: #A5B4FC;
+        }
+
+        .feature-card-visual {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        /* 8. Blendr.ai Minimalist Closing Section & Footer */
+        .closing-section {
+            text-align: center;
+            padding: 8rem 2rem 5rem 2rem;
+            position: relative;
+        }
+
+        .closing-title {
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: #FFFFFF;
+            margin-bottom: 1rem;
+        }
+
+        .closing-subtitle {
+            font-size: 1.1rem;
+            color: #94A3B8;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-strip {
+            max-width: 1140px;
+            margin: 4rem auto 2rem auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #64748B;
+            font-size: 0.85rem;
+        }
+
         @media (max-width: 950px) {
-            .hero-title { font-size: 2.5rem; }
+            .hero-title { font-size: 2.6rem; }
             .card-floating-left, .card-floating-right { display: none; }
-            .spline-stage { height: 420px; }
+            .spline-stage { height: 400px; }
             .nav-menu { display: none; }
+            .stats-strip-container { grid-template-columns: 1fr; gap: 2rem; }
+            .feature-cinematic-card { flex-direction: column; padding: 2rem; }
+            .section-heading { font-size: 2.2rem; }
+            .closing-title { font-size: 2.3rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Spotlight mouse-follower element -->
+    <!-- Spotlight mouse-follower -->
     <div class="cursor-spotlight" id="spotlight"></div>
-    <div class="ambient-glow"></div>
+    <div class="ambient-glow-top"></div>
 
     <!-- 1. Sleek Floating Navbar -->
     <nav class="navbar-container">
         <div class="nav-logo">
             <span>SAPPM</span>
+            <span class="nav-logo-badge">Decision Support</span>
         </div>
 
         <div class="nav-menu">
@@ -374,11 +569,11 @@ roobinium_hero_html = """
 
         <div class="nav-actions">
             <button class="btn-ghost" onclick="window.parent.location.href='/Staff_Portal'">Login</button>
-            <button class="btn-pill-white" onclick="window.parent.location.href='/Predict'">Launch Studio</button>
+            <button class="btn-pill-white" onclick="window.parent.location.href='/Predict'">Evaluate Now</button>
         </div>
     </nav>
 
-    <!-- 2. Centered Typography -->
+    <!-- 2. Centered Minimalist Hero Header -->
     <section class="hero-section">
         <h1 class="hero-title">Elevate Academic Intelligence</h1>
         <p class="hero-subtitle">
@@ -418,7 +613,93 @@ roobinium_hero_html = """
         </div>
     </div>
 
-    <!-- Spotlight cursor physics & Spline logo remover script -->
+    <!-- 4. Finomac Minimalist Stat Strip -->
+    <div class="stats-strip-container">
+        <div class="stat-strip-item">
+            <div class="stat-strip-num">1,000,000</div>
+            <div class="stat-strip-label">Trained Dataset Records</div>
+        </div>
+        <div class="stat-strip-item">
+            <div class="stat-strip-num" style="color: #34D399;">99.81%</div>
+            <div class="stat-strip-label">XGBoost Test Accuracy</div>
+        </div>
+        <div class="stat-strip-item">
+            <div class="stat-strip-num" style="color: #60A5FA;">&lt; 15 ms</div>
+            <div class="stat-strip-label">Real-Time Inference</div>
+        </div>
+    </div>
+
+    <!-- 5. Blendr.ai Cinematic Feature Showcases -->
+    <div class="features-container">
+        <div class="section-header">
+            <span class="section-eyebrow">Institutional Architecture</span>
+            <h2 class="section-heading">Everything You Need to Guide Student Success</h2>
+        </div>
+
+        <!-- Feature Card 1 -->
+        <div class="feature-cinematic-card">
+            <div class="feature-card-content">
+                <div class="feature-chip">✦ Predictive Intelligence</div>
+                <h3 class="feature-card-title">Multiclass Performance Forecasting</h3>
+                <p class="feature-card-desc">
+                    Trained across 800,000 records to generate fine-grained probability distributions across grades A, B, C, D, and F with 99.81% precision.
+                </p>
+                <a class="feature-card-cta" onclick="window.parent.location.href='/Predict'">Launch Predictor ↗</a>
+            </div>
+            <div class="feature-card-visual">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 2.4rem; font-weight: 900; color: #34D399;">Grade A</div>
+                <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 4px; text-transform: uppercase; font-weight: 700;">99.81% Certainty</div>
+            </div>
+        </div>
+
+        <!-- Feature Card 2 -->
+        <div class="feature-cinematic-card">
+            <div class="feature-card-content">
+                <div class="feature-chip">✦ Explainable AI</div>
+                <h3 class="feature-card-title">Demystified SHAP Attribution</h3>
+                <p class="feature-card-desc">
+                    Eliminates black-box opacity. Quantifies exact Shapley factor contributions for attendance, study hours, and continuous assessments.
+                </p>
+                <a class="feature-card-cta" onclick="window.parent.location.href='/Explainability'">Inspect Attribution ↗</a>
+            </div>
+            <div class="feature-card-visual">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.8rem; font-weight: 900; color: #818CF8;">SHAP +0.42</div>
+                <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 4px; text-transform: uppercase; font-weight: 700;">Dominant Positive Driver</div>
+            </div>
+        </div>
+
+        <!-- Feature Card 3 -->
+        <div class="feature-cinematic-card">
+            <div class="feature-card-content">
+                <div class="feature-chip">✦ Proactive Guidance</div>
+                <h3 class="feature-card-title">3-Tier Early Warning Stratification</h3>
+                <p class="feature-card-desc">
+                    Automatically tags learners into Low, Medium, and High Risk tiers to trigger early mentoring before final examinations.
+                </p>
+                <a class="feature-card-cta" onclick="window.parent.location.href='/Student_Records'">View Database Records ↗</a>
+            </div>
+            <div class="feature-card-visual">
+                <div style="display: inline-block; padding: 6px 18px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.5); border-radius: 9999px; color: #34D399; font-weight: 800; font-size: 1.1rem;">● LOW RISK</div>
+                <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 8px; text-transform: uppercase; font-weight: 700;">Proactive Categorisation</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Closing CTA Section -->
+    <section class="closing-section">
+        <h2 class="closing-title">Ready to evaluate student performance?</h2>
+        <p class="closing-subtitle">Launch the predictor or access the staff portal to begin data-driven guidance.</p>
+        <button class="hero-cta" onclick="window.parent.location.href='/Predict'">
+            Evaluate Performance ↗
+        </button>
+
+        <div class="footer-strip">
+            <div>S.A.P.P.M — Academic Performance Intelligence</div>
+            <div>Powered by XGBoost, SHAP & Supabase</div>
+        </div>
+    </section>
+
+    <!-- Spotlight physics & watermark remover script -->
     <script>
         const spotlight = document.getElementById('spotlight');
         let currentX = window.innerWidth / 2;
@@ -436,7 +717,6 @@ roobinium_hero_html = """
             spotlight.style.opacity = '0';
         });
 
-        // Smooth physics interpolation loop
         function animate() {
             currentX += (targetX - currentX) * 0.12;
             currentY += (targetY - currentY) * 0.12;
@@ -446,7 +726,6 @@ roobinium_hero_html = """
         }
         animate();
 
-        // Remove Spline watermark badge automatically
         const removeSplineLogo = () => {
             const viewer = document.getElementById('splineViewer');
             if (viewer && viewer.shadowRoot) {
@@ -459,40 +738,11 @@ roobinium_hero_html = """
                 }
             }
         };
-
         setInterval(removeSplineLogo, 200);
     </script>
 </body>
 </html>
 """
 
-# Render Full-Height Hero Viewport with Spotlight & Cleaned Badge
-components.html(roobinium_hero_html, height=840)
-
-# Quick Streamlit Navigation Actions Below
-st.markdown("""
-    <div style="max-width: 1100px; margin: 0 auto 4rem auto; padding: 0 1.5rem;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
-            <div style="background: rgba(18, 24, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 1.5rem; text-align: center;">
-                <div style="font-size: 0.75rem; color: #818CF8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Prediction Service</div>
-                <div style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF; margin: 0.4rem 0 1rem 0;">Student Forecast</div>
-                <a href="/Predict" target="_self" style="display: inline-block; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #FFFFFF; padding: 8px 18px; border-radius: 9999px; font-weight: 600; text-decoration: none; font-size: 0.85rem;">Open Predictor ↗</a>
-            </div>
-            <div style="background: rgba(18, 24, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 1.5rem; text-align: center;">
-                <div style="font-size: 0.75rem; color: #34D399; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Explainability</div>
-                <div style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF; margin: 0.4rem 0 1rem 0;">SHAP Attribution</div>
-                <a href="/Explainability" target="_self" style="display: inline-block; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #FFFFFF; padding: 8px 18px; border-radius: 9999px; font-weight: 600; text-decoration: none; font-size: 0.85rem;">Inspect SHAP ↗</a>
-            </div>
-            <div style="background: rgba(18, 24, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 1.5rem; text-align: center;">
-                <div style="font-size: 0.75rem; color: #60A5FA; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Model Registry</div>
-                <div style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF; margin: 0.4rem 0 1rem 0;">Algorithm Benchmarks</div>
-                <a href="/Model_Analytics" target="_self" style="display: inline-block; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #FFFFFF; padding: 8px 18px; border-radius: 9999px; font-weight: 600; text-decoration: none; font-size: 0.85rem;">View Analytics ↗</a>
-            </div>
-            <div style="background: rgba(18, 24, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 1.5rem; text-align: center;">
-                <div style="font-size: 0.75rem; color: #FBBF24; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Database Logs</div>
-                <div style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF; margin: 0.4rem 0 1rem 0;">Student Records</div>
-                <a href="/Student_Records" target="_self" style="display: inline-block; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); color: #FFFFFF; padding: 8px 18px; border-radius: 9999px; font-weight: 600; text-decoration: none; font-size: 0.85rem;">Browse Logs ↗</a>
-            </div>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
+# Render Full-Page Blendr / Roobinium Experience
+components.html(complete_landing_html, height=2650, scrolling=False)
