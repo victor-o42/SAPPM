@@ -1,11 +1,10 @@
 """
 S.A.P.P.M - Next-Generation AI Intelligence Platform
 Engineered to match Blendr.ai & Roobinium Agency Standards:
-- Floating glass island navbar
-- Interactive 3D robot centerpiece with dynamic spotlight physics
-- Minimalist metric counters (Finomac style)
-- Large cinematic feature showcases with eyebrow chips (Blendr style)
-- Minimalist closing CTA and footer
+- Restored clean floating glass island navbar (no awkward badge)
+- Distinct non-repetitive metrics (Inference Speed on 3D card, Accuracy on stat strip)
+- Smooth IntersectionObserver scroll-driven fade-up animations
+- 3D interactive robot centerpiece with dynamic spotlight physics
 """
 
 import streamlit as st
@@ -33,12 +32,12 @@ st.markdown("""
         visibility: hidden !important;
     }
 
-    /* Canvas background */
     html, body, [class*="css"], .stApp {
         background-color: #05070E !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #FFFFFF !important;
         overflow-x: hidden !important;
+        scroll-behavior: smooth !important;
     }
 
     .main .block-container {
@@ -65,6 +64,10 @@ complete_landing_html = """
             box-sizing: border-box;
             font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
             user-select: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -106,7 +109,7 @@ complete_landing_html = """
             z-index: 1;
         }
 
-        /* 2. Sleek Floating Island Navbar */
+        /* 2. Sleek Floating Island Navbar (Cleaned) */
         .navbar-container {
             width: 100%;
             max-width: 1200px;
@@ -120,24 +123,11 @@ complete_landing_html = """
         }
 
         .nav-logo {
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             font-weight: 900;
             letter-spacing: -0.04em;
             color: #FFFFFF;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .nav-logo-badge {
-            font-size: 0.68rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            color: #818CF8;
-            background: rgba(99, 102, 241, 0.15);
-            border: 1px solid rgba(99, 102, 241, 0.35);
-            padding: 2px 8px;
-            border-radius: 9999px;
-            text-transform: uppercase;
+            text-decoration: none;
         }
 
         .nav-menu {
@@ -356,17 +346,23 @@ complete_landing_html = """
             border-radius: 9999px;
         }
 
-        /* 6. Finomac-Style Minimalist Stat Ticker */
+        /* 6. Finomac-Style Minimalist Stat Strip */
         .stats-strip-container {
             max-width: 1100px;
             margin: 4rem auto;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
-            padding: 0 2rem;
+            padding: 3rem 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 3rem 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .stats-strip-container.in-view {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .stat-strip-item {
@@ -402,6 +398,13 @@ complete_landing_html = """
             text-align: center;
             max-width: 700px;
             margin: 0 auto 4rem auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .section-header.in-view {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .section-eyebrow {
@@ -427,13 +430,19 @@ complete_landing_html = """
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 28px;
             padding: 3.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 3rem;
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .feature-cinematic-card.in-view {
+            opacity: 1;
+            transform: translateY(0);
         }
         .feature-cinematic-card:hover {
             border-color: rgba(99, 102, 241, 0.4);
@@ -505,8 +514,15 @@ complete_landing_html = """
         /* 8. Blendr.ai Minimalist Closing Section & Footer */
         .closing-section {
             text-align: center;
-            padding: 8rem 2rem 5rem 2rem;
+            padding: 6rem 2rem 4rem 2rem;
             position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .closing-section.in-view {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .closing-title {
@@ -552,12 +568,11 @@ complete_landing_html = """
     <div class="cursor-spotlight" id="spotlight"></div>
     <div class="ambient-glow-top"></div>
 
-    <!-- 1. Sleek Floating Navbar -->
+    <!-- 1. Sleek Floating Navbar (Restored clean branding) -->
     <nav class="navbar-container">
-        <div class="nav-logo">
+        <a class="nav-logo" onclick="window.parent.location.href='/'">
             <span>SAPPM</span>
-            <span class="nav-logo-badge">Decision Support</span>
-        </div>
+        </a>
 
         <div class="nav-menu">
             <a class="nav-link" onclick="window.parent.location.href='/Predict'">Predict</a>
@@ -600,21 +615,21 @@ complete_landing_html = """
             </div>
         </div>
 
-        <!-- Floating Right Card -->
+        <!-- Floating Right Card (Inference Speed - Non Repetitive) -->
         <div class="card-floating-right">
             <div class="micro-tag">
-                <span>Model Accuracy</span>
+                <span>Inference Speed</span>
                 <div class="arrow-chip">↗</div>
             </div>
-            <div class="micro-stat">99.81%</div>
+            <div class="micro-stat">&lt; 15ms</div>
             <div class="progress-bar-wrap">
-                <div class="progress-fill" style="width: 99.8%;"></div>
+                <div class="progress-fill" style="width: 98%;"></div>
             </div>
         </div>
     </div>
 
-    <!-- 4. Finomac Minimalist Stat Strip -->
-    <div class="stats-strip-container">
+    <!-- 4. Finomac Minimalist Stat Strip (Trained dataset & 99.81% accuracy) -->
+    <div class="stats-strip-container animate-on-scroll">
         <div class="stat-strip-item">
             <div class="stat-strip-num">1,000,000</div>
             <div class="stat-strip-label">Trained Dataset Records</div>
@@ -624,20 +639,20 @@ complete_landing_html = """
             <div class="stat-strip-label">XGBoost Test Accuracy</div>
         </div>
         <div class="stat-strip-item">
-            <div class="stat-strip-num" style="color: #60A5FA;">&lt; 15 ms</div>
-            <div class="stat-strip-label">Real-Time Inference</div>
+            <div class="stat-strip-num" style="color: #A78BFA;">4 Factors</div>
+            <div class="stat-strip-label">Predictor Indicators</div>
         </div>
     </div>
 
     <!-- 5. Blendr.ai Cinematic Feature Showcases -->
     <div class="features-container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
             <span class="section-eyebrow">Institutional Architecture</span>
             <h2 class="section-heading">Everything You Need to Guide Student Success</h2>
         </div>
 
         <!-- Feature Card 1 -->
-        <div class="feature-cinematic-card">
+        <div class="feature-cinematic-card animate-on-scroll">
             <div class="feature-card-content">
                 <div class="feature-chip">✦ Predictive Intelligence</div>
                 <h3 class="feature-card-title">Multiclass Performance Forecasting</h3>
@@ -653,7 +668,7 @@ complete_landing_html = """
         </div>
 
         <!-- Feature Card 2 -->
-        <div class="feature-cinematic-card">
+        <div class="feature-cinematic-card animate-on-scroll">
             <div class="feature-card-content">
                 <div class="feature-chip">✦ Explainable AI</div>
                 <h3 class="feature-card-title">Demystified SHAP Attribution</h3>
@@ -669,7 +684,7 @@ complete_landing_html = """
         </div>
 
         <!-- Feature Card 3 -->
-        <div class="feature-cinematic-card">
+        <div class="feature-cinematic-card animate-on-scroll">
             <div class="feature-card-content">
                 <div class="feature-chip">✦ Proactive Guidance</div>
                 <h3 class="feature-card-title">3-Tier Early Warning Stratification</h3>
@@ -686,7 +701,7 @@ complete_landing_html = """
     </div>
 
     <!-- 6. Closing CTA Section -->
-    <section class="closing-section">
+    <section class="closing-section animate-on-scroll">
         <h2 class="closing-title">Ready to evaluate student performance?</h2>
         <p class="closing-subtitle">Launch the predictor or access the staff portal to begin data-driven guidance.</p>
         <button class="hero-cta" onclick="window.parent.location.href='/Predict'">
@@ -699,7 +714,7 @@ complete_landing_html = """
         </div>
     </section>
 
-    <!-- Spotlight physics & watermark remover script -->
+    <!-- Spotlight physics, smooth scroll reveal & watermark remover script -->
     <script>
         const spotlight = document.getElementById('spotlight');
         let currentX = window.innerWidth / 2;
@@ -725,6 +740,19 @@ complete_landing_html = """
             requestAnimationFrame(animate);
         }
         animate();
+
+        // IntersectionObserver for smooth scroll-driven reveals
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            scrollObserver.observe(el);
+        });
 
         const removeSplineLogo = () => {
             const viewer = document.getElementById('splineViewer');
