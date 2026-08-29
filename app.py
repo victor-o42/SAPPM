@@ -1,9 +1,9 @@
 """
 S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
-Full-Viewport Agency Experience with 3 High-End 21st.dev Buttons:
-1. Center CTA: Origin Button (Pointer-origin radial expansion fill + animated breathing neon shadow)
-2. Navbar Login: Star Button (Constellation starfield SVG with circulating perimeter light beam)
-3. Navbar Sign Up: Interactive Hover Button by Dillion Verma (Magic UI expanding dot & arrow slide)
+Full-Viewport Agency Experience with Exact Original 21st.dev Palette & Animations:
+1. Center CTA: Origin Button (Exact dark-contrast radial fill from prompt + breathing glow)
+2. Navbar Login: Star Button (Constellation starfield SVG with perimeter light beam)
+3. Navbar Sign Up: Interactive Hover Button by Dillion Verma with original high-contrast fill & kinetic animated SVG arrow
 """
 
 import streamlit as st
@@ -47,7 +47,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Complete Roobinium 4-Card Hero Viewport with 3 High-End 21st.dev Animated Buttons
+# Complete Roobinium 4-Card Hero Viewport with Exact Original Colors & Kinetic Arrow
 roobinium_full_viewport_html = """
 <!DOCTYPE html>
 <html lang="en">
@@ -154,7 +154,7 @@ roobinium_full_viewport_html = """
         }
 
         /* ==========================================================
-           BUTTON 2: STAR BUTTON (Login) - 21st.dev
+           BUTTON 2: STAR BUTTON (Login) - Original Palette
            ========================================================== */
         .star-button-wrapper {
             position: relative;
@@ -172,7 +172,7 @@ roobinium_full_viewport_html = """
         }
         .star-button-wrapper:hover {
             border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
             transform: translateY(-1px);
         }
 
@@ -205,8 +205,8 @@ roobinium_full_viewport_html = """
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: radial-gradient(circle, #818CF8 0%, #38BDF8 50%, transparent 80%);
-            filter: blur(6px);
+            background: radial-gradient(circle, #FFFFFF 0%, #E2E8F0 50%, transparent 80%);
+            filter: blur(5px);
             animation: starBeamOrbit 4s linear infinite;
             z-index: 1;
         }
@@ -220,7 +220,8 @@ roobinium_full_viewport_html = """
         }
 
         /* ==========================================================
-           BUTTON 3: INTERACTIVE HOVER BUTTON (Sign Up) - by Dillion Verma (Magic UI)
+           BUTTON 3: INTERACTIVE HOVER BUTTON by Dillion Verma (Sign Up)
+           Original Clean Palette + Kinetic Animated Arrow
            ========================================================== */
         .interactive-hover-btn {
             position: relative;
@@ -257,24 +258,38 @@ roobinium_full_viewport_html = """
             transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        /* Kinetic Animated SVG Arrow */
         .interactive-hover-btn .btn-arrow-slide {
             position: absolute;
             right: 18px;
             opacity: 0;
-            transform: translateX(10px);
+            transform: translateX(12px);
             transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            font-size: 1rem;
             color: #FFFFFF;
             z-index: 2;
+            display: flex;
+            align-items: center;
         }
 
+        .interactive-hover-btn:hover .btn-arrow-slide {
+            opacity: 1;
+            transform: translateX(0);
+            animation: kineticArrowPulse 1.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes kineticArrowPulse {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(3px); }
+        }
+
+        /* Original Pure Dark Contrast Expanding Circle */
         .interactive-hover-btn .expanding-circle {
             position: absolute;
             right: 22px;
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #4F46E5;
+            background: #05070E;
             transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
             transform: scale(0);
             z-index: 1;
@@ -282,7 +297,7 @@ roobinium_full_viewport_html = """
 
         .interactive-hover-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.45);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.35);
         }
         .interactive-hover-btn:hover .expanding-circle {
             transform: scale(38);
@@ -293,10 +308,6 @@ roobinium_full_viewport_html = """
         }
         .interactive-hover-btn:hover .btn-dot {
             opacity: 0;
-        }
-        .interactive-hover-btn:hover .btn-arrow-slide {
-            opacity: 1;
-            transform: translateX(0);
         }
 
         /* Centered Hero Header */
@@ -328,8 +339,8 @@ roobinium_full_viewport_html = """
         }
 
         /* ==========================================================
-           BUTTON 1: ORIGIN BUTTON (Evaluate Performance) - 21st.dev
-           Animated pointer-origin expansion + pulsing breathing shadow
+           BUTTON 1: ORIGIN BUTTON (Evaluate Performance)
+           Original Dark Contrast Fill from Prompt + Pulsing Breathing Glow
            ========================================================== */
         .origin-button {
             position: relative;
@@ -346,7 +357,7 @@ roobinium_full_viewport_html = """
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.5);
             animation: breathingShadow 3s ease-in-out infinite alternate;
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
             z-index: 10;
         }
 
@@ -365,13 +376,14 @@ roobinium_full_viewport_html = """
         .origin-button:hover {
             transform: translateY(-2px) scale(1.02);
             animation: none;
-            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.6), 0 0 35px rgba(56, 189, 248, 0.7);
+            box-shadow: 0 20px 50px rgba(255, 255, 255, 0.5), 0 0 35px rgba(56, 189, 248, 0.6);
         }
 
+        /* Original Dark Contrast Fill from the Prompt */
         .origin-button .origin-ripple {
             position: absolute;
             border-radius: 50%;
-            background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
+            background: #05070E;
             transform: translate(-50%, -50%) scale(0);
             pointer-events: none;
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -543,14 +555,19 @@ roobinium_full_viewport_html = """
                 </div>
             </div>
 
-            <!-- BUTTON 3: INTERACTIVE HOVER BUTTON by Dillion Verma (Sign Up) -->
+            <!-- BUTTON 3: INTERACTIVE HOVER BUTTON by Dillion Verma (Sign Up) with Kinetic Arrow -->
             <div class="interactive-hover-btn" onclick="window.parent.location.href='/Staff_Portal'">
                 <div class="expanding-circle"></div>
                 <span class="btn-text-content">
                     <span>Sign Up</span>
                     <span class="btn-dot"></span>
                 </span>
-                <span class="btn-arrow-slide">→</span>
+                <span class="btn-arrow-slide">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </span>
             </div>
         </div>
     </nav>
