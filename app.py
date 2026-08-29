@@ -3,12 +3,13 @@ S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
 Full-Viewport Agency Experience:
 - Floating glass island navbar with direct links & CTA
 - Centered typography with Evaluate Performance action
-- Centerpiece 3D robot tracking cursor surrounded by 4 Roobinium frosted glass micro-cards:
+- Centerpiece 3D robot tracking cursor framed by 4 unified Roobinium frosted glass micro-cards:
     1. Top-Left: Model Architecture (Multiclass XGBoost Engine)
     2. Top-Right: Model Accuracy (99.81%)
     3. Bottom-Left: Inference Speed (< 15ms)
     4. Bottom-Right: Dataset Records (1,000,000)
-- Zero clutter / no bottom overflow
+- Unified color palette: Consistent Indigo-to-Cyan gradient bars & pure white typography
+- Tight, balanced framing closer to the robot
 """
 
 import streamlit as st
@@ -116,7 +117,7 @@ roobinium_full_viewport_html = """
         /* 1. Sleek Floating Island Navbar */
         .navbar-container {
             width: 100%;
-            max-width: 1240px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 24px 32px 10px 32px;
             display: flex;
@@ -193,7 +194,7 @@ roobinium_full_viewport_html = """
         /* 2. Centered Minimalist Hero Header */
         .hero-section {
             text-align: center;
-            padding-top: 1rem;
+            padding-top: 0.75rem;
             position: relative;
             z-index: 10;
             max-width: 900px;
@@ -206,16 +207,16 @@ roobinium_full_viewport_html = """
             letter-spacing: -0.04em;
             line-height: 1.12;
             color: #FFFFFF;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.6rem;
         }
 
         .hero-subtitle {
-            font-size: 1.1rem;
+            font-size: 1.08rem;
             color: #94A3B8;
             font-weight: 400;
             max-width: 600px;
-            margin: 0 auto 1.5rem auto;
-            line-height: 1.6;
+            margin: 0 auto 1.35rem auto;
+            line-height: 1.55;
         }
 
         .hero-cta {
@@ -223,7 +224,7 @@ roobinium_full_viewport_html = """
             color: #05070E;
             border: none;
             border-radius: 9999px;
-            padding: 14px 36px;
+            padding: 13px 34px;
             font-size: 0.95rem;
             font-weight: 800;
             cursor: pointer;
@@ -238,12 +239,12 @@ roobinium_full_viewport_html = """
             box-shadow: 0 15px 45px rgba(255, 255, 255, 0.4);
         }
 
-        /* 3. 3D Spline Canvas Container with 4 Floating Cards */
+        /* 3. 3D Spline Canvas Container */
         .spline-stage {
             position: relative;
             width: 100%;
-            height: 540px;
-            margin-top: -15px;
+            height: 560px;
+            margin-top: -20px;
             z-index: 5;
             display: flex;
             align-items: center;
@@ -256,7 +257,7 @@ roobinium_full_viewport_html = """
             pointer-events: auto;
         }
 
-        /* 4 Floating Roobinium Micro-Cards */
+        /* 4 Floating Roobinium Micro-Cards (Unified Exact Aesthetic & Closer Proportions) */
         .floating-card {
             position: absolute;
             z-index: 20;
@@ -265,34 +266,34 @@ roobinium_full_viewport_html = """
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
-            padding: 16px 22px;
-            width: 240px;
+            padding: 18px 24px;
+            width: 235px;
             box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .floating-card:hover {
-            border-color: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-3px);
         }
 
-        /* Positioning the 4 Cards Surrounding the Robot */
+        /* Balanced Tight Proportions Closer to the Robot */
         .card-top-left {
-            left: calc(50% - 500px);
-            top: 60px;
+            left: calc(50% - 410px);
+            top: 110px;
         }
 
         .card-top-right {
-            right: calc(50% - 500px);
-            top: 60px;
+            right: calc(50% - 410px);
+            top: 110px;
         }
 
         .card-bottom-left {
-            left: calc(50% - 500px);
+            left: calc(50% - 410px);
             bottom: 60px;
         }
 
         .card-bottom-right {
-            right: calc(50% - 500px);
+            right: calc(50% - 410px);
             bottom: 60px;
         }
 
@@ -323,45 +324,45 @@ roobinium_full_viewport_html = """
             font-size: 1.05rem;
             font-weight: 700;
             color: #FFFFFF;
-            margin-top: 6px;
+            margin-top: 8px;
             line-height: 1.35;
         }
 
         .micro-stat {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.75rem;
+            font-size: 1.8rem;
             font-weight: 900;
             color: #FFFFFF;
             margin-top: 4px;
         }
 
+        /* Unified Gradient Bar Across All 4 Cards */
         .progress-bar-wrap {
             width: 100%;
             height: 4px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 9999px;
-            margin-top: 8px;
+            margin-top: 10px;
             overflow: hidden;
         }
         .progress-fill {
-            width: 96%;
             height: 100%;
             background: linear-gradient(90deg, #6366F1, #38BDF8);
             border-radius: 9999px;
         }
 
-        @media (max-width: 1100px) {
-            .card-top-left { left: 20px; top: 20px; }
-            .card-top-right { right: 20px; top: 20px; }
-            .card-bottom-left { left: 20px; bottom: 20px; }
-            .card-bottom-right { right: 20px; bottom: 20px; }
+        @media (max-width: 1000px) {
+            .card-top-left { left: 20px; top: 80px; }
+            .card-top-right { right: 20px; top: 80px; }
+            .card-bottom-left { left: 20px; bottom: 40px; }
+            .card-bottom-right { right: 20px; bottom: 40px; }
         }
 
-        @media (max-width: 900px) {
-            .hero-title { font-size: 2.5rem; }
+        @media (max-width: 800px) {
+            .hero-title { font-size: 2.4rem; }
             .floating-card { display: none; }
             .nav-menu { display: none; }
-            .spline-stage { height: 400px; }
+            .spline-stage { height: 420px; }
         }
     </style>
 </head>
@@ -401,7 +402,7 @@ roobinium_full_viewport_html = """
         </button>
     </section>
 
-    <!-- 3. 3D Spline Centerpiece with 4 Floating Cards -->
+    <!-- 3. 3D Spline Centerpiece with 4 Unified Floating Cards -->
     <div class="spline-stage">
         <spline-viewer id="splineViewer" url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"></spline-viewer>
         
@@ -411,9 +412,9 @@ roobinium_full_viewport_html = """
                 <span>Model Architecture</span>
                 <div class="arrow-chip">↗</div>
             </div>
-            <div class="micro-main-text">Multiclass XGBoost</div>
+            <div class="micro-main-text">Multiclass XGBoost Engine</div>
             <div class="progress-bar-wrap">
-                <div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, #6366F1, #818CF8);"></div>
+                <div class="progress-fill" style="width: 95%;"></div>
             </div>
         </div>
 
@@ -423,9 +424,9 @@ roobinium_full_viewport_html = """
                 <span>Model Accuracy</span>
                 <div class="arrow-chip">↗</div>
             </div>
-            <div class="micro-stat" style="color: #34D399;">99.81%</div>
+            <div class="micro-stat">99.81%</div>
             <div class="progress-bar-wrap">
-                <div class="progress-fill" style="width: 99.8%; background: linear-gradient(90deg, #10B981, #34D399);"></div>
+                <div class="progress-fill" style="width: 99.8%;"></div>
             </div>
         </div>
 
@@ -435,21 +436,21 @@ roobinium_full_viewport_html = """
                 <span>Inference Speed</span>
                 <div class="arrow-chip">↗</div>
             </div>
-            <div class="micro-stat" style="color: #60A5FA;">&lt; 15ms</div>
+            <div class="micro-stat">&lt; 15ms</div>
             <div class="progress-bar-wrap">
-                <div class="progress-fill" style="width: 95%; background: linear-gradient(90deg, #3B82F6, #60A5FA);"></div>
+                <div class="progress-fill" style="width: 96%;"></div>
             </div>
         </div>
 
-        <!-- 4. Bottom-Right Card: Trained Records -->
+        <!-- 4. Bottom-Right Card: Dataset Records -->
         <div class="floating-card card-bottom-right">
             <div class="micro-tag">
                 <span>Dataset Records</span>
                 <div class="arrow-chip">↗</div>
             </div>
-            <div class="micro-stat" style="color: #FBBF24;">1,000,000</div>
+            <div class="micro-stat">1,000,000</div>
             <div class="progress-bar-wrap">
-                <div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, #F59E0B, #FBBF24);"></div>
+                <div class="progress-fill" style="width: 100%;"></div>
             </div>
         </div>
     </div>
