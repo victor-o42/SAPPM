@@ -1,6 +1,6 @@
 """
 Staff Authentication Module
-Handles staff registration, login verification, and profile management.
+Handles staff registration, login verification, and profile management with Supabase.
 """
 
 from typing import Optional, Dict, Any
@@ -8,20 +8,31 @@ from src.db.supabase_client import get_supabase
 
 supabase = get_supabase()
 
-def sign_up_staff(email: str, password: str, full_name: str, staff_id: str, department: str = "Academic Affairs") -> Dict[str, Any]:
+def sign_up_staff(
+    email: str, 
+    password: str, 
+    first_name: str, 
+    last_name: str, 
+    staff_id: str, 
+    department: str = "Academic Affairs"
+) -> Dict[str, Any]:
     """
     Registers a new staff member with Supabase Auth and saves profile metadata.
     """
     try:
+        full_name = f"{first_name.strip()} {last_name.strip()}".strip()
+        
         # Create user in Supabase Auth
         res = supabase.auth.sign_up({
             "email": email.strip(),
             "password": password,
             "options": {
                 "data": {
-                    "full_name": full_name.strip(),
+                    "first_name": first_name.strip(),
+                    "last_name": last_name.strip(),
+                    "full_name": full_name,
                     "staff_id": staff_id.strip(),
-                    "department": department
+                    "department": department.strip()
                 }
             }
         })
@@ -33,11 +44,13 @@ def sign_up_staff(email: str, password: str, full_name: str, staff_id: str, depa
         # Store profile details in staff_profiles table
         profile_data = {
             "id": user.id,
-            "full_name": full_name.strip(),
+            "first_name": first_name.strip(),
+            "last_name": last_name.strip(),
+            "full_name": full_name,
             "staff_id": staff_id.strip(),
             "email": email.strip(),
             "role": "Academic Advisor",
-            "department": department
+            "department": department.strip()
         }
         supabase.table("staff_profiles").upsert(profile_data).execute()
 
@@ -68,13 +81,18 @@ def sign_in_staff(email: str, password: str) -> Dict[str, Any]:
             
         # Fetch profile from staff_profiles table
         profile_res = supabase.table("staff_profiles").select("*").eq("id", user.id).execute()
-        profile = profile_res.data[0] if profile_res.data else {
-            "id": user.id,
-            "email": user.email,
-            "full_name": user.user_metadata.get("full_name", "Staff Member"),
-            "staff_id": user.user_metadata.get("staff_id", "N/A"),
-            "role": "Academic Staff"
-        }
+        profile = (
+            profile_res.data[0]
+            if (profile_res.data and isinstance(profile_res.data[0], dict))
+            else {
+                "id": user.id,
+                "email": user.email,
+                "full_name": user.user_metadata.get("full_name", "Staff Member"),
+                "staff_id": user.user_metadata.get("staff_id", "N/A"),
+                "role": "Academic Staff",
+                "department": user.user_metadata.get("department", "Academic Affairs"),
+            }
+        )
 
         return {
             "success": True, 
