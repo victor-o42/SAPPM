@@ -1,15 +1,11 @@
 """
 S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
 Full-Viewport Agency Experience:
+- Ultra-vibrant dynamic cursor spotlight tracking
+- Crystal-clear Liquid Glass frosted micro-cards (translucent refraction allowing 3D robot limbs to show through)
 - Floating glass island navbar with direct links & CTA
 - Centered typography with Evaluate Performance action
-- Centerpiece 3D robot tracking cursor framed by 4 unified Roobinium frosted glass micro-cards:
-    1. Top-Left: Model Architecture (Multiclass XGBoost Engine)
-    2. Top-Right: Model Accuracy (99.81%)
-    3. Bottom-Left: Inference Speed (< 15ms)
-    4. Bottom-Right: Dataset Records (1,000,000)
-- Unified color palette: Consistent Indigo-to-Cyan gradient bars & pure white typography
-- Tight, balanced framing closer to the robot
+- 4 unified Roobinium micro-cards framing the robot
 """
 
 import streamlit as st
@@ -54,7 +50,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Complete Roobinium 4-Card Hero Viewport
+# Complete Roobinium 4-Card Hero Viewport with Liquid Glass & Enhanced Spotlight
 roobinium_full_viewport_html = """
 <!DOCTYPE html>
 <html lang="en">
@@ -84,14 +80,14 @@ roobinium_full_viewport_html = """
             justify-content: space-between;
         }
 
-        /* Dynamic Cursor Spotlight */
+        /* 1. Enhanced High-Visibility Dynamic Cursor Spotlight */
         .cursor-spotlight {
             position: fixed;
             width: 650px;
             height: 650px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.16) 0%, rgba(56, 189, 248, 0.08) 35%, rgba(139, 92, 246, 0.03) 55%, transparent 70%);
-            filter: blur(45px);
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, rgba(56, 189, 248, 0.22) 30%, rgba(139, 92, 246, 0.1) 50%, transparent 70%);
+            filter: blur(40px);
             pointer-events: none;
             transform: translate(-50%, -50%);
             z-index: 2;
@@ -108,13 +104,13 @@ roobinium_full_viewport_html = """
             transform: translate(-50%, -50%);
             width: 900px;
             height: 550px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(56, 189, 248, 0.04) 50%, transparent 80%);
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(56, 189, 248, 0.08) 50%, transparent 80%);
             filter: blur(80px);
             pointer-events: none;
             z-index: 1;
         }
 
-        /* 1. Sleek Floating Island Navbar */
+        /* 2. Sleek Floating Island Navbar */
         .navbar-container {
             width: 100%;
             max-width: 1200px;
@@ -191,7 +187,7 @@ roobinium_full_viewport_html = """
             box-shadow: 0 8px 30px rgba(255, 255, 255, 0.35);
         }
 
-        /* 2. Centered Minimalist Hero Header */
+        /* 3. Centered Minimalist Hero Header */
         .hero-section {
             text-align: center;
             padding-top: 0.75rem;
@@ -239,7 +235,7 @@ roobinium_full_viewport_html = """
             box-shadow: 0 15px 45px rgba(255, 255, 255, 0.4);
         }
 
-        /* 3. 3D Spline Canvas Container */
+        /* 4. 3D Spline Canvas Container */
         .spline-stage {
             position: relative;
             width: 100%;
@@ -257,23 +253,25 @@ roobinium_full_viewport_html = """
             pointer-events: auto;
         }
 
-        /* 4 Floating Roobinium Micro-Cards (Unified Exact Aesthetic & Closer Proportions) */
+        /* 5. Translucent Liquid Glass Micro-Cards */
         .floating-card {
             position: absolute;
             z-index: 20;
-            background: rgba(18, 24, 40, 0.65);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 23, 42, 0.35);
+            backdrop-filter: blur(10px) saturate(180%);
+            -webkit-backdrop-filter: blur(10px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             border-radius: 20px;
             padding: 18px 24px;
             width: 235px;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
+            box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.22);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .floating-card:hover {
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(15, 23, 42, 0.45);
+            border-color: rgba(255, 255, 255, 0.28);
             transform: translateY(-3px);
+            box-shadow: 0 20px 45px 0 rgba(99, 102, 241, 0.25), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         /* Balanced Tight Proportions Closer to the Robot */
@@ -312,7 +310,7 @@ roobinium_full_viewport_html = """
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -326,6 +324,7 @@ roobinium_full_viewport_html = """
             color: #FFFFFF;
             margin-top: 8px;
             line-height: 1.35;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
         }
 
         .micro-stat {
@@ -334,13 +333,14 @@ roobinium_full_viewport_html = """
             font-weight: 900;
             color: #FFFFFF;
             margin-top: 4px;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
         }
 
         /* Unified Gradient Bar Across All 4 Cards */
         .progress-bar-wrap {
             width: 100%;
             height: 4px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.12);
             border-radius: 9999px;
             margin-top: 10px;
             overflow: hidden;
@@ -367,7 +367,7 @@ roobinium_full_viewport_html = """
     </style>
 </head>
 <body>
-    <!-- Dynamic Spotlight -->
+    <!-- Dynamic Enhanced Spotlight -->
     <div class="cursor-spotlight" id="spotlight"></div>
     <div class="ambient-glow-top"></div>
 
@@ -402,7 +402,7 @@ roobinium_full_viewport_html = """
         </button>
     </section>
 
-    <!-- 3. 3D Spline Centerpiece with 4 Unified Floating Cards -->
+    <!-- 3. 3D Spline Centerpiece with 4 Translucent Liquid Glass Cards -->
     <div class="spline-stage">
         <spline-viewer id="splineViewer" url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"></spline-viewer>
         
