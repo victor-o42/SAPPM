@@ -1,7 +1,7 @@
 """
 S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
-Full-Viewport Agency Experience with 100% Clickable Navigation:
-- All buttons & links wired with target="_top" for immediate parent routing
+Full-Viewport Agency Experience with 100% Reliable Top-Level Routing:
+- Full window.top.location.href + target="_top" dual-action navigation
 - Origin Button (Evaluate Performance), Star Button (Login), Interactive Hover Button (Sign Up)
 - Translucent Liquid Glass micro-cards framing 3D cursor-tracking robot
 """
@@ -47,7 +47,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Complete Roobinium 4-Card Hero Viewport with 100% Clickable Navigation
+# Complete Roobinium 4-Card Hero Viewport with Bulletproof Top-Level Navigation
 roobinium_full_viewport_html = """
 <!DOCTYPE html>
 <html lang="en">
@@ -516,23 +516,23 @@ roobinium_full_viewport_html = """
     <div class="cursor-spotlight" id="spotlight"></div>
     <div class="ambient-glow-top"></div>
 
-    <!-- 1. Sleek Floating Navbar (All Links target="_top" for immediate parent routing) -->
+    <!-- 1. Sleek Floating Navbar with Direct Navigation -->
     <nav class="navbar-container">
-        <a class="nav-logo" href="/" target="_top">
+        <a class="nav-logo" onclick="goToPage('/')">
             <span>SAPPM</span>
         </a>
 
         <div class="nav-menu">
-            <a class="nav-link" href="/Predict" target="_top">Predict</a>
-            <a class="nav-link" href="/Explainability" target="_top">Explainability</a>
-            <a class="nav-link" href="/Model_Analytics" target="_top">Analytics</a>
-            <a class="nav-link" href="/Student_Records" target="_top">Records</a>
-            <a class="nav-link" href="/Documentation" target="_top">Documentation</a>
+            <a class="nav-link" onclick="goToPage('/Predict')">Predict</a>
+            <a class="nav-link" onclick="goToPage('/Explainability')">Explainability</a>
+            <a class="nav-link" onclick="goToPage('/Model_Analytics')">Analytics</a>
+            <a class="nav-link" onclick="goToPage('/Student_Records')">Records</a>
+            <a class="nav-link" onclick="goToPage('/Documentation')">Documentation</a>
         </div>
 
         <div class="nav-actions">
             <!-- BUTTON 2: STAR BUTTON (Login) -->
-            <a class="star-button-wrapper" href="/Staff_Portal" target="_top">
+            <div class="star-button-wrapper" onclick="goToPage('/Staff_Portal')">
                 <div class="star-orbit-beam"></div>
                 <div class="star-button-inner">
                     <svg class="star-svg-bg" viewBox="0 0 100 40" fill="none">
@@ -544,10 +544,10 @@ roobinium_full_viewport_html = """
                     </svg>
                     <span>Login</span>
                 </div>
-            </a>
+            </div>
 
             <!-- BUTTON 3: INTERACTIVE HOVER BUTTON by Dillion Verma (Sign Up) -->
-            <a class="interactive-hover-btn" href="/Staff_Portal" target="_top">
+            <div class="interactive-hover-btn" onclick="goToPage('/Staff_Portal')">
                 <div class="expanding-circle"></div>
                 <span class="btn-text-content">
                     <span>Sign Up</span>
@@ -559,7 +559,7 @@ roobinium_full_viewport_html = """
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
                 </span>
-            </a>
+            </div>
         </div>
     </nav>
 
@@ -571,12 +571,12 @@ roobinium_full_viewport_html = """
         </p>
         
         <!-- BUTTON 1: ORIGIN BUTTON (Evaluate Performance) -->
-        <a class="origin-button" id="originBtn" href="/Predict" target="_top">
+        <button class="origin-button" id="originBtn" onclick="goToPage('/Predict')">
             <div class="origin-ripple" id="originRipple"></div>
             <span class="button-label">
                 Evaluate Performance ↗
             </span>
-        </a>
+        </button>
     </section>
 
     <!-- 3. 3D Spline Centerpiece with 4 Translucent Liquid Glass Cards -->
@@ -628,8 +628,23 @@ roobinium_full_viewport_html = """
         </div>
     </div>
 
-    <!-- Scripts for Spotlight, Origin Button & Watermark removal -->
+    <!-- Scripts for Navigation, Spotlight, Origin Button & Watermark removal -->
     <script>
+        // Universal Top-Level Navigation Handler
+        function goToPage(path) {
+            try {
+                if (window.top && window.top !== window) {
+                    window.top.location.href = window.top.location.origin + path;
+                } else if (window.parent && window.parent !== window) {
+                    window.parent.location.href = window.parent.location.origin + path;
+                } else {
+                    window.location.href = path;
+                }
+            } catch (e) {
+                window.location.href = path;
+            }
+        }
+
         const spotlight = document.getElementById('spotlight');
         let currentX = window.innerWidth / 2;
         let currentY = window.innerHeight / 2;
