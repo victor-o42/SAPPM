@@ -1,9 +1,9 @@
 """
 S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
-Full-Viewport Agency Experience with Exact Original 21st.dev Palette & Animations:
-1. Center CTA: Origin Button (Exact dark-contrast radial fill from prompt + breathing glow)
-2. Navbar Login: Star Button (Constellation starfield SVG with perimeter light beam)
-3. Navbar Sign Up: Interactive Hover Button by Dillion Verma with original high-contrast fill & kinetic animated SVG arrow
+Full-Viewport Agency Experience with 100% Clickable Navigation:
+- All buttons & links wired with target="_top" for immediate parent routing
+- Origin Button (Evaluate Performance), Star Button (Login), Interactive Hover Button (Sign Up)
+- Translucent Liquid Glass micro-cards framing 3D cursor-tracking robot
 """
 
 import streamlit as st
@@ -47,7 +47,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Complete Roobinium 4-Card Hero Viewport with Exact Original Colors & Kinetic Arrow
+# Complete Roobinium 4-Card Hero Viewport with 100% Clickable Navigation
 roobinium_full_viewport_html = """
 <!DOCTYPE html>
 <html lang="en">
@@ -153,9 +153,7 @@ roobinium_full_viewport_html = """
             gap: 16px;
         }
 
-        /* ==========================================================
-           BUTTON 2: STAR BUTTON (Login) - Original Palette
-           ========================================================== */
+        /* BUTTON 2: STAR BUTTON (Login) */
         .star-button-wrapper {
             position: relative;
             display: inline-flex;
@@ -219,10 +217,7 @@ roobinium_full_viewport_html = """
             100% { top: -25px; left: -25px; }
         }
 
-        /* ==========================================================
-           BUTTON 3: INTERACTIVE HOVER BUTTON by Dillion Verma (Sign Up)
-           Original Clean Palette + Kinetic Animated Arrow
-           ========================================================== */
+        /* BUTTON 3: INTERACTIVE HOVER BUTTON by Dillion Verma (Sign Up) */
         .interactive-hover-btn {
             position: relative;
             display: inline-flex;
@@ -239,6 +234,7 @@ roobinium_full_viewport_html = """
             border: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 0 4px 18px rgba(255, 255, 255, 0.25);
             transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
         }
 
         .interactive-hover-btn .btn-text-content {
@@ -258,7 +254,6 @@ roobinium_full_viewport_html = """
             transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Kinetic Animated SVG Arrow */
         .interactive-hover-btn .btn-arrow-slide {
             position: absolute;
             right: 18px;
@@ -282,7 +277,6 @@ roobinium_full_viewport_html = """
             100% { transform: translateX(3px); }
         }
 
-        /* Original Pure Dark Contrast Expanding Circle */
         .interactive-hover-btn .expanding-circle {
             position: absolute;
             right: 22px;
@@ -338,10 +332,7 @@ roobinium_full_viewport_html = """
             line-height: 1.55;
         }
 
-        /* ==========================================================
-           BUTTON 1: ORIGIN BUTTON (Evaluate Performance)
-           Original Dark Contrast Fill from Prompt + Pulsing Breathing Glow
-           ========================================================== */
+        /* BUTTON 1: ORIGIN BUTTON (Evaluate Performance) */
         .origin-button {
             position: relative;
             display: inline-flex;
@@ -359,6 +350,7 @@ roobinium_full_viewport_html = """
             animation: breathingShadow 3s ease-in-out infinite alternate;
             transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
             z-index: 10;
+            text-decoration: none;
         }
 
         @keyframes breathingShadow {
@@ -379,7 +371,6 @@ roobinium_full_viewport_html = """
             box-shadow: 0 20px 50px rgba(255, 255, 255, 0.5), 0 0 35px rgba(56, 189, 248, 0.6);
         }
 
-        /* Original Dark Contrast Fill from the Prompt */
         .origin-button .origin-ripple {
             position: absolute;
             border-radius: 50%;
@@ -525,23 +516,23 @@ roobinium_full_viewport_html = """
     <div class="cursor-spotlight" id="spotlight"></div>
     <div class="ambient-glow-top"></div>
 
-    <!-- 1. Sleek Floating Navbar -->
+    <!-- 1. Sleek Floating Navbar (All Links target="_top" for immediate parent routing) -->
     <nav class="navbar-container">
-        <a class="nav-logo" onclick="window.parent.location.href='/'">
+        <a class="nav-logo" href="/" target="_top">
             <span>SAPPM</span>
         </a>
 
         <div class="nav-menu">
-            <a class="nav-link" onclick="window.parent.location.href='/Predict'">Predict</a>
-            <a class="nav-link" onclick="window.parent.location.href='/Explainability'">Explainability</a>
-            <a class="nav-link" onclick="window.parent.location.href='/Model_Analytics'">Analytics</a>
-            <a class="nav-link" onclick="window.parent.location.href='/Student_Records'">Records</a>
-            <a class="nav-link" onclick="window.parent.location.href='/Documentation'">Documentation</a>
+            <a class="nav-link" href="/Predict" target="_top">Predict</a>
+            <a class="nav-link" href="/Explainability" target="_top">Explainability</a>
+            <a class="nav-link" href="/Model_Analytics" target="_top">Analytics</a>
+            <a class="nav-link" href="/Student_Records" target="_top">Records</a>
+            <a class="nav-link" href="/Documentation" target="_top">Documentation</a>
         </div>
 
         <div class="nav-actions">
             <!-- BUTTON 2: STAR BUTTON (Login) -->
-            <div class="star-button-wrapper" onclick="window.parent.location.href='/Staff_Portal'">
+            <a class="star-button-wrapper" href="/Staff_Portal" target="_top">
                 <div class="star-orbit-beam"></div>
                 <div class="star-button-inner">
                     <svg class="star-svg-bg" viewBox="0 0 100 40" fill="none">
@@ -553,10 +544,10 @@ roobinium_full_viewport_html = """
                     </svg>
                     <span>Login</span>
                 </div>
-            </div>
+            </a>
 
-            <!-- BUTTON 3: INTERACTIVE HOVER BUTTON by Dillion Verma (Sign Up) with Kinetic Arrow -->
-            <div class="interactive-hover-btn" onclick="window.parent.location.href='/Staff_Portal'">
+            <!-- BUTTON 3: INTERACTIVE HOVER BUTTON by Dillion Verma (Sign Up) -->
+            <a class="interactive-hover-btn" href="/Staff_Portal" target="_top">
                 <div class="expanding-circle"></div>
                 <span class="btn-text-content">
                     <span>Sign Up</span>
@@ -568,7 +559,7 @@ roobinium_full_viewport_html = """
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
                 </span>
-            </div>
+            </a>
         </div>
     </nav>
 
@@ -580,12 +571,12 @@ roobinium_full_viewport_html = """
         </p>
         
         <!-- BUTTON 1: ORIGIN BUTTON (Evaluate Performance) -->
-        <button class="origin-button" id="originBtn" onclick="window.parent.location.href='/Predict'">
+        <a class="origin-button" id="originBtn" href="/Predict" target="_top">
             <div class="origin-ripple" id="originRipple"></div>
             <span class="button-label">
                 Evaluate Performance ↗
             </span>
-        </button>
+        </a>
     </section>
 
     <!-- 3. 3D Spline Centerpiece with 4 Translucent Liquid Glass Cards -->
