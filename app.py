@@ -1,7 +1,9 @@
 """
 S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
-Full-Viewport Agency Experience with 100% Guaranteed 100vw Layout:
-- Star Button (Login) with glowing, animated twinkling 4-point constellation sparkles
+Full-Viewport Agency Experience with Zero Iframe Nesting & Zero Scrollbars:
+- Frame-buster script to eliminate nested iframes permanently
+- Global scrollbar suppression
+- Star Button (Login) with glowing animated constellation sparkles
 - Origin Button (Evaluate Performance), Star Button (Login), Interactive Hover Button (Sign Up)
 - Translucent Liquid Glass micro-cards framing 3D cursor-tracking robot
 """
@@ -15,49 +17,48 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Ultra-clean CSS: hide default Streamlit chrome & sidebar completely and guarantee 100vw width
+# Global Scrollbar Killer & Full Viewport Lock
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
 
-    [data-testid="stSidebar"] {
+    /* Kill all scrollbars globally */
+    ::-webkit-scrollbar {
         display: none !important;
+        width: 0 !important;
+        height: 0 !important;
     }
-    header[data-testid="stHeader"] {
-        display: none !important;
-    }
-    #MainMenu, footer {
-        visibility: hidden !important;
+    * {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
     }
 
-    html, body, [class*="css"], .stApp {
+    [data-testid="stSidebar"] { display: none !important; }
+    header[data-testid="stHeader"] { display: none !important; }
+    #MainMenu, footer { visibility: hidden !important; }
+
+    html, body, [class*="css"], .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
         background-color: #05070E !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #FFFFFF !important;
         overflow: hidden !important;
         height: 100vh !important;
-        width: 100vw !important;
-    }
-
-    .main, .block-container, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
-        max-width: 100vw !important;
-        width: 100vw !important;
+        width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
     }
 
     iframe, [data-testid="stCustomComponentV1"] {
-        width: 100vw !important;
-        min-width: 100vw !important;
-        max-width: 100vw !important;
+        width: 100% !important;
         border: none !important;
         padding: 0 !important;
         margin: 0 !important;
+        overflow: hidden !important;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Complete Roobinium 4-Card Hero Viewport with Bulletproof Top-Level Navigation
+# Complete Roobinium 4-Card Hero Viewport
 roobinium_full_viewport_html = """
 <!DOCTYPE html>
 <html lang="en">
@@ -67,18 +68,26 @@ roobinium_full_viewport_html = """
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
 
+        /* Kill all scrollbars */
+        ::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
             user-select: none;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
         }
 
-        body {
+        html, body {
             background-color: #05070E;
             color: #FFFFFF;
-            width: 100vw;
+            width: 100%;
             height: 100vh;
             overflow: hidden;
             position: relative;
@@ -163,7 +172,7 @@ roobinium_full_viewport_html = """
             gap: 16px;
         }
 
-        /* BUTTON 2: STAR BUTTON (Login) with Animated Twinkling Constellations */
+        /* BUTTON 2: STAR BUTTON (Login) */
         .star-button-wrapper {
             position: relative;
             display: inline-flex;
@@ -522,20 +531,6 @@ roobinium_full_viewport_html = """
             background: linear-gradient(90deg, #6366F1, #38BDF8);
             border-radius: 9999px;
         }
-
-        @media (max-width: 1000px) {
-            .card-top-left { left: 20px; top: 80px; }
-            .card-top-right { right: 20px; top: 80px; }
-            .card-bottom-left { left: 20px; bottom: 40px; }
-            .card-bottom-right { right: 20px; bottom: 40px; }
-        }
-
-        @media (max-width: 800px) {
-            .hero-title { font-size: 2.4rem; }
-            .floating-card { display: none; }
-            .nav-menu { display: none; }
-            .spline-stage { height: 420px; }
-        }
     </style>
 </head>
 <body>
@@ -543,23 +538,23 @@ roobinium_full_viewport_html = """
     <div class="cursor-spotlight" id="spotlight"></div>
     <div class="ambient-glow-top"></div>
 
-    <!-- 1. Sleek Floating Navbar with Direct Navigation -->
+    <!-- 1. Sleek Floating Navbar with Direct Top-Level Navigation -->
     <nav class="navbar-container">
-        <a class="nav-logo" onclick="goToPage('/')">
+        <a class="nav-logo" href="/" target="_top">
             <span>SAPPM</span>
         </a>
 
         <div class="nav-menu">
-            <a class="nav-link" onclick="goToPage('/Predict')">Predict</a>
-            <a class="nav-link" onclick="goToPage('/Explainability')">Explainability</a>
-            <a class="nav-link" onclick="goToPage('/Model_Analytics')">Analytics</a>
-            <a class="nav-link" onclick="goToPage('/Student_Records')">Records</a>
-            <a class="nav-link" onclick="goToPage('/Documentation')">Documentation</a>
+            <a class="nav-link" href="/Predict" target="_top">Predict</a>
+            <a class="nav-link" href="/Explainability" target="_top">Explainability</a>
+            <a class="nav-link" href="/Model_Analytics" target="_top">Analytics</a>
+            <a class="nav-link" href="/Student_Records" target="_top">Records</a>
+            <a class="nav-link" href="/Documentation" target="_top">Documentation</a>
         </div>
 
         <div class="nav-actions">
-            <!-- BUTTON 2: STAR BUTTON (Login) with Animated Twinkling Constellations -->
-            <div class="star-button-wrapper" onclick="goToPage('/Staff_Portal')">
+            <!-- BUTTON 2: STAR BUTTON (Login) -->
+            <a class="star-button-wrapper" href="/Staff_Portal" target="_top">
                 <div class="star-orbit-beam"></div>
                 <div class="star-button-inner">
                     <svg class="star-svg-bg" viewBox="0 0 100 40" fill="none">
@@ -571,10 +566,10 @@ roobinium_full_viewport_html = """
                     </svg>
                     <span>Login</span>
                 </div>
-            </div>
+            </a>
 
             <!-- BUTTON 3: INTERACTIVE HOVER BUTTON by Dillion Verma (Sign Up) -->
-            <div class="interactive-hover-btn" onclick="goToPage('/Staff_Portal')">
+            <a class="interactive-hover-btn" href="/Staff_Portal" target="_top">
                 <div class="expanding-circle"></div>
                 <span class="btn-text-content">
                     <span>Sign Up</span>
@@ -586,7 +581,7 @@ roobinium_full_viewport_html = """
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
                 </span>
-            </div>
+            </a>
         </div>
     </nav>
 
@@ -598,12 +593,12 @@ roobinium_full_viewport_html = """
         </p>
         
         <!-- BUTTON 1: ORIGIN BUTTON (Evaluate Performance) -->
-        <button class="origin-button" id="originBtn" onclick="goToPage('/Predict')">
+        <a class="origin-button" id="originBtn" href="/Predict" target="_top">
             <div class="origin-ripple" id="originRipple"></div>
             <span class="button-label">
                 Evaluate Performance ↗
             </span>
-        </button>
+        </a>
     </section>
 
     <!-- 3. 3D Spline Centerpiece with 4 Translucent Liquid Glass Cards -->
@@ -655,20 +650,13 @@ roobinium_full_viewport_html = """
         </div>
     </div>
 
-    <!-- Scripts for Navigation, Spotlight, Origin Button & Watermark removal -->
+    <!-- Scripts for Spotlight, Origin Button & Watermark removal + Frame Buster -->
     <script>
-        function goToPage(path) {
+        // FRAME BUSTER: Prevent infinite iframe nesting permanently!
+        if (window.self !== window.top) {
             try {
-                if (window.top && window.top !== window) {
-                    window.top.location.href = window.top.location.origin + path;
-                } else if (window.parent && window.parent !== window) {
-                    window.parent.location.href = window.parent.location.origin + path;
-                } else {
-                    window.location.href = path;
-                }
-            } catch (e) {
-                window.location.href = path;
-            }
+                window.top.location.href = window.location.href;
+            } catch(e) {}
         }
 
         const spotlight = document.getElementById('spotlight');
@@ -745,5 +733,5 @@ roobinium_full_viewport_html = """
 </html>
 """
 
-# Render Full-Viewport Experience
+# Render Full-Viewport Experience (Fixed 100vh)
 components.html(roobinium_full_viewport_html, height=920, scrolling=False)

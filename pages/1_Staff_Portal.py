@@ -1,11 +1,13 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
-Engineered with Native Streamlit Top-Level Routing (Zero Iframe Trapping):
-- Native Streamlit st.page_link("app.py") for 100% reliable parent navigation
-- 3D Perspective Tilt Card (sign-in-card-2) with continuous 360° laser border beam
-- Kinetic vector SVG animated arrow in Origin Button with smooth hover slide & pulse
-- Animated eye (watch / watch-off) vector toggle
-- Minimalist Zinc/Silver staggered spring letter-wave inputs
+Engineered to 21st.dev Premium Standards:
+- Zero iframe nesting with Frame Buster security
+- Zero stacked scrollbars (global scrollbar suppression)
+- Ultra-premium 21st.dev Double-Bezel Glass Back Button with kinetic sliding chevron arrow
+- 3D Perspective Tilt Card with continuous 360° circulating laser border beam
+- Staggered Spring Letter-Wave Underline Inputs (Zinc/Off-white)
+- Origin Button (Button 1 Style) with kinetic sliding vector arrow
+- Animated Watch / Watch-Off Eye Toggle
 - Full Supabase Auth integration
 """
 
@@ -23,68 +25,43 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Hide default Streamlit sidebar & top decoration, and enforce full 100vw width
+# Global Scrollbar Killer & Full Viewport Lock
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
+
+    /* Kill all scrollbars globally */
+    ::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+    * {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }
 
     [data-testid="stSidebar"] { display: none !important; }
     header[data-testid="stHeader"] { display: none !important; }
     #MainMenu, footer { visibility: hidden !important; }
 
-    html, body, [class*="css"], .stApp {
+    html, body, [class*="css"], .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
         background-color: #05070E !important;
-        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #FFFFFF !important;
-        overflow-x: hidden !important;
-    }
-
-    .main, .block-container, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
-        max-width: 100vw !important;
-        width: 100vw !important;
+        overflow: hidden !important;
+        height: 100vh !important;
+        width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
     }
 
     iframe, [data-testid="stCustomComponentV1"] {
-        width: 100vw !important;
-        min-width: 100vw !important;
-        max-width: 100vw !important;
+        width: 100% !important;
         border: none !important;
         padding: 0 !important;
         margin: 0 !important;
-    }
-
-    /* Native Top-Level Back to Home Pill Button */
-    .top-nav-bar {
-        padding: 20px 36px 0 36px;
-        position: relative;
-        z-index: 100;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    [data-testid="stPageLink"] a {
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 8px !important;
-        color: #94A3B8 !important;
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        border-radius: 9999px !important;
-        padding: 8px 20px !important;
-        font-size: 0.88rem !important;
-        font-weight: 700 !important;
-        text-decoration: none !important;
-        transition: all 0.25s ease !important;
-        width: fit-content !important;
-    }
-
-    [data-testid="stPageLink"] a:hover {
-        color: #FFFFFF !important;
-        border-color: rgba(255, 255, 255, 0.35) !important;
-        background: rgba(255, 255, 255, 0.1) !important;
-        transform: translateX(-3px) !important;
+        overflow: hidden !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -137,12 +114,7 @@ if is_auth:
             st.rerun()
 
 else:
-    # 1. Native Streamlit Page Link
-    st.markdown('<div class="top-nav-bar">', unsafe_allow_html=True)
-    st.page_link("app.py", label="← Back to Home")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # 2. 21st.dev Centered 3D Perspective Tilt Card
+    # 21st.dev Cinematic Double-Bezel Auth Screen with Zero Scrollbars
     auth_component_html = """
     <!DOCTYPE html>
     <html lang="en">
@@ -151,26 +123,33 @@ else:
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
 
+            /* Suppress all scrollbars */
+            ::-webkit-scrollbar {
+                display: none !important;
+                width: 0 !important;
+                height: 0 !important;
+            }
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
                 font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
                 user-select: none;
+                scrollbar-width: none !important;
+                -ms-overflow-style: none !important;
             }
 
-            body {
-                background-color: transparent;
+            html, body {
+                background-color: #05070E;
                 color: #FFFFFF;
-                width: 100vw;
-                min-height: 100vh;
-                overflow-x: hidden;
+                width: 100%;
+                height: 100vh;
+                overflow: hidden;
                 position: relative;
                 display: flex;
                 flex-direction: column;
-                justify-content: flex-start;
+                justify-content: center;
                 align-items: center;
-                padding-top: 1rem;
             }
 
             /* Ambient Glow Backgrounds */
@@ -180,7 +159,7 @@ else:
                 left: 50%;
                 transform: translateX(-50%);
                 width: 100vw;
-                height: 550px;
+                height: 500px;
                 background: radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, rgba(99, 102, 241, 0.12) 40%, transparent 75%);
                 filter: blur(80px);
                 pointer-events: none;
@@ -193,18 +172,69 @@ else:
                 left: 50%;
                 transform: translateX(-50%);
                 width: 90vw;
-                height: 400px;
+                height: 350px;
                 background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
                 filter: blur(80px);
                 pointer-events: none;
                 z-index: 1;
             }
 
-            /* 3D PERSPECTIVE TILT CARD */
+            /* ==========================================================
+               HIGH-END 21ST.DEV DOUBLE-BEZEL BACK TO HOME BUTTON
+               ========================================================== */
+            .back-home-wrapper {
+                position: absolute;
+                top: 28px;
+                left: 36px;
+                z-index: 50;
+                text-decoration: none;
+            }
+
+            .back-home-pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                padding: 9px 20px;
+                border-radius: 9999px;
+                background: rgba(15, 23, 42, 0.55);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+                color: #CBD5E1;
+                font-size: 0.82rem;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .back-home-pill:hover {
+                color: #FFFFFF;
+                border-color: rgba(255, 255, 255, 0.35);
+                background: rgba(15, 23, 42, 0.8);
+                box-shadow: 0 12px 30px -2px rgba(99, 102, 241, 0.25), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35);
+                transform: translateX(-3px);
+            }
+
+            .back-home-pill .chevron-icon {
+                transition: transform 0.3s ease;
+                display: flex;
+                align-items: center;
+            }
+
+            .back-home-pill:hover .chevron-icon {
+                transform: translateX(-4px);
+            }
+
+            /* ==========================================================
+               3D PERSPECTIVE TILT CARD WITH CONTINUOUS ORBITING BORDER BEAM
+               ========================================================== */
             .card-perspective-container {
                 perspective: 1500px;
                 width: 100%;
-                max-width: 490px;
+                max-width: 480px;
                 margin: 0 auto;
                 position: relative;
                 z-index: 10;
@@ -248,22 +278,22 @@ else:
                 position: relative;
                 z-index: 2;
                 border-radius: 26px;
-                background: rgba(11, 15, 28, 0.88);
+                background: rgba(11, 15, 28, 0.9);
                 backdrop-filter: blur(30px);
                 -webkit-backdrop-filter: blur(30px);
-                padding: 38px 42px;
+                padding: 34px 38px;
             }
 
             .card-emblem {
-                width: 48px;
-                height: 48px;
+                width: 46px;
+                height: 46px;
                 border-radius: 50%;
                 background: rgba(255, 255, 255, 0.06);
                 border: 1px solid rgba(255, 255, 255, 0.15);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin: 0 auto 16px auto;
+                margin: 0 auto 14px auto;
                 font-weight: 900;
                 font-size: 1.25rem;
                 color: #FFFFFF;
@@ -272,7 +302,7 @@ else:
 
             .card-header-title {
                 text-align: center;
-                font-size: 1.75rem;
+                font-size: 1.65rem;
                 font-weight: 900;
                 letter-spacing: -0.03em;
                 color: #FFFFFF;
@@ -281,9 +311,9 @@ else:
 
             .card-header-sub {
                 text-align: center;
-                font-size: 0.88rem;
+                font-size: 0.85rem;
                 color: #94A3B8;
-                margin-bottom: 26px;
+                margin-bottom: 22px;
             }
 
             .auth-toggle-bar {
@@ -292,7 +322,7 @@ else:
                 border: 1px solid rgba(255, 255, 255, 0.08);
                 border-radius: 9999px;
                 padding: 4px;
-                margin-bottom: 28px;
+                margin-bottom: 24px;
             }
 
             .toggle-btn {
@@ -300,7 +330,7 @@ else:
                 text-align: center;
                 padding: 8px 16px;
                 border-radius: 9999px;
-                font-size: 0.88rem;
+                font-size: 0.85rem;
                 font-weight: 700;
                 cursor: pointer;
                 transition: all 0.25s ease;
@@ -332,24 +362,24 @@ else:
             .input-underline-group {
                 position: relative;
                 width: 100%;
-                margin-bottom: 26px;
-                padding-top: 16px;
+                margin-bottom: 22px;
+                padding-top: 14px;
             }
 
             .input-group-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 20px;
+                gap: 16px;
             }
 
             .floating-letters-wrapper {
                 position: absolute;
-                top: 20px;
+                top: 18px;
                 left: 0;
                 pointer-events: none;
                 display: flex;
                 color: #94A3B8;
-                font-size: 0.95rem;
+                font-size: 0.92rem;
                 font-weight: 500;
             }
 
@@ -366,7 +396,7 @@ else:
                 border-bottom: 2px solid rgba(255, 255, 255, 0.2);
                 padding: 6px 0 8px 0;
                 color: #FFFFFF;
-                font-size: 1rem;
+                font-size: 0.95rem;
                 font-weight: 500;
                 outline: none;
                 transition: border-bottom-color 0.3s ease;
@@ -377,7 +407,7 @@ else:
             }
 
             .input-underline-group.is-active .letter-wave-char {
-                transform: translateY(-24px) scale(0.85);
+                transform: translateY(-22px) scale(0.85);
                 color: #E2E8F0;
                 font-weight: 700;
             }
@@ -410,16 +440,16 @@ else:
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 14px 28px;
+                padding: 13px 28px;
                 border-radius: 9999px;
                 background: #FFFFFF;
                 color: #05070E;
-                font-size: 0.98rem;
+                font-size: 0.95rem;
                 font-weight: 800;
                 border: 1px solid rgba(255, 255, 255, 0.5);
                 cursor: pointer;
                 overflow: hidden;
-                margin-top: 14px;
+                margin-top: 12px;
                 animation: authBtnBreathingShadow 3s ease-in-out infinite alternate;
                 transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
             }
@@ -486,8 +516,8 @@ else:
 
             .footer-links {
                 text-align: center;
-                margin-top: 22px;
-                font-size: 0.85rem;
+                margin-top: 18px;
+                font-size: 0.82rem;
                 color: #64748B;
             }
             .footer-links a {
@@ -500,6 +530,19 @@ else:
     <body>
         <div class="ambient-top"></div>
         <div class="ambient-bottom"></div>
+
+        <!-- 21st.dev Double-Bezel Glass Back to Home Button -->
+        <a class="back-home-wrapper" href="/" target="_top">
+            <div class="back-home-pill">
+                <span class="chevron-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </span>
+                <span>Back to Home</span>
+            </div>
+        </a>
 
         <!-- 3D Perspective Tilt Card with Continuous 360deg Laser Border Beam -->
         <div class="card-perspective-container">
@@ -534,7 +577,7 @@ else:
                             </div>
                         </div>
 
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 0.82rem; color: #94A3B8;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 0.8rem; color: #94A3B8;">
                             <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
                                 <input type="checkbox" style="accent-color: #818CF8;" /> Remember me
                             </label>
@@ -630,6 +673,13 @@ else:
         </div>
 
         <script>
+            // FRAME BUSTER: Prevent infinite iframe nesting permanently!
+            if (window.self !== window.top) {
+                try {
+                    window.top.location.href = window.location.href;
+                } catch(e) {}
+            }
+
             // 1. 3D Perspective Mouse Tilt Physics
             const tiltCardWrapper = document.getElementById('tiltCardWrapper');
             document.addEventListener('mousemove', (e) => {
@@ -795,4 +845,4 @@ else:
     </html>
     """
 
-    components.html(auth_component_html, height=880, scrolling=False)
+    components.html(auth_component_html, height=920, scrolling=False)
