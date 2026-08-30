@@ -1,7 +1,7 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
 Refined to exact specifications:
-- Direct top-level parent routing for Back to Home (target="_top")
+- Direct top-level parent window navigation with window.top.location.assign
 - Centered cinematic auth experience
 - Kinetic vector SVG animated arrow in Origin Button with smooth hover slide & pulse
 - Animated eye (watch / watch-off) vector toggle with smooth eyelid & slash transition
@@ -482,14 +482,14 @@ else:
         <div class="ambient-top"></div>
         <div class="ambient-bottom"></div>
 
-        <!-- Clean Minimal Back to Home Link with target="_top" -->
-        <a class="back-home-pill" href="/" target="_top">
+        <!-- Clean Minimal Back to Home Link with Bulletproof Top-Level Navigation -->
+        <div class="back-home-pill" onclick="navigateHome(event)">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
             <span>Back to Home</span>
-        </a>
+        </div>
 
         <!-- 3D Perspective Tilt Card with Continuous 360deg Laser Border Beam -->
         <div class="card-perspective-container">
@@ -620,6 +620,23 @@ else:
         </div>
 
         <script>
+            // Bulletproof parent top-level navigation
+            function navigateHome(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                try {
+                    window.top.location.href = window.top.location.origin;
+                } catch(err) {
+                    try {
+                        window.parent.location.href = window.parent.location.origin;
+                    } catch(err2) {
+                        window.location.href = '/';
+                    }
+                }
+            }
+
             // 1. 3D Perspective Mouse Tilt Physics
             const tiltCardWrapper = document.getElementById('tiltCardWrapper');
             document.addEventListener('mousemove', (e) => {
