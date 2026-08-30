@@ -1,11 +1,11 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
 Refined to exact specifications:
-- Continuous laser light beam smoothly circulating around the card perimeter (360° border orbit)
-- Origin Button (Button 1) with pointer-tracking radial ripple fill & breathing neon shadow
-- Exact Zinc/Silver Staggered Spring Letter-Wave Inputs (no harsh blue)
-- Smooth cross-fade sliding tab transitions between Sign In and Create Account
-- Full Supabase Auth integration
+- Centered cinematic auth experience (removed unnecessary top navbar clutter)
+- Kinetic vector SVG animated arrow in Origin Button with smooth hover slide & pulse
+- Animated eye (watch / watch-off) vector toggle with smooth eyelid & slash transition
+- Continuous circulating 360° laser border beam on 3D tilt card
+- Minimalist Zinc/Silver staggered spring letter-wave inputs
 """
 
 import os
@@ -22,7 +22,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Hide default Streamlit sidebar & chrome
+# Hide default Streamlit sidebar & top decoration
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
@@ -94,7 +94,7 @@ if is_auth:
             st.rerun()
 
 else:
-    # 21st.dev Exact Refined Auth Component
+    # 21st.dev Exact Clean Auth Component (Distraction-Free)
     auth_component_html = """
     <!DOCTYPE html>
     <html lang="en">
@@ -120,8 +120,9 @@ else:
                 position: relative;
                 display: flex;
                 flex-direction: column;
-                justify-content: flex-start;
+                justify-content: center;
                 align-items: center;
+                padding: 2rem 1rem;
             }
 
             /* Ambient Glow Backgrounds */
@@ -151,42 +152,31 @@ else:
                 z-index: 1;
             }
 
-            /* Top Floating Navbar */
-            .nav-wrapper {
-                width: 100%;
-                max-width: 1200px;
-                padding: 24px 32px 10px 32px;
-                display: flex;
-                justify-content: space-between;
+            /* Minimal Back Home Floating Link */
+            .back-home-pill {
+                position: absolute;
+                top: 28px;
+                left: 36px;
+                display: inline-flex;
                 align-items: center;
-                position: relative;
-                z-index: 50;
-            }
-
-            .nav-logo {
-                font-size: 1.35rem;
-                font-weight: 900;
-                letter-spacing: -0.04em;
-                color: #FFFFFF;
-                text-decoration: none;
-                cursor: pointer;
-            }
-
-            .nav-links {
-                display: flex;
-                gap: 32px;
-            }
-
-            .nav-link-item {
+                gap: 8px;
                 color: #94A3B8;
-                font-size: 0.92rem;
-                font-weight: 500;
+                font-size: 0.88rem;
+                font-weight: 600;
                 text-decoration: none;
-                transition: color 0.2s ease;
+                padding: 8px 16px;
+                border-radius: 9999px;
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                transition: all 0.25s ease;
+                z-index: 50;
                 cursor: pointer;
             }
-            .nav-link-item:hover {
+            .back-home-pill:hover {
                 color: #FFFFFF;
+                border-color: rgba(255, 255, 255, 0.25);
+                background: rgba(255, 255, 255, 0.08);
+                transform: translateX(-2px);
             }
 
             /* ==========================================================
@@ -195,8 +185,8 @@ else:
             .card-perspective-container {
                 perspective: 1500px;
                 width: 100%;
-                max-width: 500px;
-                margin: 2rem auto 5rem auto;
+                max-width: 490px;
+                margin: 0 auto;
                 position: relative;
                 z-index: 10;
             }
@@ -241,7 +231,7 @@ else:
                 position: relative;
                 z-index: 2;
                 border-radius: 26px;
-                background: rgba(11, 15, 28, 0.85);
+                background: rgba(11, 15, 28, 0.88);
                 backdrop-filter: blur(30px);
                 -webkit-backdrop-filter: blur(30px);
                 padding: 38px 42px;
@@ -326,7 +316,6 @@ else:
 
             /* ==========================================================
                STAGGERED SPRING LETTER-WAVE UNDERLINE INPUTS
-               Zinc/Off-white Spring Text (No Harsh Blue)
                ========================================================== */
             .input-underline-group {
                 position: relative;
@@ -375,30 +364,38 @@ else:
                 border-bottom-color: #FFFFFF;
             }
 
-            /* Spring wave into clean zinc / off-white text (Matches prompt) */
+            /* Spring wave into clean zinc / off-white text */
             .input-underline-group.is-active .letter-wave-char {
                 transform: translateY(-24px) scale(0.85);
                 color: #E2E8F0;
                 font-weight: 700;
             }
 
-            .password-toggle-icon {
+            /* Animated Eye Watch / Watch-Off Vector Icon */
+            .password-toggle-btn {
                 position: absolute;
                 right: 0;
                 bottom: 8px;
                 cursor: pointer;
                 color: #94A3B8;
-                font-size: 1.1rem;
-                transition: color 0.2s ease;
-                user-select: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: color 0.2s ease, transform 0.2s ease;
             }
-            .password-toggle-icon:hover {
+            .password-toggle-btn:hover {
                 color: #FFFFFF;
+                transform: scale(1.1);
+            }
+            .password-toggle-btn svg {
+                width: 18px;
+                height: 18px;
+                stroke: currentColor;
+                transition: all 0.25s ease;
             }
 
             /* ==========================================================
-               SUBMIT BUTTON: ORIGIN BUTTON (Button 1 Style)
-               Pointer-origin radial ripple fill + breathing shadow
+               SUBMIT BUTTON: ORIGIN BUTTON WITH KINETIC SLIDING VECTOR ARROW
                ========================================================== */
             .origin-submit-btn {
                 width: 100%;
@@ -464,6 +461,23 @@ else:
                 color: #FFFFFF;
             }
 
+            /* Kinetic Animated Vector SVG Arrow */
+            .kinetic-vector-arrow {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .origin-submit-btn:hover .kinetic-vector-arrow {
+                transform: translateX(5px);
+                animation: arrowKineticPulse 1.2s ease-in-out infinite alternate;
+            }
+
+            @keyframes arrowKineticPulse {
+                0% { transform: translateX(4px); }
+                100% { transform: translateX(8px); }
+            }
+
             .footer-links {
                 text-align: center;
                 margin-top: 22px;
@@ -481,19 +495,16 @@ else:
         <div class="ambient-top"></div>
         <div class="ambient-bottom"></div>
 
-        <!-- Floating Navbar -->
-        <nav class="nav-wrapper">
-            <a class="nav-logo" onclick="goToPage('/')">SAPPM</a>
-            <div class="nav-links">
-                <a class="nav-link-item" onclick="goToPage('/Predict')">Predict</a>
-                <a class="nav-link-item" onclick="goToPage('/Explainability')">Explainability</a>
-                <a class="nav-link-item" onclick="goToPage('/Model_Analytics')">Analytics</a>
-                <a class="nav-link-item" onclick="goToPage('/Student_Records')">Records</a>
-                <a class="nav-link-item" onclick="goToPage('/Documentation')">Docs</a>
-            </div>
-        </nav>
+        <!-- Clean Minimal Back to Home Link -->
+        <a class="back-home-pill" onclick="goToPage('/')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Home</span>
+        </a>
 
-        <!-- 3D Perspective Tilt Card with 360deg Circulating Laser Border Beam -->
+        <!-- 3D Perspective Tilt Card with Continuous 360deg Laser Border Beam -->
         <div class="card-perspective-container">
             <div class="tilt-card-wrapper" id="tiltCardWrapper">
                 <div class="tilt-card">
@@ -516,11 +527,17 @@ else:
                             <input type="email" class="underline-field" id="login_email" autocomplete="off" required />
                         </div>
 
-                        <!-- Password Input with Underline Letter Wave -->
+                        <!-- Password Input with Underline Letter Wave & Animated Watch/Watch-Off SVG -->
                         <div class="input-underline-group" id="grp_login_password">
                             <div class="floating-letters-wrapper" id="lbl_login_password"></div>
                             <input type="password" class="underline-field" id="login_password" autocomplete="off" required />
-                            <div class="password-toggle-icon" onclick="togglePasswordVisibility('login_password', this)">👁</div>
+                            <div class="password-toggle-btn" onclick="togglePasswordEye('login_password', this)">
+                                <!-- Watch (Eye Closed) SVG by default -->
+                                <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </div>
                         </div>
 
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 0.82rem; color: #94A3B8;">
@@ -530,11 +547,17 @@ else:
                             <a href="#" style="color: #CBD5E1; text-decoration: none;">Forgot password?</a>
                         </div>
 
-                        <!-- ORIGIN BUTTON 1 -->
+                        <!-- ORIGIN BUTTON 1 WITH KINETIC VECTOR ARROW -->
                         <button type="submit" class="origin-submit-btn" id="btnSignInOrigin">
                             <div class="origin-ripple"></div>
                             <span class="button-label">
-                                Sign In to Portal →
+                                <span>Sign In to Portal</span>
+                                <span class="kinetic-vector-arrow">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </span>
                             </span>
                         </button>
                     </form>
@@ -571,25 +594,41 @@ else:
                             <input type="email" class="underline-field" id="signup_email" autocomplete="off" required />
                         </div>
 
-                        <!-- Password Grid -->
+                        <!-- Password Grid with Animated Watch/Watch-Off SVG -->
                         <div class="input-group-grid">
                             <div class="input-underline-group" id="grp_signup_pass">
                                 <div class="floating-letters-wrapper" id="lbl_signup_pass"></div>
                                 <input type="password" class="underline-field" id="signup_pass" autocomplete="off" required />
-                                <div class="password-toggle-icon" onclick="togglePasswordVisibility('signup_pass', this)">👁</div>
+                                <div class="password-toggle-btn" onclick="togglePasswordEye('signup_pass', this)">
+                                    <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                                    </svg>
+                                </div>
                             </div>
                             <div class="input-underline-group" id="grp_signup_cpass">
                                 <div class="floating-letters-wrapper" id="lbl_signup_cpass"></div>
                                 <input type="password" class="underline-field" id="signup_cpass" autocomplete="off" required />
-                                <div class="password-toggle-icon" onclick="togglePasswordVisibility('signup_cpass', this)">👁</div>
+                                <div class="password-toggle-btn" onclick="togglePasswordEye('signup_cpass', this)">
+                                    <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- ORIGIN BUTTON 1 -->
+                        <!-- ORIGIN BUTTON 1 WITH KINETIC VECTOR ARROW -->
                         <button type="submit" class="origin-submit-btn" id="btnSignUpOrigin">
                             <div class="origin-ripple"></div>
                             <span class="button-label">
-                                Register Staff Account →
+                                <span>Register Staff Account</span>
+                                <span class="kinetic-vector-arrow">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </span>
                             </span>
                         </button>
                     </form>
@@ -690,7 +729,7 @@ else:
                     signInForm.style.display = 'none';
                     signUpForm.style.display = 'block';
                     signUpForm.classList.remove('auth-form-animated');
-                    void signUpForm.offsetWidth; // Trigger reflow for smooth animation
+                    void signUpForm.offsetWidth;
                     signUpForm.classList.add('auth-form-animated');
                     formTitle.textContent = 'Create Staff Account';
                     formSub.textContent = 'Register your institutional credentials for access';
@@ -701,7 +740,7 @@ else:
                     signUpForm.style.display = 'none';
                     signInForm.style.display = 'block';
                     signInForm.classList.remove('auth-form-animated');
-                    void signInForm.offsetWidth; // Trigger reflow for smooth animation
+                    void signInForm.offsetWidth;
                     signInForm.classList.add('auth-form-animated');
                     formTitle.textContent = 'Welcome Back';
                     formSub.textContent = 'Sign in to access student prediction analytics';
@@ -709,7 +748,33 @@ else:
                 }
             }
 
-            // 4. Origin Button Radial Physics for Auth Buttons
+            // 4. Animated Watch / Watch-Off Eye Toggle Logic
+            function togglePasswordEye(id, containerEl) {
+                const input = document.getElementById(id);
+                if (!input) return;
+
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    // Watch (Eye Open) SVG
+                    containerEl.innerHTML = `
+                        <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    `;
+                } else {
+                    input.type = 'password';
+                    // Watch-Off (Eye Closed Slash) SVG
+                    containerEl.innerHTML = `
+                        <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    `;
+                }
+            }
+
+            // 5. Origin Button Radial Ripple Physics
             const attachOriginRipple = (btnId) => {
                 const btn = document.getElementById(btnId);
                 if (!btn) return;
@@ -744,24 +809,11 @@ else:
             attachOriginRipple('btnSignInOrigin');
             attachOriginRipple('btnSignUpOrigin');
 
-            function togglePasswordVisibility(id, iconEl) {
-                const input = document.getElementById(id);
-                if (input) {
-                    if (input.type === 'password') {
-                        input.type = 'text';
-                        iconEl.textContent = '🙈';
-                    } else {
-                        input.type = 'password';
-                        iconEl.textContent = '👁';
-                    }
-                }
-            }
-
             function handleAuthSubmit(event, action) {
                 event.preventDefault();
                 const btn = event.target.querySelector('button');
                 const label = btn.querySelector('.button-label');
-                label.textContent = 'Verifying credentials...';
+                label.innerHTML = '<span>Verifying credentials...</span>';
             }
         </script>
     </body>
