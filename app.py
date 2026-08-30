@@ -1,6 +1,6 @@
 """
 S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
-Full-Viewport Agency Experience with 100% Reliable Top-Level Routing:
+Full-Viewport Agency Experience with 100% Guaranteed 100vw Layout:
 - Star Button (Login) with glowing, animated twinkling 4-point constellation sparkles
 - Origin Button (Evaluate Performance), Star Button (Login), Interactive Hover Button (Sign Up)
 - Translucent Liquid Glass micro-cards framing 3D cursor-tracking robot
@@ -15,7 +15,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Ultra-clean CSS: hide default Streamlit chrome & sidebar completely
+# Ultra-clean CSS: hide default Streamlit chrome & sidebar completely and guarantee 100vw width
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
@@ -39,8 +39,18 @@ st.markdown("""
         width: 100vw !important;
     }
 
-    .main .block-container {
-        max-width: 100% !important;
+    .main, .block-container, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
+        max-width: 100vw !important;
+        width: 100vw !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    iframe, [data-testid="stCustomComponentV1"] {
+        width: 100vw !important;
+        min-width: 100vw !important;
+        max-width: 100vw !important;
+        border: none !important;
         padding: 0 !important;
         margin: 0 !important;
     }
@@ -553,13 +563,9 @@ roobinium_full_viewport_html = """
                 <div class="star-orbit-beam"></div>
                 <div class="star-button-inner">
                     <svg class="star-svg-bg" viewBox="0 0 100 40" fill="none">
-                        <!-- Four-point Sparkling Star 1 -->
                         <path class="twinkle-star-1" d="M22 13 Q22 18 17 18 Q22 18 22 23 Q22 18 27 18 Q22 18 22 13 Z" fill="#FFFFFF" />
-                        <!-- Four-point Sparkling Star 2 -->
                         <path class="twinkle-star-2" d="M78 12 Q78 16 74 16 Q78 16 78 20 Q78 16 82 16 Q78 16 78 12 Z" fill="#FFFFFF" />
-                        <!-- Four-point Sparkling Star 3 -->
                         <path class="twinkle-star-3" d="M50 25 Q50 28 47 28 Q50 28 50 31 Q50 28 53 28 Q50 28 50 25 Z" fill="#CBD5E1" />
-                        <!-- Micro Sparkles -->
                         <circle cx="34" cy="8" r="1.2" fill="#FFFFFF" opacity="0.9" />
                         <circle cx="66" cy="29" r="1" fill="#FFFFFF" opacity="0.8" />
                     </svg>
@@ -651,7 +657,6 @@ roobinium_full_viewport_html = """
 
     <!-- Scripts for Navigation, Spotlight, Origin Button & Watermark removal -->
     <script>
-        // Universal Top-Level Navigation Handler
         function goToPage(path) {
             try {
                 if (window.top && window.top !== window) {

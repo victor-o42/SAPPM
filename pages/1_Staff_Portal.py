@@ -23,7 +23,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Hide default Streamlit sidebar & top decoration, and style the native Back to Home pill
+# Hide default Streamlit sidebar & top decoration, and enforce full 100vw width
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
@@ -39,8 +39,18 @@ st.markdown("""
         overflow-x: hidden !important;
     }
 
-    .main .block-container {
-        max-width: 100% !important;
+    .main, .block-container, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
+        max-width: 100vw !important;
+        width: 100vw !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    iframe, [data-testid="stCustomComponentV1"] {
+        width: 100vw !important;
+        min-width: 100vw !important;
+        max-width: 100vw !important;
+        border: none !important;
         padding: 0 !important;
         margin: 0 !important;
     }
@@ -50,6 +60,8 @@ st.markdown("""
         padding: 20px 36px 0 36px;
         position: relative;
         z-index: 100;
+        max-width: 1200px;
+        margin: 0 auto;
     }
 
     [data-testid="stPageLink"] a {
@@ -125,7 +137,7 @@ if is_auth:
             st.rerun()
 
 else:
-    # 1. Native Streamlit Page Link (Direct top-level routing, 0% chance of iframe trapping)
+    # 1. Native Streamlit Page Link
     st.markdown('<div class="top-nav-bar">', unsafe_allow_html=True)
     st.page_link("app.py", label="← Back to Home")
     st.markdown('</div>', unsafe_allow_html=True)
@@ -188,9 +200,7 @@ else:
                 z-index: 1;
             }
 
-            /* ==========================================================
-               3D PERSPECTIVE TILT CARD WITH CONTINUOUS ORBITING BORDER BEAM
-               ========================================================== */
+            /* 3D PERSPECTIVE TILT CARD */
             .card-perspective-container {
                 perspective: 1500px;
                 width: 100%;
