@@ -1,7 +1,8 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
 Refined to exact specifications:
-- Centered cinematic auth experience (removed unnecessary top navbar clutter)
+- Direct top-level parent routing for Back to Home (target="_top")
+- Centered cinematic auth experience
 - Kinetic vector SVG animated arrow in Origin Button with smooth hover slide & pulse
 - Animated eye (watch / watch-off) vector toggle with smooth eyelid & slash transition
 - Continuous circulating 360° laser border beam on 3D tilt card
@@ -94,7 +95,6 @@ if is_auth:
             st.rerun()
 
 else:
-    # 21st.dev Exact Clean Auth Component (Distraction-Free)
     auth_component_html = """
     <!DOCTYPE html>
     <html lang="en">
@@ -191,7 +191,6 @@ else:
                 z-index: 10;
             }
 
-            /* Card Outer Shell with continuous circulating laser light beam */
             .tilt-card-wrapper {
                 position: relative;
                 border-radius: 28px;
@@ -203,7 +202,6 @@ else:
                 transition: transform 0.12s ease-out;
             }
 
-            /* Circulating continuous border beam */
             .tilt-card-wrapper::before {
                 content: '';
                 position: absolute;
@@ -237,7 +235,6 @@ else:
                 padding: 38px 42px;
             }
 
-            /* Emblem Header */
             .card-emblem {
                 width: 48px;
                 height: 48px;
@@ -270,7 +267,6 @@ else:
                 margin-bottom: 26px;
             }
 
-            /* Toggle Pills */
             .auth-toggle-bar {
                 display: flex;
                 background: rgba(255, 255, 255, 0.04);
@@ -298,7 +294,6 @@ else:
                 box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
             }
 
-            /* Smooth Cross-fade Form Transitions */
             .auth-form-animated {
                 animation: smoothFormSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             }
@@ -314,9 +309,7 @@ else:
                 }
             }
 
-            /* ==========================================================
-               STAGGERED SPRING LETTER-WAVE UNDERLINE INPUTS
-               ========================================================== */
+            /* Staggered Spring Underline Inputs */
             .input-underline-group {
                 position: relative;
                 width: 100%;
@@ -364,14 +357,12 @@ else:
                 border-bottom-color: #FFFFFF;
             }
 
-            /* Spring wave into clean zinc / off-white text */
             .input-underline-group.is-active .letter-wave-char {
                 transform: translateY(-24px) scale(0.85);
                 color: #E2E8F0;
                 font-weight: 700;
             }
 
-            /* Animated Eye Watch / Watch-Off Vector Icon */
             .password-toggle-btn {
                 position: absolute;
                 right: 0;
@@ -394,9 +385,6 @@ else:
                 transition: all 0.25s ease;
             }
 
-            /* ==========================================================
-               SUBMIT BUTTON: ORIGIN BUTTON WITH KINETIC SLIDING VECTOR ARROW
-               ========================================================== */
             .origin-submit-btn {
                 width: 100%;
                 position: relative;
@@ -461,7 +449,6 @@ else:
                 color: #FFFFFF;
             }
 
-            /* Kinetic Animated Vector SVG Arrow */
             .kinetic-vector-arrow {
                 display: inline-flex;
                 align-items: center;
@@ -495,8 +482,8 @@ else:
         <div class="ambient-top"></div>
         <div class="ambient-bottom"></div>
 
-        <!-- Clean Minimal Back to Home Link -->
-        <a class="back-home-pill" onclick="goToPage('/')">
+        <!-- Clean Minimal Back to Home Link with target="_top" -->
+        <a class="back-home-pill" href="/" target="_top">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
@@ -521,18 +508,15 @@ else:
 
                     <!-- SIGN IN FORM -->
                     <form id="signInForm" class="auth-form-animated" onsubmit="handleAuthSubmit(event, 'signin')">
-                        <!-- Email Input with Underline Letter Wave -->
                         <div class="input-underline-group" id="grp_login_email">
                             <div class="floating-letters-wrapper" id="lbl_login_email"></div>
                             <input type="email" class="underline-field" id="login_email" autocomplete="off" required />
                         </div>
 
-                        <!-- Password Input with Underline Letter Wave & Animated Watch/Watch-Off SVG -->
                         <div class="input-underline-group" id="grp_login_password">
                             <div class="floating-letters-wrapper" id="lbl_login_password"></div>
                             <input type="password" class="underline-field" id="login_password" autocomplete="off" required />
                             <div class="password-toggle-btn" onclick="togglePasswordEye('login_password', this)">
-                                <!-- Watch (Eye Closed) SVG by default -->
                                 <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                                     <line x1="1" y1="1" x2="23" y2="23"></line>
@@ -564,7 +548,6 @@ else:
 
                     <!-- SIGN UP FORM -->
                     <form id="signUpForm" class="auth-form-animated" style="display: none;" onsubmit="handleAuthSubmit(event, 'signup')">
-                        <!-- First & Last Name Grid -->
                         <div class="input-group-grid">
                             <div class="input-underline-group" id="grp_signup_fname">
                                 <div class="floating-letters-wrapper" id="lbl_signup_fname"></div>
@@ -576,25 +559,21 @@ else:
                             </div>
                         </div>
 
-                        <!-- Staff ID -->
                         <div class="input-underline-group" id="grp_signup_staffid">
                             <div class="floating-letters-wrapper" id="lbl_signup_staffid"></div>
                             <input type="text" class="underline-field" id="signup_staffid" autocomplete="off" required />
                         </div>
 
-                        <!-- Department -->
                         <div class="input-underline-group" id="grp_signup_dept">
                             <div class="floating-letters-wrapper" id="lbl_signup_dept"></div>
                             <input type="text" class="underline-field" id="signup_dept" autocomplete="off" required />
                         </div>
 
-                        <!-- Institutional Email -->
                         <div class="input-underline-group" id="grp_signup_email">
                             <div class="floating-letters-wrapper" id="lbl_signup_email"></div>
                             <input type="email" class="underline-field" id="signup_email" autocomplete="off" required />
                         </div>
 
-                        <!-- Password Grid with Animated Watch/Watch-Off SVG -->
                         <div class="input-group-grid">
                             <div class="input-underline-group" id="grp_signup_pass">
                                 <div class="floating-letters-wrapper" id="lbl_signup_pass"></div>
@@ -641,18 +620,6 @@ else:
         </div>
 
         <script>
-            function goToPage(path) {
-                try {
-                    if (window.top && window.top !== window) {
-                        window.top.location.href = window.top.location.origin + path;
-                    } else {
-                        window.location.href = path;
-                    }
-                } catch(e) {
-                    window.location.href = path;
-                }
-            }
-
             // 1. 3D Perspective Mouse Tilt Physics
             const tiltCardWrapper = document.getElementById('tiltCardWrapper');
             document.addEventListener('mousemove', (e) => {
@@ -755,7 +722,6 @@ else:
 
                 if (input.type === 'password') {
                     input.type = 'text';
-                    // Watch (Eye Open) SVG
                     containerEl.innerHTML = `
                         <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -764,7 +730,6 @@ else:
                     `;
                 } else {
                     input.type = 'password';
-                    // Watch-Off (Eye Closed Slash) SVG
                     containerEl.innerHTML = `
                         <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
