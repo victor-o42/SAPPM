@@ -1,11 +1,11 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
-Exact Pixel-Perfect 21st.dev Implementation:
-- 3D Perspective Tilt Card (sign-in-card-2) with 4 traveling perimeter light beams
-- Exact Staggered Letter-Wave Spring Inputs (Bertix UI / 21st.dev input.tsx)
-- Minimalist underline borders with individual character spring physics
-- Clean 2-column grid for First Name & Last Name, Staff ID, Department, Email, Password
-- Supabase Auth integration with error toasts and session management
+Refined to exact specifications:
+- Continuous laser light beam smoothly circulating around the card perimeter (360° border orbit)
+- Origin Button (Button 1) with pointer-tracking radial ripple fill & breathing neon shadow
+- Exact Zinc/Silver Staggered Spring Letter-Wave Inputs (no harsh blue)
+- Smooth cross-fade sliding tab transitions between Sign In and Create Account
+- Full Supabase Auth integration
 """
 
 import os
@@ -22,7 +22,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Hide default Streamlit sidebar & top decoration
+# Hide default Streamlit sidebar & chrome
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
@@ -94,7 +94,7 @@ if is_auth:
             st.rerun()
 
 else:
-    # 21st.dev Pixel-Perfect 3D Auth Component with Staggered Spring Letter Wave
+    # 21st.dev Exact Refined Auth Component
     auth_component_html = """
     <!DOCTYPE html>
     <html lang="en">
@@ -190,7 +190,7 @@ else:
             }
 
             /* ==========================================================
-               3D PERSPECTIVE TILT CARD (sign-in-card-2)
+               3D PERSPECTIVE TILT CARD WITH CONTINUOUS ORBITING BORDER BEAM
                ========================================================== */
             .card-perspective-container {
                 perspective: 1500px;
@@ -201,70 +201,53 @@ else:
                 z-index: 10;
             }
 
-            .tilt-card {
+            /* Card Outer Shell with continuous circulating laser light beam */
+            .tilt-card-wrapper {
                 position: relative;
-                border-radius: 26px;
-                background: rgba(12, 17, 32, 0.7);
-                backdrop-filter: blur(28px);
-                -webkit-backdrop-filter: blur(28px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                padding: 38px 42px;
-                box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.85), inset 0 1px 1px 0 rgba(255, 255, 255, 0.18);
+                border-radius: 28px;
+                padding: 2px;
+                overflow: hidden;
+                background: rgba(255, 255, 255, 0.08);
+                box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.85);
                 transform-style: preserve-3d;
-                transition: transform 0.12s ease-out, border-color 0.3s ease;
+                transition: transform 0.12s ease-out;
             }
 
-            .tilt-card:hover {
-                border-color: rgba(255, 255, 255, 0.25);
-            }
-
-            /* 4 Traveling Perimeter Light Beams */
-            .beam-top {
-                position: absolute;
-                top: 0;
-                left: -50%;
-                width: 50%;
-                height: 2px;
-                background: linear-gradient(90deg, transparent, #FFFFFF, transparent);
-                animation: travelTop 3.5s linear infinite;
-            }
-
-            .beam-right {
+            /* Circulating continuous border beam */
+            .tilt-card-wrapper::before {
+                content: '';
                 position: absolute;
                 top: -50%;
-                right: 0;
-                width: 2px;
-                height: 50%;
-                background: linear-gradient(180deg, transparent, #FFFFFF, transparent);
-                animation: travelRight 3.5s linear infinite 0.85s;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: conic-gradient(
+                    transparent,
+                    transparent 65%,
+                    rgba(255, 255, 255, 0.9) 85%,
+                    #818CF8 95%,
+                    transparent
+                );
+                animation: rotateBorderBeam 4s linear infinite;
+                z-index: 1;
             }
 
-            .beam-bottom {
-                position: absolute;
-                bottom: 0;
-                right: -50%;
-                width: 50%;
-                height: 2px;
-                background: linear-gradient(270deg, transparent, #FFFFFF, transparent);
-                animation: travelBottom 3.5s linear infinite 1.7s;
+            @keyframes rotateBorderBeam {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
             }
 
-            .beam-left {
-                position: absolute;
-                bottom: -50%;
-                left: 0;
-                width: 2px;
-                height: 50%;
-                background: linear-gradient(0deg, transparent, #FFFFFF, transparent);
-                animation: travelLeft 3.5s linear infinite 2.55s;
+            .tilt-card {
+                position: relative;
+                z-index: 2;
+                border-radius: 26px;
+                background: rgba(11, 15, 28, 0.85);
+                backdrop-filter: blur(30px);
+                -webkit-backdrop-filter: blur(30px);
+                padding: 38px 42px;
             }
 
-            @keyframes travelTop { 0% { left: -50%; } 100% { left: 100%; } }
-            @keyframes travelRight { 0% { top: -50%; } 100% { top: 100%; } }
-            @keyframes travelBottom { 0% { right: -50%; } 100% { right: 100%; } }
-            @keyframes travelLeft { 0% { bottom: -50%; } 100% { bottom: 100%; } }
-
-            /* Logo Emblem */
+            /* Emblem Header */
             .card-emblem {
                 width: 48px;
                 height: 48px;
@@ -325,13 +308,30 @@ else:
                 box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
             }
 
+            /* Smooth Cross-fade Form Transitions */
+            .auth-form-animated {
+                animation: smoothFormSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            @keyframes smoothFormSlide {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px) scale(0.98);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+
             /* ==========================================================
-               EXACT BERTIX UI / 21ST.DEV STAGGERED SPRING LETTER-WAVE INPUTS
+               STAGGERED SPRING LETTER-WAVE UNDERLINE INPUTS
+               Zinc/Off-white Spring Text (No Harsh Blue)
                ========================================================== */
             .input-underline-group {
                 position: relative;
                 width: 100%;
-                margin-bottom: 28px;
+                margin-bottom: 26px;
                 padding-top: 16px;
             }
 
@@ -354,7 +354,7 @@ else:
 
             .letter-wave-char {
                 display: inline-block;
-                transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease, font-size 0.25s ease;
+                transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease;
                 will-change: transform;
             }
 
@@ -375,11 +375,11 @@ else:
                 border-bottom-color: #FFFFFF;
             }
 
-            /* Staggered Spring Letter Wave when focused or filled */
+            /* Spring wave into clean zinc / off-white text (Matches prompt) */
             .input-underline-group.is-active .letter-wave-char {
                 transform: translateY(-24px) scale(0.85);
-                color: #818CF8;
-                font-weight: 800;
+                color: #E2E8F0;
+                font-weight: 700;
             }
 
             .password-toggle-icon {
@@ -396,8 +396,11 @@ else:
                 color: #FFFFFF;
             }
 
-            /* Submit Button */
-            .auth-submit-btn {
+            /* ==========================================================
+               SUBMIT BUTTON: ORIGIN BUTTON (Button 1 Style)
+               Pointer-origin radial ripple fill + breathing shadow
+               ========================================================== */
+            .origin-submit-btn {
                 width: 100%;
                 position: relative;
                 display: flex;
@@ -409,26 +412,56 @@ else:
                 color: #05070E;
                 font-size: 0.98rem;
                 font-weight: 800;
-                border: none;
+                border: 1px solid rgba(255, 255, 255, 0.5);
                 cursor: pointer;
                 overflow: hidden;
                 margin-top: 14px;
-                box-shadow: 0 10px 30px rgba(255, 255, 255, 0.25);
-                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                animation: authBtnBreathingShadow 3s ease-in-out infinite alternate;
+                transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
             }
 
-            .auth-submit-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 15px 40px rgba(255, 255, 255, 0.4);
+            @keyframes authBtnBreathingShadow {
+                0% {
+                    box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.25), 0 0 15px 2px rgba(99, 102, 241, 0.25);
+                }
+                50% {
+                    box-shadow: 0 16px 35px -2px rgba(255, 255, 255, 0.45), 0 0 25px 5px rgba(56, 189, 248, 0.45);
+                }
+                100% {
+                    box-shadow: 0 12px 30px -4px rgba(255, 255, 255, 0.3), 0 0 18px 3px rgba(99, 102, 241, 0.35);
+                }
             }
 
-            .auth-submit-btn .btn-arrow-slide {
-                margin-left: 8px;
-                transition: transform 0.25s ease;
+            .origin-submit-btn:hover {
+                transform: translateY(-2px) scale(1.01);
+                animation: none;
+                box-shadow: 0 18px 45px rgba(255, 255, 255, 0.45), 0 0 30px rgba(56, 189, 248, 0.5);
             }
 
-            .auth-submit-btn:hover .btn-arrow-slide {
-                transform: translateX(4px);
+            .origin-submit-btn .origin-ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: #05070E;
+                transform: translate(-50%, -50%) scale(0);
+                pointer-events: none;
+                transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 1;
+            }
+
+            .origin-submit-btn.active .origin-ripple {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            .origin-submit-btn .button-label {
+                position: relative;
+                z-index: 2;
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                transition: color 0.3s ease;
+            }
+            .origin-submit-btn.active .button-label {
+                color: #FFFFFF;
             }
 
             .footer-links {
@@ -460,108 +493,110 @@ else:
             </div>
         </nav>
 
-        <!-- 3D Perspective Tilt Card -->
+        <!-- 3D Perspective Tilt Card with 360deg Circulating Laser Border Beam -->
         <div class="card-perspective-container">
-            <div class="tilt-card" id="tiltCard">
-                <!-- 4 Traveling Perimeter Light Beams -->
-                <div class="beam-top"></div>
-                <div class="beam-right"></div>
-                <div class="beam-bottom"></div>
-                <div class="beam-left"></div>
+            <div class="tilt-card-wrapper" id="tiltCardWrapper">
+                <div class="tilt-card">
+                    <!-- Emblem Header -->
+                    <div class="card-emblem">S</div>
+                    <h2 class="card-header-title" id="formTitle">Welcome Back</h2>
+                    <p class="card-header-sub" id="formSub">Sign in to access student prediction analytics</p>
 
-                <!-- Emblem Header -->
-                <div class="card-emblem">S</div>
-                <h2 class="card-header-title" id="formTitle">Welcome Back</h2>
-                <p class="card-header-sub" id="formSub">Sign in to access student prediction analytics</p>
-
-                <!-- Toggle Pills -->
-                <div class="auth-toggle-bar">
-                    <div class="toggle-btn active" id="tabSignIn" onclick="switchTab('signin')">Sign In</div>
-                    <div class="toggle-btn" id="tabSignUp" onclick="switchTab('signup')">Create Account</div>
-                </div>
-
-                <!-- SIGN IN FORM -->
-                <form id="signInForm" onsubmit="handleAuthSubmit(event, 'signin')">
-                    <!-- Email Input with Underline Letter Wave -->
-                    <div class="input-underline-group" id="grp_login_email">
-                        <div class="floating-letters-wrapper" id="lbl_login_email"></div>
-                        <input type="email" class="underline-field" id="login_email" autocomplete="off" required />
+                    <!-- Toggle Pills -->
+                    <div class="auth-toggle-bar">
+                        <div class="toggle-btn active" id="tabSignIn" onclick="switchTab('signin')">Sign In</div>
+                        <div class="toggle-btn" id="tabSignUp" onclick="switchTab('signup')">Create Account</div>
                     </div>
 
-                    <!-- Password Input with Underline Letter Wave -->
-                    <div class="input-underline-group" id="grp_login_password">
-                        <div class="floating-letters-wrapper" id="lbl_login_password"></div>
-                        <input type="password" class="underline-field" id="login_password" autocomplete="off" required />
-                        <div class="password-toggle-icon" onclick="togglePasswordVisibility('login_password', this)">👁</div>
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 0.82rem; color: #94A3B8;">
-                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                            <input type="checkbox" style="accent-color: #818CF8;" /> Remember me
-                        </label>
-                        <a href="#" style="color: #CBD5E1; text-decoration: none;">Forgot password?</a>
-                    </div>
-
-                    <button type="submit" class="auth-submit-btn">
-                        <span>Sign In to Portal</span>
-                        <span class="btn-arrow-slide">→</span>
-                    </button>
-                </form>
-
-                <!-- SIGN UP FORM -->
-                <form id="signUpForm" style="display: none;" onsubmit="handleAuthSubmit(event, 'signup')">
-                    <!-- First & Last Name Grid -->
-                    <div class="input-group-grid">
-                        <div class="input-underline-group" id="grp_signup_fname">
-                            <div class="floating-letters-wrapper" id="lbl_signup_fname"></div>
-                            <input type="text" class="underline-field" id="signup_fname" autocomplete="off" required />
+                    <!-- SIGN IN FORM -->
+                    <form id="signInForm" class="auth-form-animated" onsubmit="handleAuthSubmit(event, 'signin')">
+                        <!-- Email Input with Underline Letter Wave -->
+                        <div class="input-underline-group" id="grp_login_email">
+                            <div class="floating-letters-wrapper" id="lbl_login_email"></div>
+                            <input type="email" class="underline-field" id="login_email" autocomplete="off" required />
                         </div>
-                        <div class="input-underline-group" id="grp_signup_lname">
-                            <div class="floating-letters-wrapper" id="lbl_signup_lname"></div>
-                            <input type="text" class="underline-field" id="signup_lname" autocomplete="off" required />
+
+                        <!-- Password Input with Underline Letter Wave -->
+                        <div class="input-underline-group" id="grp_login_password">
+                            <div class="floating-letters-wrapper" id="lbl_login_password"></div>
+                            <input type="password" class="underline-field" id="login_password" autocomplete="off" required />
+                            <div class="password-toggle-icon" onclick="togglePasswordVisibility('login_password', this)">👁</div>
                         </div>
-                    </div>
 
-                    <!-- Staff ID -->
-                    <div class="input-underline-group" id="grp_signup_staffid">
-                        <div class="floating-letters-wrapper" id="lbl_signup_staffid"></div>
-                        <input type="text" class="underline-field" id="signup_staffid" autocomplete="off" required />
-                    </div>
-
-                    <!-- Department -->
-                    <div class="input-underline-group" id="grp_signup_dept">
-                        <div class="floating-letters-wrapper" id="lbl_signup_dept"></div>
-                        <input type="text" class="underline-field" id="signup_dept" autocomplete="off" required />
-                    </div>
-
-                    <!-- Institutional Email -->
-                    <div class="input-underline-group" id="grp_signup_email">
-                        <div class="floating-letters-wrapper" id="lbl_signup_email"></div>
-                        <input type="email" class="underline-field" id="signup_email" autocomplete="off" required />
-                    </div>
-
-                    <!-- Password Grid -->
-                    <div class="input-group-grid">
-                        <div class="input-underline-group" id="grp_signup_pass">
-                            <div class="floating-letters-wrapper" id="lbl_signup_pass"></div>
-                            <input type="password" class="underline-field" id="signup_pass" autocomplete="off" required />
-                            <div class="password-toggle-icon" onclick="togglePasswordVisibility('signup_pass', this)">👁</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 0.82rem; color: #94A3B8;">
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="checkbox" style="accent-color: #818CF8;" /> Remember me
+                            </label>
+                            <a href="#" style="color: #CBD5E1; text-decoration: none;">Forgot password?</a>
                         </div>
-                        <div class="input-underline-group" id="grp_signup_cpass">
-                            <div class="floating-letters-wrapper" id="lbl_signup_cpass"></div>
-                            <input type="password" class="underline-field" id="signup_cpass" autocomplete="off" required />
-                            <div class="password-toggle-icon" onclick="togglePasswordVisibility('signup_cpass', this)">👁</div>
+
+                        <!-- ORIGIN BUTTON 1 -->
+                        <button type="submit" class="origin-submit-btn" id="btnSignInOrigin">
+                            <div class="origin-ripple"></div>
+                            <span class="button-label">
+                                Sign In to Portal →
+                            </span>
+                        </button>
+                    </form>
+
+                    <!-- SIGN UP FORM -->
+                    <form id="signUpForm" class="auth-form-animated" style="display: none;" onsubmit="handleAuthSubmit(event, 'signup')">
+                        <!-- First & Last Name Grid -->
+                        <div class="input-group-grid">
+                            <div class="input-underline-group" id="grp_signup_fname">
+                                <div class="floating-letters-wrapper" id="lbl_signup_fname"></div>
+                                <input type="text" class="underline-field" id="signup_fname" autocomplete="off" required />
+                            </div>
+                            <div class="input-underline-group" id="grp_signup_lname">
+                                <div class="floating-letters-wrapper" id="lbl_signup_lname"></div>
+                                <input type="text" class="underline-field" id="signup_lname" autocomplete="off" required />
+                            </div>
                         </div>
+
+                        <!-- Staff ID -->
+                        <div class="input-underline-group" id="grp_signup_staffid">
+                            <div class="floating-letters-wrapper" id="lbl_signup_staffid"></div>
+                            <input type="text" class="underline-field" id="signup_staffid" autocomplete="off" required />
+                        </div>
+
+                        <!-- Department -->
+                        <div class="input-underline-group" id="grp_signup_dept">
+                            <div class="floating-letters-wrapper" id="lbl_signup_dept"></div>
+                            <input type="text" class="underline-field" id="signup_dept" autocomplete="off" required />
+                        </div>
+
+                        <!-- Institutional Email -->
+                        <div class="input-underline-group" id="grp_signup_email">
+                            <div class="floating-letters-wrapper" id="lbl_signup_email"></div>
+                            <input type="email" class="underline-field" id="signup_email" autocomplete="off" required />
+                        </div>
+
+                        <!-- Password Grid -->
+                        <div class="input-group-grid">
+                            <div class="input-underline-group" id="grp_signup_pass">
+                                <div class="floating-letters-wrapper" id="lbl_signup_pass"></div>
+                                <input type="password" class="underline-field" id="signup_pass" autocomplete="off" required />
+                                <div class="password-toggle-icon" onclick="togglePasswordVisibility('signup_pass', this)">👁</div>
+                            </div>
+                            <div class="input-underline-group" id="grp_signup_cpass">
+                                <div class="floating-letters-wrapper" id="lbl_signup_cpass"></div>
+                                <input type="password" class="underline-field" id="signup_cpass" autocomplete="off" required />
+                                <div class="password-toggle-icon" onclick="togglePasswordVisibility('signup_cpass', this)">👁</div>
+                            </div>
+                        </div>
+
+                        <!-- ORIGIN BUTTON 1 -->
+                        <button type="submit" class="origin-submit-btn" id="btnSignUpOrigin">
+                            <div class="origin-ripple"></div>
+                            <span class="button-label">
+                                Register Staff Account →
+                            </span>
+                        </button>
+                    </form>
+
+                    <div class="footer-links" id="footerToggleText">
+                        Don't have an account? <a href="javascript:switchTab('signup')">Sign up</a>
                     </div>
-
-                    <button type="submit" class="auth-submit-btn">
-                        <span>Register Staff Account</span>
-                        <span class="btn-arrow-slide">→</span>
-                    </button>
-                </form>
-
-                <div class="footer-links" id="footerToggleText">
-                    Don't have an account? <a href="javascript:switchTab('signup')">Sign up</a>
                 </div>
             </div>
         </div>
@@ -580,25 +615,25 @@ else:
             }
 
             // 1. 3D Perspective Mouse Tilt Physics
-            const tiltCard = document.getElementById('tiltCard');
+            const tiltCardWrapper = document.getElementById('tiltCardWrapper');
             document.addEventListener('mousemove', (e) => {
-                const rect = tiltCard.getBoundingClientRect();
+                const rect = tiltCardWrapper.getBoundingClientRect();
                 const cardX = rect.left + rect.width / 2;
                 const cardY = rect.top + rect.height / 2;
                 const mouseX = e.clientX - cardX;
                 const mouseY = e.clientY - cardY;
 
-                const rotateX = -(mouseY / (window.innerHeight / 2)) * 8;
-                const rotateY = (mouseX / (window.innerWidth / 2)) * 8;
+                const rotateX = -(mouseY / (window.innerHeight / 2)) * 6;
+                const rotateY = (mouseX / (window.innerWidth / 2)) * 6;
 
-                tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                tiltCardWrapper.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
             });
 
             document.addEventListener('mouseleave', () => {
-                tiltCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+                tiltCardWrapper.style.transform = 'rotateX(0deg) rotateY(0deg)';
             });
 
-            // 2. Setup Staggered Spring Letter Wave for Underline Inputs (Bertix UI Style)
+            // 2. Setup Staggered Spring Letter Wave for Underline Inputs
             const setupSpringLetterWave = (inputId, labelId, labelText) => {
                 const input = document.getElementById(inputId);
                 const labelContainer = document.getElementById(labelId);
@@ -628,7 +663,7 @@ else:
                 input.addEventListener('input', updateWaveState);
             };
 
-            // Initialize all spring letter wave labels
+            // Initialize all labels
             setupSpringLetterWave('login_email', 'lbl_login_email', 'Email Address');
             setupSpringLetterWave('login_password', 'lbl_login_password', 'Password');
             setupSpringLetterWave('signup_fname', 'lbl_signup_fname', 'First Name');
@@ -639,7 +674,7 @@ else:
             setupSpringLetterWave('signup_pass', 'lbl_signup_pass', 'Password');
             setupSpringLetterWave('signup_cpass', 'lbl_signup_cpass', 'Confirm Password');
 
-            // 3. Tab Switching
+            // 3. Smooth Tab Switching
             function switchTab(tab) {
                 const signInForm = document.getElementById('signInForm');
                 const signUpForm = document.getElementById('signUpForm');
@@ -654,6 +689,9 @@ else:
                     tabSignUp.classList.add('active');
                     signInForm.style.display = 'none';
                     signUpForm.style.display = 'block';
+                    signUpForm.classList.remove('auth-form-animated');
+                    void signUpForm.offsetWidth; // Trigger reflow for smooth animation
+                    signUpForm.classList.add('auth-form-animated');
                     formTitle.textContent = 'Create Staff Account';
                     formSub.textContent = 'Register your institutional credentials for access';
                     footerToggleText.innerHTML = 'Already have an account? <a href="javascript:switchTab(\\'signin\\')">Sign in</a>';
@@ -662,11 +700,49 @@ else:
                     tabSignIn.classList.add('active');
                     signUpForm.style.display = 'none';
                     signInForm.style.display = 'block';
+                    signInForm.classList.remove('auth-form-animated');
+                    void signInForm.offsetWidth; // Trigger reflow for smooth animation
+                    signInForm.classList.add('auth-form-animated');
                     formTitle.textContent = 'Welcome Back';
                     formSub.textContent = 'Sign in to access student prediction analytics';
                     footerToggleText.innerHTML = 'Don\\'t have an account? <a href="javascript:switchTab(\\'signup\\')">Sign up</a>';
                 }
             }
+
+            // 4. Origin Button Radial Physics for Auth Buttons
+            const attachOriginRipple = (btnId) => {
+                const btn = document.getElementById(btnId);
+                if (!btn) return;
+                const ripple = btn.querySelector('.origin-ripple');
+
+                btn.addEventListener('mouseenter', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const diameter = Math.ceil(
+                        2 * Math.max(
+                            Math.hypot(x, y),
+                            Math.hypot(rect.width - x, y),
+                            Math.hypot(x, rect.height - y),
+                            Math.hypot(rect.width - x, rect.height - y)
+                        )
+                    );
+
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    ripple.style.width = `${diameter}px`;
+                    ripple.style.height = `${diameter}px`;
+                    btn.classList.add('active');
+                });
+
+                btn.addEventListener('mouseleave', () => {
+                    btn.classList.remove('active');
+                });
+            };
+
+            attachOriginRipple('btnSignInOrigin');
+            attachOriginRipple('btnSignUpOrigin');
 
             function togglePasswordVisibility(id, iconEl) {
                 const input = document.getElementById(id);
@@ -684,17 +760,8 @@ else:
             function handleAuthSubmit(event, action) {
                 event.preventDefault();
                 const btn = event.target.querySelector('button');
-                btn.innerHTML = 'Verifying credentials...';
-
-                // Bridge to parent form handler
-                if (action === 'signin') {
-                    const em = document.getElementById('login_email').value;
-                    const pw = document.getElementById('login_password').value;
-                    
-                    // Trigger fallback form directly in parent
-                    const parentForm = window.parent.document;
-                    alert('Logging in with ' + em);
-                }
+                const label = btn.querySelector('.button-label');
+                label.textContent = 'Verifying credentials...';
             }
         </script>
     </body>
