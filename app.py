@@ -1,7 +1,7 @@
 """
 S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
 Full-Viewport Agency Experience with 100% Reliable Top-Level Routing:
-- Full window.top.location.href + target="_top" dual-action navigation
+- Star Button (Login) with glowing, animated twinkling 4-point constellation sparkles
 - Origin Button (Evaluate Performance), Star Button (Login), Interactive Hover Button (Sign Up)
 - Translucent Liquid Glass micro-cards framing 3D cursor-tracking robot
 """
@@ -153,7 +153,7 @@ roobinium_full_viewport_html = """
             gap: 16px;
         }
 
-        /* BUTTON 2: STAR BUTTON (Login) */
+        /* BUTTON 2: STAR BUTTON (Login) with Animated Twinkling Constellations */
         .star-button-wrapper {
             position: relative;
             display: inline-flex;
@@ -165,12 +165,12 @@ roobinium_full_viewport_html = """
             cursor: pointer;
             text-decoration: none;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s ease;
         }
         .star-button-wrapper:hover {
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 22px rgba(255, 255, 255, 0.25);
             transform: translateY(-1px);
         }
 
@@ -180,12 +180,12 @@ roobinium_full_viewport_html = """
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 20px;
+            padding: 8px 22px;
             border-radius: 9999px;
             background: #090D1A;
-            color: #E2E8F0;
+            color: #FFFFFF;
             font-size: 0.9rem;
-            font-weight: 600;
+            font-weight: 700;
             overflow: hidden;
         }
 
@@ -194,8 +194,25 @@ roobinium_full_viewport_html = """
             inset: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.35;
             pointer-events: none;
+        }
+
+        .twinkle-star-1 {
+            animation: starTwinkle 2.4s ease-in-out infinite;
+            transform-origin: 22px 18px;
+        }
+        .twinkle-star-2 {
+            animation: starTwinkle 3s ease-in-out infinite 0.8s;
+            transform-origin: 78px 15px;
+        }
+        .twinkle-star-3 {
+            animation: starTwinkle 2.2s ease-in-out infinite 1.4s;
+            transform-origin: 50px 28px;
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.35; transform: scale(0.7); }
+            50% { opacity: 1; transform: scale(1.35); filter: drop-shadow(0 0 4px #FFFFFF); }
         }
 
         .star-orbit-beam {
@@ -531,16 +548,20 @@ roobinium_full_viewport_html = """
         </div>
 
         <div class="nav-actions">
-            <!-- BUTTON 2: STAR BUTTON (Login) -->
+            <!-- BUTTON 2: STAR BUTTON (Login) with Animated Twinkling Constellations -->
             <div class="star-button-wrapper" onclick="goToPage('/Staff_Portal')">
                 <div class="star-orbit-beam"></div>
                 <div class="star-button-inner">
                     <svg class="star-svg-bg" viewBox="0 0 100 40" fill="none">
-                        <path d="M32.34 26.68C32.34 26.3152 32.0445 26.02 31.68 26.02C31.3155 26.02 31.02 26.3152 31.02 26.68Z" fill="white" />
-                        <path d="M56.1 3.96C56.4645 3.96 56.76 4.25519 56.76 4.62C56.76 4.98481 56.4645 5.28 56.1 5.28Z" fill="white" />
-                        <path d="M74.58 5.28C74.7701 5.28 74.9413 5.36057 75.0618 5.48882Z" fill="white" />
-                        <path d="M19.32 18.48C19.32 18.1152 19.0245 17.82 18.66 17.82Z" fill="white" />
-                        <path d="M85.66 24.34C86.0245 24.34 86.32 24.6352 86.32 25Z" fill="white" />
+                        <!-- Four-point Sparkling Star 1 -->
+                        <path class="twinkle-star-1" d="M22 13 Q22 18 17 18 Q22 18 22 23 Q22 18 27 18 Q22 18 22 13 Z" fill="#FFFFFF" />
+                        <!-- Four-point Sparkling Star 2 -->
+                        <path class="twinkle-star-2" d="M78 12 Q78 16 74 16 Q78 16 78 20 Q78 16 82 16 Q78 16 78 12 Z" fill="#FFFFFF" />
+                        <!-- Four-point Sparkling Star 3 -->
+                        <path class="twinkle-star-3" d="M50 25 Q50 28 47 28 Q50 28 50 31 Q50 28 53 28 Q50 28 50 25 Z" fill="#CBD5E1" />
+                        <!-- Micro Sparkles -->
+                        <circle cx="34" cy="8" r="1.2" fill="#FFFFFF" opacity="0.9" />
+                        <circle cx="66" cy="29" r="1" fill="#FFFFFF" opacity="0.8" />
                     </svg>
                     <span>Login</span>
                 </div>
@@ -719,5 +740,5 @@ roobinium_full_viewport_html = """
 </html>
 """
 
-# Render Full-Viewport Experience (Fixed 100vh)
+# Render Full-Viewport Experience
 components.html(roobinium_full_viewport_html, height=920, scrolling=False)
