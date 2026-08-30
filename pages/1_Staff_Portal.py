@@ -1,12 +1,12 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
-Refined to exact specifications:
-- Direct top-level parent window navigation with window.top.location.assign
-- Centered cinematic auth experience
+Engineered with Native Streamlit Top-Level Routing (Zero Iframe Trapping):
+- Native Streamlit st.page_link("app.py") for 100% reliable parent navigation
+- 3D Perspective Tilt Card (sign-in-card-2) with continuous 360° laser border beam
 - Kinetic vector SVG animated arrow in Origin Button with smooth hover slide & pulse
-- Animated eye (watch / watch-off) vector toggle with smooth eyelid & slash transition
-- Continuous circulating 360° laser border beam on 3D tilt card
+- Animated eye (watch / watch-off) vector toggle
 - Minimalist Zinc/Silver staggered spring letter-wave inputs
+- Full Supabase Auth integration
 """
 
 import os
@@ -23,7 +23,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Hide default Streamlit sidebar & top decoration
+# Hide default Streamlit sidebar & top decoration, and style the native Back to Home pill
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
@@ -43,6 +43,36 @@ st.markdown("""
         max-width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
+    }
+
+    /* Native Top-Level Back to Home Pill Button */
+    .top-nav-bar {
+        padding: 20px 36px 0 36px;
+        position: relative;
+        z-index: 100;
+    }
+
+    [data-testid="stPageLink"] a {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        color: #94A3B8 !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 9999px !important;
+        padding: 8px 20px !important;
+        font-size: 0.88rem !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
+        transition: all 0.25s ease !important;
+        width: fit-content !important;
+    }
+
+    [data-testid="stPageLink"] a:hover {
+        color: #FFFFFF !important;
+        border-color: rgba(255, 255, 255, 0.35) !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        transform: translateX(-3px) !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -95,6 +125,12 @@ if is_auth:
             st.rerun()
 
 else:
+    # 1. Native Streamlit Page Link (Direct top-level routing, 0% chance of iframe trapping)
+    st.markdown('<div class="top-nav-bar">', unsafe_allow_html=True)
+    st.page_link("app.py", label="← Back to Home")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # 2. 21st.dev Centered 3D Perspective Tilt Card
     auth_component_html = """
     <!DOCTYPE html>
     <html lang="en">
@@ -112,7 +148,7 @@ else:
             }
 
             body {
-                background-color: #05070E;
+                background-color: transparent;
                 color: #FFFFFF;
                 width: 100vw;
                 min-height: 100vh;
@@ -120,9 +156,9 @@ else:
                 position: relative;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
+                justify-content: flex-start;
                 align-items: center;
-                padding: 2rem 1rem;
+                padding-top: 1rem;
             }
 
             /* Ambient Glow Backgrounds */
@@ -150,33 +186,6 @@ else:
                 filter: blur(80px);
                 pointer-events: none;
                 z-index: 1;
-            }
-
-            /* Minimal Back Home Floating Link */
-            .back-home-pill {
-                position: absolute;
-                top: 28px;
-                left: 36px;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                color: #94A3B8;
-                font-size: 0.88rem;
-                font-weight: 600;
-                text-decoration: none;
-                padding: 8px 16px;
-                border-radius: 9999px;
-                background: rgba(255, 255, 255, 0.04);
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                transition: all 0.25s ease;
-                z-index: 50;
-                cursor: pointer;
-            }
-            .back-home-pill:hover {
-                color: #FFFFFF;
-                border-color: rgba(255, 255, 255, 0.25);
-                background: rgba(255, 255, 255, 0.08);
-                transform: translateX(-2px);
             }
 
             /* ==========================================================
@@ -482,15 +491,6 @@ else:
         <div class="ambient-top"></div>
         <div class="ambient-bottom"></div>
 
-        <!-- Clean Minimal Back to Home Link with Bulletproof Top-Level Navigation -->
-        <div class="back-home-pill" onclick="navigateHome(event)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-            <span>Back to Home</span>
-        </div>
-
         <!-- 3D Perspective Tilt Card with Continuous 360deg Laser Border Beam -->
         <div class="card-perspective-container">
             <div class="tilt-card-wrapper" id="tiltCardWrapper">
@@ -620,23 +620,6 @@ else:
         </div>
 
         <script>
-            // Bulletproof parent top-level navigation
-            function navigateHome(e) {
-                if (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-                try {
-                    window.top.location.href = window.top.location.origin;
-                } catch(err) {
-                    try {
-                        window.parent.location.href = window.parent.location.origin;
-                    } catch(err2) {
-                        window.location.href = '/';
-                    }
-                }
-            }
-
             // 1. 3D Perspective Mouse Tilt Physics
             const tiltCardWrapper = document.getElementById('tiltCardWrapper');
             document.addEventListener('mousemove', (e) => {
