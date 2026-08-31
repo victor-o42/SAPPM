@@ -1,11 +1,12 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
-- Pre-auth: 3D Perspective Tilt Card with 360° laser beam & Spring underline inputs
-- Post-auth: The Full Original Student Academic Performance Prediction System (app_3.py architecture with Sliders, XGBoost/Random Forest Inference, Prediction Confidence, Probabilities Distribution Chart, SHAP Attribution, and Feature Importance)
+- Pre-auth: 3D Perspective Tilt Card with 360° laser beam & Spring underline inputs with real validation (Password matching, length, Supabase Auth)
+- Post-auth: The Full Original Student Academic Performance Prediction System (app_3.py architecture with Sliders, Model Inference, Prediction Confidence, Probabilities Distribution Chart, SHAP Attribution, and Feature Importance)
 """
 
 import os
 import sys
+import urllib.parse
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import streamlit as st
@@ -100,15 +101,70 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Query param or session auth check
-if "auth" in st.query_params and st.query_params["auth"] == "true":
-    st.session_state["authenticated"] = True
-    st.session_state["profile"] = {
-        "full_name": "Faculty Staff Member",
-        "role": "Academic Advisor",
-        "department": "Faculty of Sciences",
-        "staff_id": "STF/2026/089"
-    }
+# Process incoming Supabase Auth requests from the form
+auth_action = st.query_params.get("action")
+auth_error = st.session_state.get("auth_error", None)
+
+if auth_action == "signin":
+    email = st.query_params.get("email", "").strip()
+    password = st.query_params.get("password", "")
+    
+    if email and password:
+        res = sign_in_staff(email, password)
+        if res.get("success"):
+            st.session_state["authenticated"] = True
+            st.session_state["profile"] = res.get("profile", {})
+            st.session_state["auth_error"] = None
+            st.query_params.clear()
+            st.rerun()
+        else:
+            st.session_state["auth_error"] = res.get("message", "Invalid email or password.")
+            st.query_params.clear()
+            st.rerun()
+
+elif auth_action == "signup":
+    email = st.query_params.get("email", "").strip()
+    password = st.query_params.get("password", "")
+    c_password = st.query_params.get("c_password", "")
+    fname = st.query_params.get("fname", "").strip()
+    lname = st.query_params.get("lname", "").strip()
+    staffid = st.query_params.get("staffid", "").strip()
+    dept = st.query_params.get("dept", "Academic Affairs").strip()
+
+    if password != c_password:
+        st.session_state["auth_error"] = "Registration failed: Passwords do not match!"
+        st.query_params.clear()
+        st.rerun()
+    elif len(password) < 6:
+        st.session_state["auth_error"] = "Registration failed: Password must be at least 6 characters long."
+        st.query_params.clear()
+        st.rerun()
+    else:
+        res = sign_up_staff(
+            email=email,
+            password=password,
+            first_name=fname,
+            last_name=lname,
+            staff_id=staffid,
+            department=dept
+        )
+        if res.get("success"):
+            # Auto sign-in or set profile
+            sign_in_res = sign_in_staff(email, password)
+            st.session_state["authenticated"] = True
+            st.session_state["profile"] = sign_in_res.get("profile", {
+                "full_name": f"{fname} {lname}".strip(),
+                "role": "Academic Staff",
+                "department": dept,
+                "staff_id": staffid
+            })
+            st.session_state["auth_error"] = None
+            st.query_params.clear()
+            st.rerun()
+        else:
+            st.session_state["auth_error"] = res.get("message", "Registration failed. Please check inputs.")
+            st.query_params.clear()
+            st.rerun()
 
 is_auth = st.session_state.get("authenticated", False)
 profile = st.session_state.get("profile", {})
@@ -149,8 +205,8 @@ if is_auth:
             sign_out_staff()
             st.session_state["authenticated"] = False
             st.session_state["profile"] = None
-            if "auth" in st.query_params:
-                del st.query_params["auth"]
+            st.session_state["auth_error"] = None
+            st.query_params.clear()
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -282,14 +338,16 @@ if is_auth:
             """, unsafe_allow_html=True)
 
 # =========================================================================
-# 2. UNAUTHENTICATED STATE: 3D PERSPECTIVE TILT AUTH CARD
+# 2. UNAUTHENTICATED STATE: 3D PERSPECTIVE TILT AUTH CARD WITH REAL VALIDATION
 # =========================================================================
 else:
     # Native Streamlit Back Link
     st.page_link("app.py", label="← Back to Home")
 
+    err_msg_js = f"'{auth_error}'" if auth_error else "null"
+
     # 21st.dev Cinematic Double-Bezel Auth Screen
-    auth_component_html = """
+    auth_component_html = f"""
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -297,15 +355,15 @@ else:
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
 
-            * {
+            * {{
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
                 font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
                 user-select: none;
-            }
+            }}
 
-            body {
+            body {{
                 background-color: #05070E;
                 color: #FFFFFF;
                 width: 100%;
@@ -317,10 +375,10 @@ else:
                 justify-content: center;
                 align-items: center;
                 padding-top: 2rem;
-            }
+            }}
 
             /* Ambient Glow Backgrounds */
-            .ambient-top {
+            .ambient-top {{
                 position: absolute;
                 top: 0;
                 left: 50%;
@@ -331,9 +389,9 @@ else:
                 filter: blur(80px);
                 pointer-events: none;
                 z-index: 1;
-            }
+            }}
 
-            .ambient-bottom {
+            .ambient-bottom {{
                 position: absolute;
                 bottom: 0;
                 left: 50%;
@@ -344,19 +402,19 @@ else:
                 filter: blur(80px);
                 pointer-events: none;
                 z-index: 1;
-            }
+            }}
 
             /* 3D PERSPECTIVE TILT CARD */
-            .card-perspective-container {
+            .card-perspective-container {{
                 perspective: 1500px;
                 width: 100%;
                 max-width: 480px;
                 margin: 0 auto;
                 position: relative;
                 z-index: 10;
-            }
+            }}
 
-            .tilt-card-wrapper {
+            .tilt-card-wrapper {{
                 position: relative;
                 border-radius: 28px;
                 padding: 2px;
@@ -365,9 +423,9 @@ else:
                 box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.85);
                 transform-style: preserve-3d;
                 transition: transform 0.12s ease-out;
-            }
+            }}
 
-            .tilt-card-wrapper::before {
+            .tilt-card-wrapper::before {{
                 content: '';
                 position: absolute;
                 top: -50%;
@@ -383,14 +441,14 @@ else:
                 );
                 animation: rotateBorderBeam 4s linear infinite;
                 z-index: 1;
-            }
+            }}
 
-            @keyframes rotateBorderBeam {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
+            @keyframes rotateBorderBeam {{
+                0% {{ transform: rotate(0deg); }}
+                100% {{ transform: rotate(360deg); }}
+            }}
 
-            .tilt-card {
+            .tilt-card {{
                 position: relative;
                 z-index: 2;
                 border-radius: 26px;
@@ -398,9 +456,9 @@ else:
                 backdrop-filter: blur(30px);
                 -webkit-backdrop-filter: blur(30px);
                 padding: 34px 38px;
-            }
+            }}
 
-            .card-emblem {
+            .card-emblem {{
                 width: 46px;
                 height: 46px;
                 border-radius: 50%;
@@ -414,34 +472,55 @@ else:
                 font-size: 1.25rem;
                 color: #FFFFFF;
                 box-shadow: 0 0 25px rgba(139, 92, 246, 0.4);
-            }
+            }}
 
-            .card-header-title {
+            .card-header-title {{
                 text-align: center;
                 font-size: 1.65rem;
                 font-weight: 900;
                 letter-spacing: -0.03em;
                 color: #FFFFFF;
                 margin-bottom: 4px;
-            }
+            }}
 
-            .card-header-sub {
+            .card-header-sub {{
                 text-align: center;
                 font-size: 0.85rem;
                 color: #94A3B8;
-                margin-bottom: 22px;
-            }
+                margin-bottom: 18px;
+            }}
 
-            .auth-toggle-bar {
+            /* Error alert container */
+            .auth-error-banner {{
+                display: none;
+                background: rgba(239, 68, 68, 0.15);
+                border: 1px solid rgba(239, 68, 68, 0.4);
+                border-radius: 12px;
+                padding: 10px 14px;
+                color: #F87171;
+                font-size: 0.82rem;
+                font-weight: 600;
+                margin-bottom: 18px;
+                text-align: center;
+                animation: shakeAlert 0.35s ease;
+            }}
+
+            @keyframes shakeAlert {{
+                0%, 100% {{ transform: translateX(0); }}
+                20%, 60% {{ transform: translateX(-6px); }}
+                40%, 80% {{ transform: translateX(6px); }}
+            }}
+
+            .auth-toggle-bar {{
                 display: flex;
                 background: rgba(255, 255, 255, 0.04);
                 border: 1px solid rgba(255, 255, 255, 0.08);
                 border-radius: 9999px;
                 padding: 4px;
                 margin-bottom: 24px;
-            }
+            }}
 
-            .toggle-btn {
+            .toggle-btn {{
                 flex: 1;
                 text-align: center;
                 padding: 8px 16px;
@@ -451,44 +530,44 @@ else:
                 cursor: pointer;
                 transition: all 0.25s ease;
                 color: #94A3B8;
-            }
+            }}
 
-            .toggle-btn.active {
+            .toggle-btn.active {{
                 background: #FFFFFF;
                 color: #05070E;
                 box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
-            }
+            }}
 
-            .auth-form-animated {
+            .auth-form-animated {{
                 animation: smoothFormSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            }
+            }}
 
-            @keyframes smoothFormSlide {
-                from {
+            @keyframes smoothFormSlide {{
+                from {{
                     opacity: 0;
                     transform: translateY(10px) scale(0.98);
-                }
-                to {
+                }}
+                to {{
                     opacity: 1;
                     transform: translateY(0) scale(1);
-                }
-            }
+                }}
+            }}
 
             /* Staggered Spring Underline Inputs */
-            .input-underline-group {
+            .input-underline-group {{
                 position: relative;
                 width: 100%;
                 margin-bottom: 22px;
                 padding-top: 14px;
-            }
+            }}
 
-            .input-group-grid {
+            .input-group-grid {{
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 16px;
-            }
+            }}
 
-            .floating-letters-wrapper {
+            .floating-letters-wrapper {{
                 position: absolute;
                 top: 18px;
                 left: 0;
@@ -497,15 +576,15 @@ else:
                 color: #94A3B8;
                 font-size: 0.92rem;
                 font-weight: 500;
-            }
+            }}
 
-            .letter-wave-char {
+            .letter-wave-char {{
                 display: inline-block;
                 transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease;
                 will-change: transform;
-            }
+            }}
 
-            .underline-field {
+            .underline-field {{
                 width: 100%;
                 background: transparent;
                 border: none;
@@ -516,19 +595,19 @@ else:
                 font-weight: 500;
                 outline: none;
                 transition: border-bottom-color 0.3s ease;
-            }
+            }}
 
-            .underline-field:focus {
+            .underline-field:focus {{
                 border-bottom-color: #FFFFFF;
-            }
+            }}
 
-            .input-underline-group.is-active .letter-wave-char {
+            .input-underline-group.is-active .letter-wave-char {{
                 transform: translateY(-22px) scale(0.85);
                 color: #E2E8F0;
                 font-weight: 700;
-            }
+            }}
 
-            .password-toggle-btn {
+            .password-toggle-btn {{
                 position: absolute;
                 right: 0;
                 bottom: 8px;
@@ -538,19 +617,19 @@ else:
                 align-items: center;
                 justify-content: center;
                 transition: color 0.2s ease, transform 0.2s ease;
-            }
-            .password-toggle-btn:hover {
+            }}
+            .password-toggle-btn:hover {{
                 color: #FFFFFF;
                 transform: scale(1.1);
-            }
-            .password-toggle-btn svg {
+            }}
+            .password-toggle-btn svg {{
                 width: 18px;
                 height: 18px;
                 stroke: currentColor;
                 transition: all 0.25s ease;
-            }
+            }}
 
-            .origin-submit-btn {
+            .origin-submit-btn {{
                 width: 100%;
                 position: relative;
                 display: flex;
@@ -568,27 +647,27 @@ else:
                 margin-top: 12px;
                 animation: authBtnBreathingShadow 3s ease-in-out infinite alternate;
                 transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
-            }
+            }}
 
-            @keyframes authBtnBreathingShadow {
-                0% {
+            @keyframes authBtnBreathingShadow {{
+                0% {{
                     box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.25), 0 0 15px 2px rgba(99, 102, 241, 0.25);
-                }
-                50% {
+                }}
+                50% {{
                     box-shadow: 0 16px 35px -2px rgba(255, 255, 255, 0.45), 0 0 25px 5px rgba(56, 189, 248, 0.45);
-                }
-                100% {
+                }}
+                100% {{
                     box-shadow: 0 12px 30px -4px rgba(255, 255, 255, 0.3), 0 0 18px 3px rgba(99, 102, 241, 0.35);
-                }
-            }
+                }}
+            }}
 
-            .origin-submit-btn:hover {
+            .origin-submit-btn:hover {{
                 transform: translateY(-2px) scale(1.01);
                 animation: none;
                 box-shadow: 0 18px 45px rgba(255, 255, 255, 0.45), 0 0 30px rgba(56, 189, 248, 0.5);
-            }
+            }}
 
-            .origin-submit-btn .origin-ripple {
+            .origin-submit-btn .origin-ripple {{
                 position: absolute;
                 border-radius: 50%;
                 background: #05070E;
@@ -596,51 +675,51 @@ else:
                 pointer-events: none;
                 transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
                 z-index: 1;
-            }
+            }}
 
-            .origin-submit-btn.active .origin-ripple {
+            .origin-submit-btn.active .origin-ripple {{
                 transform: translate(-50%, -50%) scale(1);
-            }
+            }}
 
-            .origin-submit-btn .button-label {
+            .origin-submit-btn .button-label {{
                 position: relative;
                 z-index: 2;
                 display: inline-flex;
                 align-items: center;
                 gap: 10px;
                 transition: color 0.3s ease;
-            }
-            .origin-submit-btn.active .button-label {
+            }}
+            .origin-submit-btn.active .button-label {{
                 color: #FFFFFF;
-            }
+            }}
 
-            .kinetic-vector-arrow {
+            .kinetic-vector-arrow {{
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
                 transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-            .origin-submit-btn:hover .kinetic-vector-arrow {
+            }}
+            .origin-submit-btn:hover .kinetic-vector-arrow {{
                 transform: translateX(5px);
                 animation: arrowKineticPulse 1.2s ease-in-out infinite alternate;
-            }
+            }}
 
-            @keyframes arrowKineticPulse {
-                0% { transform: translateX(4px); }
-                100% { transform: translateX(8px); }
-            }
+            @keyframes arrowKineticPulse {{
+                0% {{ transform: translateX(4px); }}
+                100% {{ transform: translateX(8px); }}
+            }}
 
-            .footer-links {
+            .footer-links {{
                 text-align: center;
                 margin-top: 18px;
                 font-size: 0.82rem;
                 color: #64748B;
-            }
-            .footer-links a {
+            }}
+            .footer-links a {{
                 color: #CBD5E1;
                 text-decoration: none;
                 font-weight: 700;
-            }
+            }}
         </style>
     </head>
     <body>
@@ -656,6 +735,9 @@ else:
                     <h2 class="card-header-title" id="formTitle">Welcome Back</h2>
                     <p class="card-header-sub" id="formSub">Sign in to access student prediction analytics</p>
 
+                    <!-- Error Alert Banner -->
+                    <div class="auth-error-banner" id="errorBanner"></div>
+
                     <!-- Toggle Pills -->
                     <div class="auth-toggle-bar">
                         <div class="toggle-btn active" id="tabSignIn" onclick="switchTab('signin')">Sign In</div>
@@ -663,7 +745,7 @@ else:
                     </div>
 
                     <!-- SIGN IN FORM -->
-                    <form id="signInForm" class="auth-form-animated" onsubmit="handleAuthSubmit(event, 'signin')">
+                    <form id="signInForm" class="auth-form-animated" onsubmit="handleRealAuth(event, 'signin')">
                         <div class="input-underline-group" id="grp_login_email">
                             <div class="floating-letters-wrapper" id="lbl_login_email"></div>
                             <input type="email" class="underline-field" id="login_email" autocomplete="off" required />
@@ -703,7 +785,7 @@ else:
                     </form>
 
                     <!-- SIGN UP FORM -->
-                    <form id="signUpForm" class="auth-form-animated" style="display: none;" onsubmit="handleAuthSubmit(event, 'signup')">
+                    <form id="signUpForm" class="auth-form-animated" style="display: none;" onsubmit="handleRealAuth(event, 'signup')">
                         <div class="input-group-grid">
                             <div class="input-underline-group" id="grp_signup_fname">
                                 <div class="floating-letters-wrapper" id="lbl_signup_fname"></div>
@@ -776,9 +858,28 @@ else:
         </div>
 
         <script>
+            const serverError = {err_msg_js};
+            const errorBanner = document.getElementById('errorBanner');
+            if (serverError) {{
+                errorBanner.textContent = serverError;
+                errorBanner.style.display = 'block';
+            }}
+
+            function showError(msg) {{
+                errorBanner.textContent = msg;
+                errorBanner.style.display = 'block';
+                errorBanner.classList.remove('auth-error-banner');
+                void errorBanner.offsetWidth;
+                errorBanner.classList.add('auth-error-banner');
+            }}
+
+            function hideError() {{
+                errorBanner.style.display = 'none';
+            }}
+
             // 1. 3D Perspective Mouse Tilt Physics
             const tiltCardWrapper = document.getElementById('tiltCardWrapper');
-            document.addEventListener('mousemove', (e) => {
+            document.addEventListener('mousemove', (e) => {{
                 const rect = tiltCardWrapper.getBoundingClientRect();
                 const cardX = rect.left + rect.width / 2;
                 const cardY = rect.top + rect.height / 2;
@@ -788,15 +889,15 @@ else:
                 const rotateX = -(mouseY / (window.innerHeight / 2)) * 6;
                 const rotateY = (mouseX / (window.innerWidth / 2)) * 6;
 
-                tiltCardWrapper.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
+                tiltCardWrapper.style.transform = `rotateX(${{rotateX}}deg) rotateY(${{rotateY}}deg)`;
+            }});
 
-            document.addEventListener('mouseleave', () => {
+            document.addEventListener('mouseleave', () => {{
                 tiltCardWrapper.style.transform = 'rotateX(0deg) rotateY(0deg)';
-            });
+            }});
 
             // 2. Setup Staggered Spring Letter Wave for Underline Inputs
-            const setupSpringLetterWave = (inputId, labelId, labelText) => {
+            const setupSpringLetterWave = (inputId, labelId, labelText) => {{
                 const input = document.getElementById(inputId);
                 const labelContainer = document.getElementById(labelId);
                 const group = input.parentElement;
@@ -804,26 +905,26 @@ else:
                 if (!input || !labelContainer) return;
 
                 labelContainer.innerHTML = '';
-                labelText.split('').forEach((char, idx) => {
+                labelText.split('').forEach((char, idx) => {{
                     const span = document.createElement('span');
                     span.className = 'letter-wave-char';
                     span.textContent = char === ' ' ? '\\u00A0' : char;
-                    span.style.transitionDelay = `${idx * 0.03}s`;
+                    span.style.transitionDelay = `${{idx * 0.03}}s`;
                     labelContainer.appendChild(span);
-                });
+                }});
 
-                const updateWaveState = () => {
-                    if (document.activeElement === input || input.value.trim().length > 0) {
+                const updateWaveState = () => {{
+                    if (document.activeElement === input || input.value.trim().length > 0) {{
                         group.classList.add('is-active');
-                    } else {
+                    }} else {{
                         group.classList.remove('is-active');
-                    }
-                };
+                    }}
+                }};
 
                 input.addEventListener('focus', updateWaveState);
                 input.addEventListener('blur', updateWaveState);
                 input.addEventListener('input', updateWaveState);
-            };
+            }};
 
             // Initialize all labels
             setupSpringLetterWave('login_email', 'lbl_login_email', 'Email Address');
@@ -837,7 +938,8 @@ else:
             setupSpringLetterWave('signup_cpass', 'lbl_signup_cpass', 'Confirm Password');
 
             // 3. Smooth Tab Switching
-            function switchTab(tab) {
+            function switchTab(tab) {{
+                hideError();
                 const signInForm = document.getElementById('signInForm');
                 const signUpForm = document.getElementById('signUpForm');
                 const tabSignIn = document.getElementById('tabSignIn');
@@ -846,7 +948,7 @@ else:
                 const formSub = document.getElementById('formSub');
                 const footerToggleText = document.getElementById('footerToggleText');
 
-                if (tab === 'signup') {
+                if (tab === 'signup') {{
                     tabSignIn.classList.remove('active');
                     tabSignUp.classList.add('active');
                     signInForm.style.display = 'none';
@@ -857,7 +959,7 @@ else:
                     formTitle.textContent = 'Create Staff Account';
                     formSub.textContent = 'Register your institutional credentials for access';
                     footerToggleText.innerHTML = 'Already have an account? <a href="javascript:switchTab(\\'signin\\')">Sign in</a>';
-                } else {
+                }} else {{
                     tabSignUp.classList.remove('active');
                     tabSignIn.classList.add('active');
                     signUpForm.style.display = 'none';
@@ -868,15 +970,15 @@ else:
                     formTitle.textContent = 'Welcome Back';
                     formSub.textContent = 'Sign in to access student prediction analytics';
                     footerToggleText.innerHTML = 'Don\\'t have an account? <a href="javascript:switchTab(\\'signup\\')">Sign up</a>';
-                }
-            }
+                }}
+            }}
 
             // 4. Animated Watch / Watch-Off Eye Toggle Logic
-            function togglePasswordEye(id, containerEl) {
+            function togglePasswordEye(id, containerEl) {{
                 const input = document.getElementById(id);
                 if (!input) return;
 
-                if (input.type === 'password') {
+                if (input.type === 'password') {{
                     input.type = 'text';
                     containerEl.innerHTML = `
                         <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -884,7 +986,7 @@ else:
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
                     `;
-                } else {
+                }} else {{
                     input.type = 'password';
                     containerEl.innerHTML = `
                         <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -892,16 +994,16 @@ else:
                             <line x1="1" y1="1" x2="23" y2="23"></line>
                         </svg>
                     `;
-                }
-            }
+                }}
+            }}
 
             // 5. Origin Button Radial Ripple Physics
-            const attachOriginRipple = (btnId) => {
+            const attachOriginRipple = (btnId) => {{
                 const btn = document.getElementById(btnId);
                 if (!btn) return;
                 const ripple = btn.querySelector('.origin-ripple');
 
-                btn.addEventListener('mouseenter', (e) => {
+                btn.addEventListener('mouseenter', (e) => {{
                     const rect = btn.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
@@ -915,42 +1017,86 @@ else:
                         )
                     );
 
-                    ripple.style.left = `${x}px`;
-                    ripple.style.top = `${y}px`;
-                    ripple.style.width = `${diameter}px`;
-                    ripple.style.height = `${diameter}px`;
+                    ripple.style.left = `${{x}}px`;
+                    ripple.style.top = `${{y}}px`;
+                    ripple.style.width = `${{diameter}}px`;
+                    ripple.style.height = `${{diameter}}px`;
                     btn.classList.add('active');
-                });
+                }});
 
-                btn.addEventListener('mouseleave', () => {
+                btn.addEventListener('mouseleave', () => {{
                     btn.classList.remove('active');
-                });
-            };
+                }});
+            }};
 
             attachOriginRipple('btnSignInOrigin');
             attachOriginRipple('btnSignUpOrigin');
 
-            function handleAuthSubmit(event, action) {
+            // 6. REAL FORM VALIDATION & AUTHENTICATION SUBMISSION
+            function handleRealAuth(event, action) {{
                 event.preventDefault();
-                const btn = event.target.querySelector('button');
-                const label = btn.querySelector('.button-label');
-                label.innerHTML = '<span>Verifying credentials...</span>';
-                setTimeout(() => {
-                    try {
-                        if (window.parent && window.parent.location) {
-                            window.parent.location.assign('/Staff_Portal?auth=true');
+                hideError();
+
+                if (action === 'signin') {{
+                    const email = document.getElementById('login_email').value.trim();
+                    const pass = document.getElementById('login_password').value;
+
+                    if (!email || !pass) {{
+                        showError('Please enter both your email address and password.');
+                        return;
+                    }}
+
+                    const btn = document.getElementById('btnSignInOrigin');
+                    const label = btn.querySelector('.button-label');
+                    label.innerHTML = '<span>Verifying credentials...</span>';
+
+                    const targetUrl = `/Staff_Portal?action=signin&email=${{encodeURIComponent(email)}}&password=${{encodeURIComponent(pass)}}`;
+                    try {{
+                        if (window.parent && window.parent.location) {{
+                            window.parent.location.assign(targetUrl);
                             return;
-                        }
-                    } catch(e) {}
-                    try {
-                        if (window.top && window.top.location) {
-                            window.top.location.assign('/Staff_Portal?auth=true');
+                        }}
+                    }} catch(e) {{}}
+                    window.location.assign(targetUrl);
+
+                }} else if (action === 'signup') {{
+                    const fname = document.getElementById('signup_fname').value.trim();
+                    const lname = document.getElementById('signup_lname').value.trim();
+                    const staffid = document.getElementById('signup_staffid').value.trim();
+                    const dept = document.getElementById('signup_dept').value.trim();
+                    const email = document.getElementById('signup_email').value.trim();
+                    const pass = document.getElementById('signup_pass').value;
+                    const cpass = document.getElementById('signup_cpass').value;
+
+                    if (!fname || !lname || !staffid || !dept || !email || !pass || !cpass) {{
+                        showError('All fields are required for staff registration.');
+                        return;
+                    }}
+
+                    if (pass !== cpass) {{
+                        showError('Passwords do not match! Please check and re-enter.');
+                        return;
+                    }}
+
+                    if (pass.length < 6) {{
+                        showError('Password must be at least 6 characters long.');
+                        return;
+                    }}
+
+                    const btn = document.getElementById('btnSignUpOrigin');
+                    const label = btn.querySelector('.button-label');
+                    label.innerHTML = '<span>Registering credentials...</span>';
+
+                    const targetUrl = `/Staff_Portal?action=signup&email=${{encodeURIComponent(email)}}&password=${{encodeURIComponent(pass)}}&c_password=${{encodeURIComponent(cpass)}}&fname=${{encodeURIComponent(fname)}}&lname=${{encodeURIComponent(lname)}}&staffid=${{encodeURIComponent(staffid)}}&dept=${{encodeURIComponent(dept)}}`;
+                    try {{
+                        if (window.parent && window.parent.location) {{
+                            window.parent.location.assign(targetUrl);
                             return;
-                        }
-                    } catch(e) {}
-                    window.location.assign('/Staff_Portal?auth=true');
-                }, 400);
-            }
+                        }}
+                    }} catch(e) {{}}
+                    window.location.assign(targetUrl);
+                }}
+            }}
         </script>
     </body>
     </html>
