@@ -1,6 +1,7 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
 Engineered to 21st.dev Premium Standards:
+- Bulletproof navTo top router for instant, smooth page switching
 - Ultra-premium 21st.dev Double-Bezel Glass Back Button with kinetic sliding chevron arrow
 - 3D Perspective Tilt Card with continuous 360° circulating laser border beam
 - Staggered Spring Letter-Wave Underline Inputs (Zinc/Off-white)
@@ -116,7 +117,7 @@ if is_auth:
             st.rerun()
 
 else:
-    # 21st.dev Cinematic Double-Bezel Auth Screen with Zero Scrollbars
+    # 21st.dev Cinematic Double-Bezel Auth Screen
     auth_component_html = """
     <!DOCTYPE html>
     <html lang="en">
@@ -181,7 +182,7 @@ else:
                 top: 28px;
                 left: 36px;
                 z-index: 50;
-                text-decoration: none;
+                cursor: pointer;
             }
 
             .back-home-pill {
@@ -200,7 +201,6 @@ else:
                 font-weight: 700;
                 letter-spacing: 0.04em;
                 text-transform: uppercase;
-                cursor: pointer;
                 transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
 
@@ -526,7 +526,7 @@ else:
         <div class="ambient-bottom"></div>
 
         <!-- 21st.dev Double-Bezel Glass Back to Home Button -->
-        <a class="back-home-wrapper" href="/" target="_top">
+        <div class="back-home-wrapper" onclick="navTo('/')">
             <div class="back-home-pill">
                 <span class="chevron-icon">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -536,7 +536,7 @@ else:
                 </span>
                 <span>Back to Home</span>
             </div>
-        </a>
+        </div>
 
         <!-- 3D Perspective Tilt Card with Continuous 360deg Laser Border Beam -->
         <div class="card-perspective-container">
@@ -667,6 +667,22 @@ else:
         </div>
 
         <script>
+            function navTo(url) {
+                try {
+                    if (window.parent && window.parent.location) {
+                        window.parent.location.assign(url);
+                        return;
+                    }
+                } catch(e) {}
+                try {
+                    if (window.top && window.top.location) {
+                        window.top.location.assign(url);
+                        return;
+                    }
+                } catch(e) {}
+                window.location.assign(url);
+            }
+
             // 1. 3D Perspective Mouse Tilt Physics
             const tiltCardWrapper = document.getElementById('tiltCardWrapper');
             document.addEventListener('mousemove', (e) => {

@@ -1,10 +1,11 @@
 """
 S.A.P.P.M - Ultra-Sleek Minimalist 3D Intelligence Landing Page
-Full-Viewport Agency Experience with 100% Reliable Top-Level Routing:
+Full-Viewport Agency Experience with Rock-Solid Navigation:
+- JavaScript Top-Level Router (navTo) for instant page switching
 - Origin Button (Evaluate Performance), Star Button (Login), Interactive Hover Button (Sign Up)
 - Star Button (Login) with glowing animated constellation sparkles
 - Translucent Liquid Glass micro-cards framing 3D cursor-tracking robot
-- Smooth scrolling and zero iframe freezes
+- Clean scrolling with custom scrollbar
 """
 
 import streamlit as st
@@ -61,7 +62,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Complete Roobinium 4-Card Hero Viewport
+# Complete Roobinium 4-Card Hero Viewport with Bulletproof Nav Handler
 roobinium_full_viewport_html = """
 <!DOCTYPE html>
 <html lang="en">
@@ -139,8 +140,11 @@ roobinium_full_viewport_html = """
             font-weight: 900;
             letter-spacing: -0.04em;
             color: #FFFFFF;
-            text-decoration: none;
             cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+        .nav-logo:hover {
+            opacity: 0.85;
         }
 
         .nav-menu {
@@ -153,7 +157,6 @@ roobinium_full_viewport_html = """
             color: #94A3B8;
             font-size: 0.92rem;
             font-weight: 500;
-            text-decoration: none;
             transition: color 0.2s ease;
             cursor: pointer;
         }
@@ -177,7 +180,6 @@ roobinium_full_viewport_html = """
             border-radius: 9999px;
             overflow: hidden;
             cursor: pointer;
-            text-decoration: none;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s ease;
@@ -265,7 +267,6 @@ roobinium_full_viewport_html = """
             border: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 0 4px 18px rgba(255, 255, 255, 0.25);
             transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            text-decoration: none;
         }
 
         .interactive-hover-btn .btn-text-content {
@@ -381,7 +382,6 @@ roobinium_full_viewport_html = """
             animation: breathingShadow 3s ease-in-out infinite alternate;
             transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
             z-index: 10;
-            text-decoration: none;
         }
 
         @keyframes breathingShadow {
@@ -535,21 +535,21 @@ roobinium_full_viewport_html = """
 
     <!-- 1. Sleek Floating Navbar with Direct Top-Level Navigation -->
     <nav class="navbar-container">
-        <a class="nav-logo" href="/" target="_top">
+        <div class="nav-logo" onclick="navTo('/')">
             <span>SAPPM</span>
-        </a>
+        </div>
 
         <div class="nav-menu">
-            <a class="nav-link" href="/Predict" target="_top">Predict</a>
-            <a class="nav-link" href="/Explainability" target="_top">Explainability</a>
-            <a class="nav-link" href="/Model_Analytics" target="_top">Analytics</a>
-            <a class="nav-link" href="/Student_Records" target="_top">Records</a>
-            <a class="nav-link" href="/Documentation" target="_top">Documentation</a>
+            <div class="nav-link" onclick="navTo('/Predict')">Predict</div>
+            <div class="nav-link" onclick="navTo('/Explainability')">Explainability</div>
+            <div class="nav-link" onclick="navTo('/Model_Analytics')">Analytics</div>
+            <div class="nav-link" onclick="navTo('/Student_Records')">Records</div>
+            <div class="nav-link" onclick="navTo('/Documentation')">Documentation</div>
         </div>
 
         <div class="nav-actions">
             <!-- BUTTON 2: STAR BUTTON (Login) -->
-            <a class="star-button-wrapper" href="/Staff_Portal" target="_top">
+            <div class="star-button-wrapper" onclick="navTo('/Staff_Portal')">
                 <div class="star-orbit-beam"></div>
                 <div class="star-button-inner">
                     <svg class="star-svg-bg" viewBox="0 0 100 40" fill="none">
@@ -561,10 +561,10 @@ roobinium_full_viewport_html = """
                     </svg>
                     <span>Login</span>
                 </div>
-            </a>
+            </div>
 
             <!-- BUTTON 3: INTERACTIVE HOVER BUTTON by Dillion Verma (Sign Up) -->
-            <a class="interactive-hover-btn" href="/Staff_Portal" target="_top">
+            <div class="interactive-hover-btn" onclick="navTo('/Staff_Portal')">
                 <div class="expanding-circle"></div>
                 <span class="btn-text-content">
                     <span>Sign Up</span>
@@ -576,7 +576,7 @@ roobinium_full_viewport_html = """
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
                 </span>
-            </a>
+            </div>
         </div>
     </nav>
 
@@ -588,12 +588,12 @@ roobinium_full_viewport_html = """
         </p>
         
         <!-- BUTTON 1: ORIGIN BUTTON (Evaluate Performance) -->
-        <a class="origin-button" id="originBtn" href="/Predict" target="_top">
+        <div class="origin-button" id="originBtn" onclick="navTo('/Predict')">
             <div class="origin-ripple" id="originRipple"></div>
             <span class="button-label">
                 Evaluate Performance ↗
             </span>
-        </a>
+        </div>
     </section>
 
     <!-- 3. 3D Spline Centerpiece with 4 Translucent Liquid Glass Cards -->
@@ -645,8 +645,24 @@ roobinium_full_viewport_html = """
         </div>
     </div>
 
-    <!-- Scripts for Spotlight, Origin Button & Watermark removal -->
+    <!-- Bulletproof Navigation Router -->
     <script>
+        function navTo(url) {
+            try {
+                if (window.parent && window.parent.location) {
+                    window.parent.location.assign(url);
+                    return;
+                }
+            } catch(e) {}
+            try {
+                if (window.top && window.top.location) {
+                    window.top.location.assign(url);
+                    return;
+                }
+            } catch(e) {}
+            window.location.assign(url);
+        }
+
         const spotlight = document.getElementById('spotlight');
         let currentX = window.innerWidth / 2;
         let currentY = window.innerHeight / 2;
@@ -721,5 +737,5 @@ roobinium_full_viewport_html = """
 </html>
 """
 
-# Render Full-Viewport Experience (Fixed 100vh)
+# Render Full-Viewport Experience
 components.html(roobinium_full_viewport_html, height=920, scrolling=False)
