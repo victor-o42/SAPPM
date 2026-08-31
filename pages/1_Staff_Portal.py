@@ -1,6 +1,7 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
 - Pre-auth: 100% Original Ultra-Premium 3D Perspective Tilt Card with Rotating Laser Border Beam, Staggered Spring Underline Inputs, Password Eye Toggles, and Origin Radial Ripple Button
+- Transition: High-End Motion "Bars" Loader Screen (4 pulsating kinetic glowing vertical bars with staggered ease-in-out scaling)
 - Post-auth: The Full Original Student Academic Performance Prediction System (app_3.py architecture with Sliders, Model Inference, Prediction Confidence, Probabilities Distribution Chart, SHAP Attribution, and Feature Importance)
 """
 
@@ -343,7 +344,7 @@ if is_auth:
             """, unsafe_allow_html=True)
 
 # =========================================================================
-# 2. UNAUTHENTICATED STATE: 100% EXACT ORIGINAL PREMIUM 3D AUTH CARD
+# 2. UNAUTHENTICATED STATE: 100% EXACT 3D AUTH CARD WITH "BARS" LOADER OVERLAY
 # =========================================================================
 else:
     # Native Streamlit Back Link
@@ -351,7 +352,7 @@ else:
 
     err_msg_js = f"'{auth_error}'" if auth_error else "null"
 
-    # 21st.dev Cinematic Double-Bezel Auth Screen
+    # 21st.dev Cinematic Double-Bezel Auth Screen + Motion "Bars" Loader
     auth_component_html = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -725,6 +726,85 @@ else:
                 text-decoration: none;
                 font-weight: 700;
             }}
+
+            /* ========================================================================= */
+            /* MOTION / BEUI "BARS" LOADER OVERLAY                                       */
+            /* ========================================================================= */
+            .bars-loader-overlay {{
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 26px;
+                background: rgba(8, 12, 24, 0.96);
+                backdrop-filter: blur(24px);
+                -webkit-backdrop-filter: blur(24px);
+                z-index: 50;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 30px;
+                animation: fadeInOverlay 0.3s ease forwards;
+            }}
+
+            @keyframes fadeInOverlay {{
+                from {{ opacity: 0; transform: scale(0.96); }}
+                to {{ opacity: 1; transform: scale(1); }}
+            }}
+
+            .motion-bars-wrap {{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 7px;
+                height: 42px;
+                margin-bottom: 24px;
+            }}
+
+            .motion-bar-item {{
+                width: 7px;
+                height: 42px;
+                border-radius: 9999px;
+                background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%);
+                transform-origin: bottom;
+                animation: beuiBarsScale 1s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+                box-shadow: 0 0 16px rgba(129, 140, 248, 0.7);
+            }}
+
+            .motion-bar-item:nth-child(1) {{ animation-delay: 0s; }}
+            .motion-bar-item:nth-child(2) {{ animation-delay: 0.12s; }}
+            .motion-bar-item:nth-child(3) {{ animation-delay: 0.24s; }}
+            .motion-bar-item:nth-child(4) {{ animation-delay: 0.36s; }}
+
+            @keyframes beuiBarsScale {{
+                0%, 100% {{
+                    transform: scaleY(0.24);
+                    opacity: 0.45;
+                }}
+                50% {{
+                    transform: scaleY(1.0);
+                    opacity: 1;
+                    filter: drop-shadow(0 0 10px #38BDF8);
+                }}
+            }}
+
+            .loader-status-title {{
+                font-size: 1.25rem;
+                font-weight: 800;
+                color: #FFFFFF;
+                letter-spacing: -0.02em;
+                margin-bottom: 8px;
+            }}
+
+            .loader-status-sub {{
+                font-size: 0.85rem;
+                color: #94A3B8;
+                line-height: 1.5;
+                max-width: 320px;
+            }}
         </style>
     </head>
     <body>
@@ -735,6 +815,18 @@ else:
         <div class="card-perspective-container">
             <div class="tilt-card-wrapper" id="tiltCardWrapper">
                 <div class="tilt-card">
+                    <!-- MOTION BARS FULL-CARD TRANSITION OVERLAY -->
+                    <div class="bars-loader-overlay" id="barsLoaderOverlay">
+                        <div class="motion-bars-wrap">
+                            <span class="motion-bar-item"></span>
+                            <span class="motion-bar-item"></span>
+                            <span class="motion-bar-item"></span>
+                            <span class="motion-bar-item"></span>
+                        </div>
+                        <div class="loader-status-title" id="loaderTitle">Authenticating Session</div>
+                        <div class="loader-status-sub" id="loaderSub">Verifying credentials with Supabase & Initializing Academic Intelligence System...</div>
+                    </div>
+
                     <!-- Emblem Header -->
                     <div class="card-emblem">S</div>
                     <h2 class="card-header-title" id="formTitle">Welcome Back</h2>
@@ -1037,7 +1129,14 @@ else:
             attachOriginRipple('btnSignInOrigin');
             attachOriginRipple('btnSignUpOrigin');
 
-            // 6. Direct Top-Window Navigation
+            // 6. MOTION "BARS" LOADER TRIGGER & DIRECT TOP-WINDOW NAVIGATION
+            function triggerBarsLoader(title, sub) {{
+                const loader = document.getElementById('barsLoaderOverlay');
+                document.getElementById('loaderTitle').textContent = title;
+                document.getElementById('loaderSub').textContent = sub;
+                loader.style.display = 'flex';
+            }}
+
             function handleAuthAction(event, action) {{
                 event.preventDefault();
                 hideError();
@@ -1051,20 +1150,21 @@ else:
                         return;
                     }}
 
-                    const btn = document.getElementById('btnSignInOrigin');
-                    const label = btn.querySelector('.button-label');
-                    label.innerHTML = '<span>Verifying credentials...</span>';
+                    // Show the kinetic "Bars" loader screen
+                    triggerBarsLoader('Authenticating Session', 'Verifying credentials with Supabase & Initializing Academic Intelligence System...');
 
                     const targetUrl = `/Staff_Portal?action=signin&email=${{encodeURIComponent(email)}}&password=${{encodeURIComponent(pass)}}`;
-                    try {{
-                        window.top.location.href = targetUrl;
-                    }} catch(e) {{
+                    setTimeout(() => {{
                         try {{
-                            window.parent.location.href = targetUrl;
-                        }} catch(err) {{
-                            window.location.href = targetUrl;
+                            window.top.location.href = targetUrl;
+                        }} catch(e) {{
+                            try {{
+                                window.parent.location.href = targetUrl;
+                            }} catch(err) {{
+                                window.location.href = targetUrl;
+                            }}
                         }}
-                    }}
+                    }}, 900);
 
                 }} else if (action === 'signup') {{
                     const fname = document.getElementById('signup_fname').value.trim();
@@ -1090,20 +1190,21 @@ else:
                         return;
                     }}
 
-                    const btn = document.getElementById('btnSignUpOrigin');
-                    const label = btn.querySelector('.button-label');
-                    label.innerHTML = '<span>Registering credentials...</span>';
+                    // Show the kinetic "Bars" loader screen
+                    triggerBarsLoader('Creating Staff Account', 'Registering profile in database & Granting model access permissions...');
 
                     const targetUrl = `/Staff_Portal?action=signup&email=${{encodeURIComponent(email)}}&password=${{encodeURIComponent(pass)}}&c_password=${{encodeURIComponent(cpass)}}&fname=${{encodeURIComponent(fname)}}&lname=${{encodeURIComponent(lname)}}&staffid=${{encodeURIComponent(staffid)}}&dept=${{encodeURIComponent(dept)}}`;
-                    try {{
-                        window.top.location.href = targetUrl;
-                    }} catch(e) {{
+                    setTimeout(() => {{
                         try {{
-                            window.parent.location.href = targetUrl;
-                        }} catch(err) {{
-                            window.location.href = targetUrl;
+                            window.top.location.href = targetUrl;
+                        }} catch(e) {{
+                            try {{
+                                window.parent.location.href = targetUrl;
+                            }} catch(err) {{
+                                window.location.href = targetUrl;
+                            }}
                         }}
-                    }}
+                    }}, 900);
                 }}
             }}
         </script>
