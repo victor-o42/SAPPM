@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Global Scrollbar & Layout Styling: Complete Sidebar & Chrome Hiding
+# Global Scrollbar & Layout Styling: Complete Sidebar & Chrome Hiding + Glass Back Button
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
@@ -53,10 +53,60 @@ st.markdown("""
         width: 100% !important;
         border: none !important;
     }
+
+    /* Double-Bezel Native Back to Home Pill */
+    [data-testid="stPageLink"] {
+        position: fixed !important;
+        top: 24px !important;
+        left: 36px !important;
+        z-index: 999999 !important;
+    }
+
+    [data-testid="stPageLink"] a {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 10px 22px !important;
+        border-radius: 9999px !important;
+        background: rgba(15, 23, 42, 0.65) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2) !important;
+        color: #CBD5E1 !important;
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+        text-decoration: none !important;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        cursor: pointer !important;
+    }
+
+    [data-testid="stPageLink"] a:hover {
+        color: #FFFFFF !important;
+        border-color: rgba(255, 255, 255, 0.4) !important;
+        background: rgba(15, 23, 42, 0.9) !important;
+        box-shadow: 0 12px 30px -2px rgba(99, 102, 241, 0.3), inset 0 1px 1px 0 rgba(255, 255, 255, 0.4) !important;
+        transform: translateX(-4px) !important;
+    }
+
+    [data-testid="stPageLink"] a p {
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.05em !important;
+        margin: 0 !important;
+        color: inherit !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-error_html = """
+# Native Root Page Link
+st.page_link("app.py", label="← Back to Home")
+
+module_name = st.query_params.get("module", "Internal System Module")
+
+error_html = f"""
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -236,7 +286,7 @@ error_html = """
         <div class="error-badge">403 &bull; Authorization Required</div>
         <h1 class="error-title">Staff Portal Access Only</h1>
         <p class="error-desc">
-            This module requires verified institutional credentials. Please sign in via the Staff Portal to access model prediction analytics and student diagnostics.
+            The <strong>{module_name}</strong> requires verified institutional credentials. Please sign in via the Staff Portal to access model prediction analytics and student diagnostics.
         </p>
 
         <div class="action-group">

@@ -540,11 +540,11 @@ roobinium_full_viewport_html = """
         </div>
 
         <div class="nav-menu">
-            <div class="nav-link" onclick="navTo('/Access_Restricted')">Predict</div>
-            <div class="nav-link" onclick="navTo('/Access_Restricted')">Explainability</div>
-            <div class="nav-link" onclick="navTo('/Access_Restricted')">Analytics</div>
-            <div class="nav-link" onclick="navTo('/Access_Restricted')">Records</div>
-            <div class="nav-link" onclick="navTo('/Access_Restricted')">Documentation</div>
+            <div class="nav-link" onclick="navTo('/Access_Restricted?module=Prediction+Engine')">Predict</div>
+            <div class="nav-link" onclick="navTo('/Access_Restricted?module=SHAP+Explainability')">Explainability</div>
+            <div class="nav-link" onclick="navTo('/Access_Restricted?module=Model+Analytics')">Analytics</div>
+            <div class="nav-link" onclick="navTo('/Access_Restricted?module=Student+Records')">Records</div>
+            <div class="nav-link" onclick="navTo('/Access_Restricted?module=System+Documentation')">Documentation</div>
         </div>
 
         <div class="nav-actions">
