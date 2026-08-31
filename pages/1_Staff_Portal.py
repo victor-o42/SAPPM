@@ -191,7 +191,9 @@ if is_auth:
                 <span style="color: #FFFFFF; font-size: 0.92rem; font-weight: 700;">Predictor Dashboard</span>
             </div>
             <div>
-                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 9999px; color: #34D399; font-size: 0.8rem; font-weight: 700;">● Active Staff Session</span>
+                <span style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 9999px; color: #34D399; font-size: 0.8rem; font-weight: 700;">
+                    <span style="width: 7px; height: 7px; border-radius: 50%; background: #34D399; display: inline-block; box-shadow: 0 0 8px #34D399;"></span> Active Staff Session
+                </span>
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -211,7 +213,7 @@ if is_auth:
         """, unsafe_allow_html=True)
     with col_out:
         st.markdown("<div style='padding-top: 1.5rem;'>", unsafe_allow_html=True)
-        if st.button("Sign Out ↪", use_container_width=True):
+        if st.button("Sign Out", use_container_width=True):
             sign_out_staff()
             st.session_state["authenticated"] = False
             st.session_state["profile"] = None
@@ -261,60 +263,62 @@ if is_auth:
                 }}
                 .slider-group-wrap {{
                     position: relative;
-                    margin-bottom: 24px;
+                    margin-bottom: 22px;
                 }}
                 .slider-label-row {{
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 8px;
+                    margin-bottom: 6px;
                 }}
                 .slider-title {{
                     font-size: 0.85rem;
                     font-weight: 700;
-                    color: #CBD5E1;
-                    text-transform: uppercase;
-                    letter-spacing: 0.04em;
-                    display: flex;
+                    color: #E2E8F0;
+                    letter-spacing: 0.02em;
+                    display: inline-flex;
                     align-items: center;
-                    gap: 6px;
+                    gap: 8px;
+                }}
+                .slider-title svg {{
+                    width: 16px;
+                    height: 16px;
+                    stroke: #94A3B8;
                 }}
                 .slider-badge-val {{
                     font-family: 'JetBrains Mono', monospace;
-                    font-size: 0.95rem;
-                    font-weight: 800;
-                    color: #38BDF8;
-                    background: rgba(56, 189, 248, 0.1);
-                    border: 1px solid rgba(56, 189, 248, 0.25);
+                    font-size: 0.92rem;
+                    font-weight: 700;
+                    color: #FFFFFF;
+                    background: rgba(255, 255, 255, 0.06);
+                    border: 1px solid rgba(255, 255, 255, 0.12);
                     padding: 2px 10px;
-                    border-radius: 9999px;
+                    border-radius: 8px;
                 }}
                 .slider-05-container {{
                     position: relative;
                     width: 100%;
-                    padding-top: 24px;
-                    padding-bottom: 8px;
+                    padding-top: 28px;
                 }}
                 .slider-05-track {{
                     position: relative;
                     display: flex;
                     align-items: flex-end;
                     width: 100%;
-                    height: 38px;
-                    padding: 0 14px 10px 14px;
-                    background: rgba(15, 23, 42, 0.7);
-                    border: 1px solid rgba(255, 255, 255, 0.12);
-                    border-radius: 16px;
+                    height: 36px;
+                    padding: 0 16px 12px 16px;
+                    background: #0B0F19;
+                    border: 1px solid rgba(255, 255, 255, 0.15);
+                    border-radius: 12px;
                     cursor: pointer;
                     touch-action: none;
-                    transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.3s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+                    transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.3s ease, border-color 0.2s ease;
                     overflow: hidden;
                 }}
                 .slider-05-track.is-active {{
-                    height: 72px;
-                    padding-bottom: 12px;
-                    border-color: rgba(129, 140, 248, 0.5);
-                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(99, 102, 241, 0.2);
+                    height: 84px;
+                    padding-bottom: 16px;
+                    border-color: rgba(255, 255, 255, 0.35);
                 }}
                 .bars-wrapper {{
                     display: flex;
@@ -326,58 +330,58 @@ if is_auth:
                     flex: 1;
                     height: 10px;
                     border-radius: 9999px;
-                    background: rgba(255, 255, 255, 0.12);
-                    transition: background 0.25s ease, height 0.08s ease-out;
+                    background: rgba(255, 255, 255, 0.15);
+                    transition: background 0.3s ease, height 0.08s ease-out;
                     will-change: height;
                 }}
                 .equalizer-bar.is-filled {{
-                    background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 50%, #38BDF8 100%);
-                    box-shadow: 0 0 8px rgba(129, 140, 248, 0.5);
+                    background: #FFFFFF;
+                    z-index: 10;
                 }}
                 .floating-tooltip {{
                     position: absolute;
                     top: -6px;
-                    transform: translateX(-50%) scale(0.85);
+                    transform: translateX(-50%) scale(0.8);
                     opacity: 0;
                     pointer-events: none;
                     background: #1E293B;
                     color: #FFFFFF;
                     font-family: 'JetBrains Mono', monospace;
-                    font-size: 0.95rem;
-                    font-weight: 800;
-                    padding: 4px 12px;
+                    font-size: 1.05rem;
+                    font-weight: 700;
+                    padding: 4px 14px;
                     border-radius: 12px;
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 0 0 12px rgba(129, 140, 248, 0.4);
+                    border: 1px solid rgba(255, 255, 255, 0.15);
+                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
                     transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-                    z-index: 20;
+                    z-index: 30;
                     white-space: nowrap;
                 }}
                 .slider-05-container.is-active .floating-tooltip {{
                     opacity: 1;
-                    transform: translateX(-50%) translateY(-14px) scale(1);
+                    transform: translateX(-50%) translateY(-18px) scale(1);
                 }}
                 .predict-action-btn {{
                     width: 100%;
-                    padding: 14px 28px;
+                    padding: 13px 28px;
                     border-radius: 9999px;
                     background: #FFFFFF;
                     color: #05070E;
                     font-size: 0.95rem;
                     font-weight: 800;
                     border: 1px solid rgba(255, 255, 255, 0.5);
-                    box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.3), 0 0 15px 2px rgba(99, 102, 241, 0.3);
+                    box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.25), 0 0 15px 2px rgba(99, 102, 241, 0.25);
                     cursor: pointer;
                     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     gap: 10px;
-                    margin-top: 14px;
+                    margin-top: 16px;
                 }}
                 .predict-action-btn:hover {{
                     transform: translateY(-2px);
-                    box-shadow: 0 16px 35px rgba(255, 255, 255, 0.45), 0 0 25px rgba(56, 189, 248, 0.45);
+                    box-shadow: 0 16px 35px rgba(255, 255, 255, 0.4), 0 0 25px rgba(56, 189, 248, 0.4);
                 }}
                 .predict-action-btn:active {{
                     transform: translateY(0);
@@ -388,7 +392,13 @@ if is_auth:
             <!-- SLIDER 1: STUDY HOURS -->
             <div class="slider-group-wrap">
                 <div class="slider-label-row">
-                    <span class="slider-title">📚 Weekly Self Study Hours</span>
+                    <span class="slider-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                        Weekly Self Study Hours
+                    </span>
                     <span class="slider-badge-val" id="badge_study">{init_study} hrs</span>
                 </div>
                 <div class="slider-05-container" id="container_study">
@@ -402,7 +412,13 @@ if is_auth:
             <!-- SLIDER 2: ATTENDANCE -->
             <div class="slider-group-wrap">
                 <div class="slider-label-row">
-                    <span class="slider-title">🎓 Attendance Percentage</span>
+                    <span class="slider-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                        </svg>
+                        Attendance Percentage
+                    </span>
                     <span class="slider-badge-val" id="badge_att">{init_att}%</span>
                 </div>
                 <div class="slider-05-container" id="container_att">
@@ -416,7 +432,12 @@ if is_auth:
             <!-- SLIDER 3: PARTICIPATION -->
             <div class="slider-group-wrap">
                 <div class="slider-label-row">
-                    <span class="slider-title">🙋‍♂️ Class Participation</span>
+                    <span class="slider-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Class Participation
+                    </span>
                     <span class="slider-badge-val" id="badge_part">{init_part} / 10</span>
                 </div>
                 <div class="slider-05-container" id="container_part">
@@ -430,7 +451,13 @@ if is_auth:
             <!-- SLIDER 4: TOTAL SCORE -->
             <div class="slider-group-wrap">
                 <div class="slider-label-row">
-                    <span class="slider-title">📝 Total Score</span>
+                    <span class="slider-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="7"></circle>
+                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                        </svg>
+                        Total Score
+                    </span>
                     <span class="slider-badge-val" id="badge_score">{init_score} / 100</span>
                 </div>
                 <div class="slider-05-container" id="container_score">
@@ -452,7 +479,7 @@ if is_auth:
 
             <script>
                 const NUM_BARS = 44;
-                const PADDING = 14;
+                const PADDING = 16;
 
                 const sliderConfigs = {{
                     study: {{ min: 0, max: 40, step: 0.5, value: {init_study}, suffix: ' hrs' }},
@@ -489,9 +516,9 @@ if is_auth:
                         const progress = (config.value - config.min) / (config.max - config.min);
 
                         const normalHeight = 10;
-                        const hoverBaseHeight = 48;
-                        const dipHeight = 18;
-                        const maxDistance = 120;
+                        const hoverBaseHeight = 50;
+                        const dipHeight = 20;
+                        const maxDistance = 140;
 
                         barElements.forEach((bar, idx) => {{
                             const barProgress = idx / (NUM_BARS - 1);
@@ -526,7 +553,7 @@ if is_auth:
                             }}
                         }});
 
-                        // Tooltip placement
+                        // Tooltip placement matching NumberFlow / React component
                         if (active) {{
                             const clampedX = Math.max(PADDING, Math.min(width - PADDING, currentMouseX));
                             tooltip.style.left = clampedX + 'px';
@@ -710,10 +737,14 @@ if is_auth:
         elif not is_predict_req:
             st.markdown("""
                 <div style="background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 4rem 2rem; text-align: center; margin-top: 1.5rem;">
-                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📊</div>
+                    <div style="display: flex; justify-content: center; margin-bottom: 1.2rem;">
+                        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+                        </svg>
+                    </div>
                     <h3 style="color: #FFFFFF; margin: 0 0 0.5rem 0;">Awaiting Input Submission</h3>
                     <p style="color: #94A3B8; font-size: 0.92rem; max-width: 380px; margin: 0 auto;">
-                        Adjust the dynamic <strong>Slider05 Equalizer Bars</strong> on the left and click <strong>Predict Grade</strong> to generate real-time grade forecasts, confidence attributions, and SHAP decision explanations.
+                        Adjust the student metrics on the left and click <strong>Predict Grade</strong> to generate real-time grade forecasts, confidence attributions, and SHAP decision explanations.
                     </p>
                 </div>
             """, unsafe_allow_html=True)
