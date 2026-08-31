@@ -540,11 +540,11 @@ roobinium_full_viewport_html = """
         </div>
 
         <div class="nav-menu">
-            <div class="nav-link" onclick="navTo('/Predict')">Predict</div>
-            <div class="nav-link" onclick="navTo('/Explainability')">Explainability</div>
-            <div class="nav-link" onclick="navTo('/Model_Analytics')">Analytics</div>
-            <div class="nav-link" onclick="navTo('/Student_Records')">Records</div>
-            <div class="nav-link" onclick="navTo('/Documentation')">Documentation</div>
+            <div class="nav-link" onclick="navTo('/Access_Restricted')">Predict</div>
+            <div class="nav-link" onclick="navTo('/Access_Restricted')">Explainability</div>
+            <div class="nav-link" onclick="navTo('/Access_Restricted')">Analytics</div>
+            <div class="nav-link" onclick="navTo('/Access_Restricted')">Records</div>
+            <div class="nav-link" onclick="navTo('/Access_Restricted')">Documentation</div>
         </div>
 
         <div class="nav-actions">
@@ -588,7 +588,7 @@ roobinium_full_viewport_html = """
         </p>
         
         <!-- BUTTON 1: ORIGIN BUTTON (Evaluate Performance) -->
-        <div class="origin-button" id="originBtn" onclick="navTo('/Predict')">
+        <div class="origin-button" id="originBtn" onclick="navTo('/Staff_Portal')">
             <div class="origin-ripple" id="originRipple"></div>
             <span class="button-label">
                 Evaluate Performance ↗

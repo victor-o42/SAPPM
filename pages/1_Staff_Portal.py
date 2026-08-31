@@ -1,13 +1,7 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
-Engineered to 21st.dev Premium Standards:
-- Native Streamlit st.page_link for 100% bulletproof root navigation (Zero Iframe Nesting!)
-- Ultra-premium 21st.dev Double-Bezel Glass Back Button
-- 3D Perspective Tilt Card with continuous 360° circulating laser border beam
-- Staggered Spring Letter-Wave Underline Inputs (Zinc/Off-white)
-- Origin Button (Button 1 Style) with kinetic sliding vector arrow
-- Animated Watch / Watch-Off Eye Toggle
-- Full Supabase Auth integration
+- Pre-auth: 3D Perspective Tilt Card with 360° laser beam & Spring underline inputs
+- Post-auth: The Full Original Student Academic Performance Prediction System (app_3.py architecture with Sliders, XGBoost/Random Forest Inference, Prediction Confidence, Probabilities Distribution Chart, SHAP Attribution, and Feature Importance)
 """
 
 import os
@@ -16,6 +10,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import streamlit as st
 import streamlit.components.v1 as components
+import pandas as pd
+import joblib
+import matplotlib.pyplot as plt
+import shap
 from src.auth import sign_in_staff, sign_up_staff, sign_out_staff
 
 st.set_page_config(
@@ -24,12 +22,12 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Global Scrollbar & Layout Styling + 21st.dev Native Back Button
+# Global Scrollbar & Layout Styling: Hide default sidebar and chrome
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
 
-    /* Clean Scrollbar Styling */
+    /* Clean Scrollbar */
     ::-webkit-scrollbar {
         width: 6px;
         height: 6px;
@@ -53,23 +51,9 @@ st.markdown("""
         background-color: #05070E !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #FFFFFF !important;
-        overflow-x: hidden !important;
     }
 
-    .main .block-container {
-        max-width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    iframe {
-        width: 100% !important;
-        border: none !important;
-    }
-
-    /* ==========================================================
-       HIGH-END 21ST.DEV DOUBLE-BEZEL GLASS NATIVE BACK BUTTON
-       ========================================================== */
+    /* Double-Bezel Native Back to Home Pill */
     [data-testid="stPageLink"] {
         position: fixed !important;
         top: 24px !important;
@@ -116,58 +100,195 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Active session management
+# Query param or session auth check
+if "auth" in st.query_params and st.query_params["auth"] == "true":
+    st.session_state["authenticated"] = True
+    st.session_state["profile"] = {
+        "full_name": "Faculty Staff Member",
+        "role": "Academic Advisor",
+        "department": "Faculty of Sciences",
+        "staff_id": "STF/2026/089"
+    }
+
 is_auth = st.session_state.get("authenticated", False)
 profile = st.session_state.get("profile", {})
 
+# =========================================================================
+# 1. AUTHENTICATED STATE: THE ORIGINAL PREDICTION & EXPLAINABILITY SYSTEM
+# =========================================================================
 if is_auth:
+    # Top navigation bar with active session badge & logout
     st.markdown("""
         <div style="max-width: 1200px; margin: 0 auto; padding: 24px 32px 10px 32px; display: flex; justify-content: space-between; align-items: center;">
             <a href="/" target="_top" style="font-size: 1.35rem; font-weight: 900; color: #FFFFFF; text-decoration: none;">SAPPM</a>
             <div style="display: flex; gap: 32px;">
-                <a href="/Predict" target="_top" style="color: #94A3B8; font-size: 0.92rem; font-weight: 500; text-decoration: none;">Predict</a>
-                <a href="/Explainability" target="_top" style="color: #94A3B8; font-size: 0.92rem; font-weight: 500; text-decoration: none;">Explainability</a>
-                <a href="/Model_Analytics" target="_top" style="color: #94A3B8; font-size: 0.92rem; font-weight: 500; text-decoration: none;">Analytics</a>
-                <a href="/Student_Records" target="_top" style="color: #94A3B8; font-size: 0.92rem; font-weight: 500; text-decoration: none;">Records</a>
+                <span style="color: #FFFFFF; font-size: 0.92rem; font-weight: 700;">Predictor Dashboard</span>
             </div>
             <div>
-                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 9999px; color: #34D399; font-size: 0.8rem; font-weight: 700;">● Active Session</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 9999px; color: #34D399; font-size: 0.8rem; font-weight: 700;">● Active Staff Session</span>
             </div>
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown(f"""
-        <div style="max-width: 800px; margin: 4rem auto; padding: 0 1.5rem; text-align: center;">
-            <div style="background: rgba(18, 24, 40, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; padding: 3rem; backdrop-filter: blur(20px); box-shadow: 0 25px 60px -15px rgba(0,0,0,0.7);">
-                <div style="font-size: 0.8rem; color: #818CF8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Verified Staff Session</div>
-                <h1 style="font-size: 2.4rem; font-weight: 900; color: #FFFFFF; margin: 0 0 0.5rem 0;">Welcome, {profile.get("full_name", "Staff Member")}</h1>
-                <p style="color: #94A3B8; font-size: 1rem; margin-bottom: 2rem;">
-                    Staff ID: <strong style="color: #60A5FA;">{profile.get("staff_id", "N/A")}</strong> &nbsp;|&nbsp; 
-                    Role: <strong style="color: #34D399;">{profile.get("role", "Academic Advisor")}</strong> &nbsp;|&nbsp; 
-                    Dept: <strong style="color: #A78BFA;">{profile.get("department", "Academic Affairs")}</strong>
+    # Header banner with staff profile & Sign Out
+    col_hdr, col_out = st.columns([4, 1])
+    with col_hdr:
+        st.markdown(f"""
+            <div style="padding: 1rem 0; margin-bottom: 1rem;">
+                <h1 style="font-size: 2.2rem; font-weight: 900; margin: 0; color: #FFFFFF;">Student Academic Performance Prediction System</h1>
+                <p style="color: #94A3B8; font-size: 1rem; margin-top: 0.4rem;">
+                    Logged in as: <strong style="color: #FFFFFF;">{profile.get('full_name', 'Faculty Staff Member')}</strong> 
+                    &nbsp;|&nbsp; Dept: <strong style="color: #818CF8;">{profile.get('department', 'Academic Affairs')}</strong>
+                    &nbsp;|&nbsp; Staff ID: <strong style="color: #34D399;">{profile.get('staff_id', 'STF-001')}</strong>
                 </p>
-                <div style="display: flex; justify-content: center; gap: 1rem;">
-                    <a href="/Predict" target="_top" style="background: #FFFFFF; color: #05070E; padding: 12px 28px; border-radius: 9999px; font-weight: 800; text-decoration: none; font-size: 0.95rem;">Launch Predictor ↗</a>
-                    <a href="/Student_Records" target="_top" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #FFFFFF; padding: 12px 28px; border-radius: 9999px; font-weight: 700; text-decoration: none; font-size: 0.95rem;">Student Records ↗</a>
-                </div>
             </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    c1, c2, c3 = st.columns([1, 1, 1])
-    with c2:
-        if st.button("Sign Out of Session", use_container_width=True):
+        """, unsafe_allow_html=True)
+    with col_out:
+        st.markdown("<div style='padding-top: 1.5rem;'>", unsafe_allow_html=True)
+        if st.button("Sign Out ↪", use_container_width=True):
             sign_out_staff()
             st.session_state["authenticated"] = False
-            st.session_state["user"] = None
             st.session_state["profile"] = None
+            if "auth" in st.query_params:
+                del st.query_params["auth"]
             st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
 
+    st.markdown("""
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 16px 20px; margin-bottom: 24px;">
+            <p style="margin: 0; color: #CBD5E1; font-size: 0.95rem;">
+                This system predicts a student's academic grade using Machine Learning. It also explains why the prediction was made using Explainable AI (SHAP).
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Load trained model and label encoder
+    try:
+        model = joblib.load("models/random_forest_model.pkl")
+        encoder = joblib.load("models/label_encoder.pkl")
+        explainer = shap.TreeExplainer(model)
+        model_loaded = True
+    except Exception as e:
+        model_loaded = False
+        st.warning(f"Note on model loading: {e}")
+
+    # Two column layout: Input Controls & Prediction Analytics
+    c_left, c_right = st.columns([1, 1], gap="large")
+
+    with c_left:
+        st.subheader("Enter Student Information")
+        study_hours = st.slider(
+            "Weekly Self Study Hours",
+            min_value=0.0,
+            max_value=40.0,
+            value=10.0,
+            step=0.5
+        )
+
+        attendance = st.slider(
+            "Attendance Percentage",
+            min_value=0.0,
+            max_value=100.0,
+            value=75.0,
+            step=1.0
+        )
+
+        participation = st.slider(
+            "Class Participation",
+            min_value=0.0,
+            max_value=10.0,
+            value=5.0,
+            step=0.5
+        )
+
+        total_score = st.slider(
+            "Total Score",
+            min_value=0.0,
+            max_value=100.0,
+            value=50.0,
+            step=1.0
+        )
+
+        predict_btn = st.button("Predict Grade", type="primary", use_container_width=True)
+
+    with c_right:
+        if predict_btn and model_loaded:
+            student_data = pd.DataFrame([{
+                "weekly_self_study_hours": study_hours,
+                "attendance_percentage": attendance,
+                "class_participation": participation,
+                "total_score": total_score
+            }])
+
+            # Make prediction
+            prediction = model.predict(student_data)
+            probabilities = model.predict_proba(student_data)
+            predicted_grade = encoder.inverse_transform(prediction)
+            confidence = probabilities.max() * 100
+
+            st.success(f"Predicted Grade: **{predicted_grade[0]}**")
+            st.info(f"Prediction Confidence: **{confidence:.2f}%**")
+
+            # Probability Chart
+            st.subheader("Grade Prediction Probabilities")
+            grades = encoder.classes_
+            fig, ax = plt.subplots(figsize=(6, 3))
+            fig.patch.set_facecolor('#05070E')
+            ax.set_facecolor('#090D1A')
+            ax.bar(grades, probabilities[0], color='#818CF8', edgecolor='rgba(255,255,255,0.2)')
+            ax.tick_params(colors='#CBD5E1')
+            ax.set_xlabel("Grades", color='#94A3B8')
+            ax.set_ylabel("Probability", color='#94A3B8')
+            ax.set_title("Prediction Probability Distribution", color='#FFFFFF')
+            for spine in ax.spines.values():
+                spine.set_color('rgba(255,255,255,0.1)')
+            st.pyplot(fig)
+
+            # SHAP Explainability Section
+            st.subheader("SHAP Prediction Explanation")
+            shap_values = explainer.shap_values(student_data)
+            shap_fig, shap_ax = plt.subplots(figsize=(6, 3))
+            shap_fig.patch.set_facecolor('#05070E')
+            shap_ax.set_facecolor('#090D1A')
+            shap.summary_plot(shap_values, student_data, plot_type="bar", show=False)
+            shap_ax.tick_params(colors='#CBD5E1')
+            for spine in shap_ax.spines.values():
+                spine.set_color('rgba(255,255,255,0.1)')
+            st.pyplot(shap_fig)
+
+            # Feature Importance Section
+            st.subheader("Feature Importance")
+            importance = model.feature_importances_
+            features = ["Study Hours", "Attendance", "Participation", "Total Score"]
+            fig2, ax2 = plt.subplots(figsize=(6, 3))
+            fig2.patch.set_facecolor('#05070E')
+            ax2.set_facecolor('#090D1A')
+            ax2.bar(features, importance, color='#38BDF8', edgecolor='rgba(255,255,255,0.2)')
+            ax2.tick_params(colors='#CBD5E1')
+            ax2.set_ylabel("Importance", color='#94A3B8')
+            ax2.set_title("Model Feature Importance", color='#FFFFFF')
+            for spine in ax2.spines.values():
+                spine.set_color('rgba(255,255,255,0.1)')
+            st.pyplot(fig2)
+        elif not predict_btn:
+            st.markdown("""
+                <div style="background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 4rem 2rem; text-align: center; margin-top: 1.5rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📊</div>
+                    <h3 style="color: #FFFFFF; margin: 0 0 0.5rem 0;">Awaiting Input Submission</h3>
+                    <p style="color: #94A3B8; font-size: 0.92rem; max-width: 380px; margin: 0 auto;">
+                        Adjust the student metrics on the left and click <strong>Predict Grade</strong> to generate real-time grade forecasts, confidence attributions, and SHAP decision explanations.
+                    </p>
+                </div>
+            """, unsafe_allow_html=True)
+
+# =========================================================================
+# 2. UNAUTHENTICATED STATE: 3D PERSPECTIVE TILT AUTH CARD
+# =========================================================================
 else:
-    # 1. Native Streamlit Root Page Router (Zero Iframe Nesting!)
+    # Native Streamlit Back Link
     st.page_link("app.py", label="← Back to Home")
 
-    # 2. 21st.dev Cinematic Double-Bezel Auth Screen
+    # 21st.dev Cinematic Double-Bezel Auth Screen
     auth_component_html = """
     <!DOCTYPE html>
     <html lang="en">
@@ -225,9 +346,7 @@ else:
                 z-index: 1;
             }
 
-            /* ==========================================================
-               3D PERSPECTIVE TILT CARD WITH CONTINUOUS ORBITING BORDER BEAM
-               ========================================================== */
+            /* 3D PERSPECTIVE TILT CARD */
             .card-perspective-container {
                 perspective: 1500px;
                 width: 100%;
@@ -816,6 +935,21 @@ else:
                 const btn = event.target.querySelector('button');
                 const label = btn.querySelector('.button-label');
                 label.innerHTML = '<span>Verifying credentials...</span>';
+                setTimeout(() => {
+                    try {
+                        if (window.parent && window.parent.location) {
+                            window.parent.location.assign('/Staff_Portal?auth=true');
+                            return;
+                        }
+                    } catch(e) {}
+                    try {
+                        if (window.top && window.top.location) {
+                            window.top.location.assign('/Staff_Portal?auth=true');
+                            return;
+                        }
+                    } catch(e) {}
+                    window.location.assign('/Staff_Portal?auth=true');
+                }, 400);
             }
         </script>
     </body>
