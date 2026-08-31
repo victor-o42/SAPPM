@@ -229,52 +229,430 @@ if is_auth:
     # Instant cached ML pipeline retrieval
     model, encoder, explainer, model_loaded = get_ml_pipeline()
 
-    # Two column layout: Input Controls & Prediction Analytics
-    c_left, c_right = st.columns([1, 1], gap="large")
+    # Check if prediction was triggered via Slider05
+    is_predict_req = st.query_params.get("predict") == "true"
+    init_study = float(st.query_params.get("study", 10.0)) if is_predict_req else 10.0
+    init_att = float(st.query_params.get("att", 75.0)) if is_predict_req else 75.0
+    init_part = float(st.query_params.get("part", 5.0)) if is_predict_req else 5.0
+    init_score = float(st.query_params.get("score", 50.0)) if is_predict_req else 50.0
+
+    # Two column layout: Input Controls (Slider05) & Prediction Analytics
+    c_left, c_right = st.columns([1.1, 1], gap="large")
 
     with c_left:
-        st.subheader("Enter Student Information")
-        study_hours = st.slider(
-            "Weekly Self Study Hours",
-            min_value=0.0,
-            max_value=40.0,
-            value=10.0,
-            step=0.5
-        )
+        slider_05_component_html = f"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
+                * {{
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+                    user-select: none;
+                }}
+                body {{
+                    background: transparent;
+                    color: #FFFFFF;
+                    padding: 4px 6px;
+                }}
+                .slider-group-wrap {{
+                    position: relative;
+                    margin-bottom: 24px;
+                }}
+                .slider-label-row {{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                }}
+                .slider-title {{
+                    font-size: 0.85rem;
+                    font-weight: 700;
+                    color: #CBD5E1;
+                    text-transform: uppercase;
+                    letter-spacing: 0.04em;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }}
+                .slider-badge-val {{
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 0.95rem;
+                    font-weight: 800;
+                    color: #38BDF8;
+                    background: rgba(56, 189, 248, 0.1);
+                    border: 1px solid rgba(56, 189, 248, 0.25);
+                    padding: 2px 10px;
+                    border-radius: 9999px;
+                }}
+                .slider-05-container {{
+                    position: relative;
+                    width: 100%;
+                    padding-top: 24px;
+                    padding-bottom: 8px;
+                }}
+                .slider-05-track {{
+                    position: relative;
+                    display: flex;
+                    align-items: flex-end;
+                    width: 100%;
+                    height: 38px;
+                    padding: 0 14px 10px 14px;
+                    background: rgba(15, 23, 42, 0.7);
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                    border-radius: 16px;
+                    cursor: pointer;
+                    touch-action: none;
+                    transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.3s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+                    overflow: hidden;
+                }}
+                .slider-05-track.is-active {{
+                    height: 72px;
+                    padding-bottom: 12px;
+                    border-color: rgba(129, 140, 248, 0.5);
+                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(99, 102, 241, 0.2);
+                }}
+                .bars-wrapper {{
+                    display: flex;
+                    align-items: flex-end;
+                    width: 100%;
+                    gap: 3px;
+                }}
+                .equalizer-bar {{
+                    flex: 1;
+                    height: 10px;
+                    border-radius: 9999px;
+                    background: rgba(255, 255, 255, 0.12);
+                    transition: background 0.25s ease, height 0.08s ease-out;
+                    will-change: height;
+                }}
+                .equalizer-bar.is-filled {{
+                    background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 50%, #38BDF8 100%);
+                    box-shadow: 0 0 8px rgba(129, 140, 248, 0.5);
+                }}
+                .floating-tooltip {{
+                    position: absolute;
+                    top: -6px;
+                    transform: translateX(-50%) scale(0.85);
+                    opacity: 0;
+                    pointer-events: none;
+                    background: #1E293B;
+                    color: #FFFFFF;
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 0.95rem;
+                    font-weight: 800;
+                    padding: 4px 12px;
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 0 0 12px rgba(129, 140, 248, 0.4);
+                    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    z-index: 20;
+                    white-space: nowrap;
+                }}
+                .slider-05-container.is-active .floating-tooltip {{
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(-14px) scale(1);
+                }}
+                .predict-action-btn {{
+                    width: 100%;
+                    padding: 14px 28px;
+                    border-radius: 9999px;
+                    background: #FFFFFF;
+                    color: #05070E;
+                    font-size: 0.95rem;
+                    font-weight: 800;
+                    border: 1px solid rgba(255, 255, 255, 0.5);
+                    box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.3), 0 0 15px 2px rgba(99, 102, 241, 0.3);
+                    cursor: pointer;
+                    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    margin-top: 14px;
+                }}
+                .predict-action-btn:hover {{
+                    transform: translateY(-2px);
+                    box-shadow: 0 16px 35px rgba(255, 255, 255, 0.45), 0 0 25px rgba(56, 189, 248, 0.45);
+                }}
+                .predict-action-btn:active {{
+                    transform: translateY(0);
+                }}
+            </style>
+        </head>
+        <body>
+            <!-- SLIDER 1: STUDY HOURS -->
+            <div class="slider-group-wrap">
+                <div class="slider-label-row">
+                    <span class="slider-title">📚 Weekly Self Study Hours</span>
+                    <span class="slider-badge-val" id="badge_study">{init_study} hrs</span>
+                </div>
+                <div class="slider-05-container" id="container_study">
+                    <div class="floating-tooltip" id="tooltip_study">{init_study}</div>
+                    <div class="slider-05-track" id="track_study">
+                        <div class="bars-wrapper" id="bars_study"></div>
+                    </div>
+                </div>
+            </div>
 
-        attendance = st.slider(
-            "Attendance Percentage",
-            min_value=0.0,
-            max_value=100.0,
-            value=75.0,
-            step=1.0
-        )
+            <!-- SLIDER 2: ATTENDANCE -->
+            <div class="slider-group-wrap">
+                <div class="slider-label-row">
+                    <span class="slider-title">🎓 Attendance Percentage</span>
+                    <span class="slider-badge-val" id="badge_att">{init_att}%</span>
+                </div>
+                <div class="slider-05-container" id="container_att">
+                    <div class="floating-tooltip" id="tooltip_att">{init_att}%</div>
+                    <div class="slider-05-track" id="track_att">
+                        <div class="bars-wrapper" id="bars_att"></div>
+                    </div>
+                </div>
+            </div>
 
-        participation = st.slider(
-            "Class Participation",
-            min_value=0.0,
-            max_value=10.0,
-            value=5.0,
-            step=0.5
-        )
+            <!-- SLIDER 3: PARTICIPATION -->
+            <div class="slider-group-wrap">
+                <div class="slider-label-row">
+                    <span class="slider-title">🙋‍♂️ Class Participation</span>
+                    <span class="slider-badge-val" id="badge_part">{init_part} / 10</span>
+                </div>
+                <div class="slider-05-container" id="container_part">
+                    <div class="floating-tooltip" id="tooltip_part">{init_part}</div>
+                    <div class="slider-05-track" id="track_part">
+                        <div class="bars-wrapper" id="bars_part"></div>
+                    </div>
+                </div>
+            </div>
 
-        total_score = st.slider(
-            "Total Score",
-            min_value=0.0,
-            max_value=100.0,
-            value=50.0,
-            step=1.0
-        )
+            <!-- SLIDER 4: TOTAL SCORE -->
+            <div class="slider-group-wrap">
+                <div class="slider-label-row">
+                    <span class="slider-title">📝 Total Score</span>
+                    <span class="slider-badge-val" id="badge_score">{init_score} / 100</span>
+                </div>
+                <div class="slider-05-container" id="container_score">
+                    <div class="floating-tooltip" id="tooltip_score">{init_score}</div>
+                    <div class="slider-05-track" id="track_score">
+                        <div class="bars-wrapper" id="bars_score"></div>
+                    </div>
+                </div>
+            </div>
 
-        predict_btn = st.button("Predict Grade", type="primary", use_container_width=True)
+            <!-- PREDICT GRADE TRIGGER BUTTON -->
+            <button class="predict-action-btn" onclick="submitSlider05Prediction()">
+                <span>Predict Grade</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
+
+            <script>
+                const NUM_BARS = 44;
+                const PADDING = 14;
+
+                const sliderConfigs = {{
+                    study: {{ min: 0, max: 40, step: 0.5, value: {init_study}, suffix: ' hrs' }},
+                    att: {{ min: 0, max: 100, step: 1, value: {init_att}, suffix: '%' }},
+                    part: {{ min: 0, max: 10, step: 0.5, value: {init_part}, suffix: ' / 10' }},
+                    score: {{ min: 0, max: 100, step: 1, value: {init_score}, suffix: ' / 100' }}
+                }};
+
+                function createSlider05(key, config) {{
+                    const container = document.getElementById('container_' + key);
+                    const track = document.getElementById('track_' + key);
+                    const barsWrapper = document.getElementById('bars_' + key);
+                    const tooltip = document.getElementById('tooltip_' + key);
+                    const badge = document.getElementById('badge_' + key);
+
+                    barsWrapper.innerHTML = '';
+                    const barElements = [];
+
+                    for (let i = 0; i < NUM_BARS; i++) {{
+                        const bar = document.createElement('div');
+                        bar.className = 'equalizer-bar';
+                        barsWrapper.appendChild(bar);
+                        barElements.push(bar);
+                    }}
+
+                    let isDragging = false;
+                    let isHovering = false;
+                    let mouseX = 0;
+
+                    function updateBars(currentMouseX, active) {{
+                        const trackRect = track.getBoundingClientRect();
+                        const width = trackRect.width || 400;
+                        const innerWidth = width - PADDING * 2;
+                        const progress = (config.value - config.min) / (config.max - config.min);
+
+                        const normalHeight = 10;
+                        const hoverBaseHeight = 48;
+                        const dipHeight = 18;
+                        const maxDistance = 120;
+
+                        barElements.forEach((bar, idx) => {{
+                            const barProgress = idx / (NUM_BARS - 1);
+                            const isFilled = barProgress <= progress;
+
+                            if (isFilled) {{
+                                bar.classList.add('is-filled');
+                            }} else {{
+                                bar.classList.remove('is-filled');
+                            }}
+
+                            if (!active) {{
+                                bar.style.height = normalHeight + 'px';
+                            }} else {{
+                                const barX = PADDING + barProgress * innerWidth;
+                                const dist = Math.abs(currentMouseX - barX);
+                                let targetHeight = hoverBaseHeight;
+
+                                if (dist < maxDistance) {{
+                                    const relDist = dist / maxDistance;
+                                    const dip = (Math.cos(relDist * Math.PI) + 1) / 2;
+                                    targetHeight = hoverBaseHeight - dip * (hoverBaseHeight - dipHeight);
+                                }}
+
+                                if (isFilled) {{
+                                    const activeRange = barProgress / Math.max(progress, 0.01);
+                                    const activeArc = Math.sin(activeRange * Math.PI) * 6;
+                                    targetHeight += activeArc;
+                                }}
+
+                                bar.style.height = Math.max(10, Math.round(targetHeight)) + 'px';
+                            }}
+                        }});
+
+                        // Tooltip placement
+                        if (active) {{
+                            const clampedX = Math.max(PADDING, Math.min(width - PADDING, currentMouseX));
+                            tooltip.style.left = clampedX + 'px';
+                            tooltip.textContent = config.value + config.suffix;
+                        }}
+                    }}
+
+                    function calculateValueFromX(x) {{
+                        const rect = track.getBoundingClientRect();
+                        const innerWidth = rect.width - PADDING * 2;
+                        const pct = Math.max(0, Math.min(1, (x - PADDING) / innerWidth));
+                        let rawVal = config.min + pct * (config.max - config.min);
+                        if (config.step >= 1) {{
+                            return Math.round(rawVal);
+                        }} else {{
+                            return Math.round(rawVal * 2) / 2;
+                        }}
+                    }}
+
+                    function handlePointerUpdate(e, shouldChangeVal) {{
+                        const rect = track.getBoundingClientRect();
+                        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                        mouseX = Math.max(0, Math.min(rect.width, clientX - rect.left));
+
+                        if (shouldChangeVal || isDragging) {{
+                            const newVal = calculateValueFromX(mouseX);
+                            config.value = newVal;
+                            badge.textContent = newVal + config.suffix;
+                        }}
+                        updateBars(mouseX, true);
+                    }}
+
+                    track.addEventListener('mouseenter', () => {{
+                        isHovering = true;
+                        container.classList.add('is-active');
+                        track.classList.add('is-active');
+                    }});
+
+                    track.addEventListener('mouseleave', () => {{
+                        isHovering = false;
+                        if (!isDragging) {{
+                            container.classList.remove('is-active');
+                            track.classList.remove('is-active');
+                            updateBars(0, false);
+                        }}
+                    }});
+
+                    track.addEventListener('mousemove', (e) => {{
+                        handlePointerUpdate(e, isDragging);
+                    }});
+
+                    track.addEventListener('mousedown', (e) => {{
+                        isDragging = true;
+                        container.classList.add('is-active');
+                        track.classList.add('is-active');
+                        handlePointerUpdate(e, true);
+                    }});
+
+                    window.addEventListener('mouseup', () => {{
+                        if (isDragging) {{
+                            isDragging = false;
+                            if (!isHovering) {{
+                                container.classList.remove('is-active');
+                                track.classList.remove('is-active');
+                                updateBars(0, false);
+                            }}
+                        }}
+                    }});
+
+                    // Touch events
+                    track.addEventListener('touchstart', (e) => {{
+                        isDragging = true;
+                        container.classList.add('is-active');
+                        track.classList.add('is-active');
+                        handlePointerUpdate(e, true);
+                    }});
+
+                    track.addEventListener('touchmove', (e) => {{
+                        handlePointerUpdate(e, true);
+                    }});
+
+                    track.addEventListener('touchend', () => {{
+                        isDragging = false;
+                        container.classList.remove('is-active');
+                        track.classList.remove('is-active');
+                        updateBars(0, false);
+                    }});
+
+                    // Initial draw
+                    updateBars(0, false);
+                }}
+
+                createSlider05('study', sliderConfigs.study);
+                createSlider05('att', sliderConfigs.att);
+                createSlider05('part', sliderConfigs.part);
+                createSlider05('score', sliderConfigs.score);
+
+                function submitSlider05Prediction() {{
+                    const study = sliderConfigs.study.value;
+                    const att = sliderConfigs.att.value;
+                    const part = sliderConfigs.part.value;
+                    const score = sliderConfigs.score.value;
+
+                    const targetUrl = `/Staff_Portal?predict=true&study=${{study}}&att=${{att}}&part=${{part}}&score=${{score}}`;
+                    try {{
+                        if (window.parent && window.parent.location) {{
+                            window.parent.location.assign(targetUrl);
+                            return;
+                        }}
+                    }} catch(e) {{}}
+                    window.location.assign(targetUrl);
+                }}
+            </script>
+        </body>
+        </html>
+        """
+
+        components.html(slider_05_component_html, height=520, scrolling=False)
 
     with c_right:
-        if predict_btn and model_loaded and model is not None and encoder is not None and explainer is not None:
+        if is_predict_req and model_loaded and model is not None and encoder is not None and explainer is not None:
             student_data = pd.DataFrame([{
-                "weekly_self_study_hours": study_hours,
-                "attendance_percentage": attendance,
-                "class_participation": participation,
-                "total_score": total_score
+                "weekly_self_study_hours": init_study,
+                "attendance_percentage": init_att,
+                "class_participation": init_part,
+                "total_score": init_score
             }])
 
             # Make prediction
@@ -327,15 +705,15 @@ if is_auth:
             for spine in ax2.spines.values():
                 spine.set_color('#334155')
             st.pyplot(fig2)
-        elif predict_btn and not model_loaded:
+        elif is_predict_req and not model_loaded:
             st.error("Model assets could not be loaded. Please ensure model files are present in the models directory.")
-        elif not predict_btn:
+        elif not is_predict_req:
             st.markdown("""
                 <div style="background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 4rem 2rem; text-align: center; margin-top: 1.5rem;">
                     <div style="font-size: 2.5rem; margin-bottom: 1rem;">📊</div>
                     <h3 style="color: #FFFFFF; margin: 0 0 0.5rem 0;">Awaiting Input Submission</h3>
                     <p style="color: #94A3B8; font-size: 0.92rem; max-width: 380px; margin: 0 auto;">
-                        Adjust the student metrics on the left and click <strong>Predict Grade</strong> to generate real-time grade forecasts, confidence attributions, and SHAP decision explanations.
+                        Adjust the dynamic <strong>Slider05 Equalizer Bars</strong> on the left and click <strong>Predict Grade</strong> to generate real-time grade forecasts, confidence attributions, and SHAP decision explanations.
                     </p>
                 </div>
             """, unsafe_allow_html=True)
