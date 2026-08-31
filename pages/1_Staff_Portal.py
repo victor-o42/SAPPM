@@ -1,8 +1,8 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
 Engineered to 21st.dev Premium Standards:
-- Bulletproof navTo top router for instant, smooth page switching
-- Ultra-premium 21st.dev Double-Bezel Glass Back Button with kinetic sliding chevron arrow
+- Native Streamlit st.page_link for 100% bulletproof root navigation (Zero Iframe Nesting!)
+- Ultra-premium 21st.dev Double-Bezel Glass Back Button
 - 3D Perspective Tilt Card with continuous 360° circulating laser border beam
 - Staggered Spring Letter-Wave Underline Inputs (Zinc/Off-white)
 - Origin Button (Button 1 Style) with kinetic sliding vector arrow
@@ -24,7 +24,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Global Scrollbar & Layout Styling
+# Global Scrollbar & Layout Styling + 21st.dev Native Back Button
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
@@ -65,6 +65,53 @@ st.markdown("""
     iframe {
         width: 100% !important;
         border: none !important;
+    }
+
+    /* ==========================================================
+       HIGH-END 21ST.DEV DOUBLE-BEZEL GLASS NATIVE BACK BUTTON
+       ========================================================== */
+    [data-testid="stPageLink"] {
+        position: fixed !important;
+        top: 24px !important;
+        left: 36px !important;
+        z-index: 999999 !important;
+    }
+
+    [data-testid="stPageLink"] a {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 10px 22px !important;
+        border-radius: 9999px !important;
+        background: rgba(15, 23, 42, 0.65) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2) !important;
+        color: #CBD5E1 !important;
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+        text-decoration: none !important;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        cursor: pointer !important;
+    }
+
+    [data-testid="stPageLink"] a:hover {
+        color: #FFFFFF !important;
+        border-color: rgba(255, 255, 255, 0.4) !important;
+        background: rgba(15, 23, 42, 0.9) !important;
+        box-shadow: 0 12px 30px -2px rgba(99, 102, 241, 0.3), inset 0 1px 1px 0 rgba(255, 255, 255, 0.4) !important;
+        transform: translateX(-4px) !important;
+    }
+
+    [data-testid="stPageLink"] a p {
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.05em !important;
+        margin: 0 !important;
+        color: inherit !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -117,7 +164,10 @@ if is_auth:
             st.rerun()
 
 else:
-    # 21st.dev Cinematic Double-Bezel Auth Screen
+    # 1. Native Streamlit Root Page Router (Zero Iframe Nesting!)
+    st.page_link("app.py", label="← Back to Home")
+
+    # 2. 21st.dev Cinematic Double-Bezel Auth Screen
     auth_component_html = """
     <!DOCTYPE html>
     <html lang="en">
@@ -145,6 +195,7 @@ else:
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
+                padding-top: 2rem;
             }
 
             /* Ambient Glow Backgrounds */
@@ -172,54 +223,6 @@ else:
                 filter: blur(80px);
                 pointer-events: none;
                 z-index: 1;
-            }
-
-            /* ==========================================================
-               HIGH-END 21ST.DEV DOUBLE-BEZEL BACK TO HOME BUTTON
-               ========================================================== */
-            .back-home-wrapper {
-                position: absolute;
-                top: 28px;
-                left: 36px;
-                z-index: 50;
-                cursor: pointer;
-            }
-
-            .back-home-pill {
-                display: inline-flex;
-                align-items: center;
-                gap: 10px;
-                padding: 9px 20px;
-                border-radius: 9999px;
-                background: rgba(15, 23, 42, 0.55);
-                backdrop-filter: blur(16px);
-                -webkit-backdrop-filter: blur(16px);
-                border: 1px solid rgba(255, 255, 255, 0.12);
-                box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
-                color: #CBD5E1;
-                font-size: 0.82rem;
-                font-weight: 700;
-                letter-spacing: 0.04em;
-                text-transform: uppercase;
-                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-
-            .back-home-pill:hover {
-                color: #FFFFFF;
-                border-color: rgba(255, 255, 255, 0.35);
-                background: rgba(15, 23, 42, 0.8);
-                box-shadow: 0 12px 30px -2px rgba(99, 102, 241, 0.25), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35);
-                transform: translateX(-3px);
-            }
-
-            .back-home-pill .chevron-icon {
-                transition: transform 0.3s ease;
-                display: flex;
-                align-items: center;
-            }
-
-            .back-home-pill:hover .chevron-icon {
-                transform: translateX(-4px);
             }
 
             /* ==========================================================
@@ -525,19 +528,6 @@ else:
         <div class="ambient-top"></div>
         <div class="ambient-bottom"></div>
 
-        <!-- 21st.dev Double-Bezel Glass Back to Home Button -->
-        <div class="back-home-wrapper" onclick="navTo('/')">
-            <div class="back-home-pill">
-                <span class="chevron-icon">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                </span>
-                <span>Back to Home</span>
-            </div>
-        </div>
-
         <!-- 3D Perspective Tilt Card with Continuous 360deg Laser Border Beam -->
         <div class="card-perspective-container">
             <div class="tilt-card-wrapper" id="tiltCardWrapper">
@@ -667,22 +657,6 @@ else:
         </div>
 
         <script>
-            function navTo(url) {
-                try {
-                    if (window.parent && window.parent.location) {
-                        window.parent.location.assign(url);
-                        return;
-                    }
-                } catch(e) {}
-                try {
-                    if (window.top && window.top.location) {
-                        window.top.location.assign(url);
-                        return;
-                    }
-                } catch(e) {}
-                window.location.assign(url);
-            }
-
             // 1. 3D Perspective Mouse Tilt Physics
             const tiltCardWrapper = document.getElementById('tiltCardWrapper');
             document.addEventListener('mousemove', (e) => {
