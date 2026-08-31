@@ -169,6 +169,16 @@ is_auth = st.session_state.get("authenticated", False)
 profile = st.session_state.get("profile", {})
 auth_error = st.session_state.get("auth_error", None)
 
+@st.cache_resource(show_spinner=False)
+def get_ml_pipeline():
+    try:
+        model = joblib.load("models/random_forest_model.pkl")
+        encoder = joblib.load("models/label_encoder.pkl")
+        explainer = shap.TreeExplainer(model)
+        return model, encoder, explainer, True
+    except Exception as e:
+        return None, None, None, False
+
 # =========================================================================
 # 1. AUTHENTICATED STATE: THE ORIGINAL PREDICTION & EXPLAINABILITY SYSTEM
 # =========================================================================
@@ -216,20 +226,8 @@ if is_auth:
         </div>
     """, unsafe_allow_html=True)
 
-    # Load trained model and label encoder
-    model = None
-    encoder = None
-    explainer = None
-    model_loaded = False
-
-    try:
-        model = joblib.load("models/random_forest_model.pkl")
-        encoder = joblib.load("models/label_encoder.pkl")
-        explainer = shap.TreeExplainer(model)
-        model_loaded = True
-    except Exception as e:
-        model_loaded = False
-        st.warning(f"Note on model loading: {e}")
+    # Instant cached ML pipeline retrieval
+    model, encoder, explainer, model_loaded = get_ml_pipeline()
 
     # Two column layout: Input Controls & Prediction Analytics
     c_left, c_right = st.columns([1, 1], gap="large")
@@ -294,13 +292,13 @@ if is_auth:
             fig, ax = plt.subplots(figsize=(6, 3))
             fig.patch.set_facecolor('#05070E')
             ax.set_facecolor('#090D1A')
-            ax.bar(grades, probabilities[0], color='#818CF8', edgecolor='rgba(255,255,255,0.2)')
+            ax.bar(grades, probabilities[0], color='#818CF8', edgecolor='#CBD5E1', alpha=0.9)
             ax.tick_params(colors='#CBD5E1')
             ax.set_xlabel("Grades", color='#94A3B8')
             ax.set_ylabel("Probability", color='#94A3B8')
             ax.set_title("Prediction Probability Distribution", color='#FFFFFF')
             for spine in ax.spines.values():
-                spine.set_color('rgba(255,255,255,0.1)')
+                spine.set_color('#334155')
             st.pyplot(fig)
 
             # SHAP Explainability Section
@@ -312,7 +310,7 @@ if is_auth:
             shap.summary_plot(shap_values, student_data, plot_type="bar", show=False)
             shap_ax.tick_params(colors='#CBD5E1')
             for spine in shap_ax.spines.values():
-                spine.set_color('rgba(255,255,255,0.1)')
+                spine.set_color('#334155')
             st.pyplot(shap_fig)
 
             # Feature Importance Section
@@ -322,12 +320,12 @@ if is_auth:
             fig2, ax2 = plt.subplots(figsize=(6, 3))
             fig2.patch.set_facecolor('#05070E')
             ax2.set_facecolor('#090D1A')
-            ax2.bar(features, importance, color='#38BDF8', edgecolor='rgba(255,255,255,0.2)')
+            ax2.bar(features, importance, color='#38BDF8', edgecolor='#CBD5E1', alpha=0.9)
             ax2.tick_params(colors='#CBD5E1')
             ax2.set_ylabel("Importance", color='#94A3B8')
             ax2.set_title("Model Feature Importance", color='#FFFFFF')
             for spine in ax2.spines.values():
-                spine.set_color('rgba(255,255,255,0.1)')
+                spine.set_color('#334155')
             st.pyplot(fig2)
         elif predict_btn and not model_loaded:
             st.error("Model assets could not be loaded. Please ensure model files are present in the models directory.")
