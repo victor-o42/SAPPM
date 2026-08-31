@@ -1,12 +1,11 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
-- Pre-auth: 3D Perspective Tilt Card with 360° laser beam & Spring underline inputs with real validation (Password matching, length, Supabase Auth)
+- Pre-auth: 3D Perspective Tilt Card with 360° laser beam & Spring underline inputs with real native top-level form submission (Zero Iframe Trapping!)
 - Post-auth: The Full Original Student Academic Performance Prediction System (app_3.py architecture with Sliders, Model Inference, Prediction Confidence, Probabilities Distribution Chart, SHAP Attribution, and Feature Importance)
 """
 
 import os
 import sys
-import urllib.parse
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import streamlit as st
@@ -101,9 +100,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Process incoming Supabase Auth requests from the form
+# Process incoming Supabase Auth requests from top-level form submission
 auth_action = st.query_params.get("action")
-auth_error = st.session_state.get("auth_error", None)
 
 if auth_action == "signin":
     email = st.query_params.get("email", "").strip()
@@ -149,7 +147,6 @@ elif auth_action == "signup":
             department=dept
         )
         if res.get("success"):
-            # Auto sign-in or set profile
             sign_in_res = sign_in_staff(email, password)
             st.session_state["authenticated"] = True
             st.session_state["profile"] = sign_in_res.get("profile", {
@@ -168,6 +165,7 @@ elif auth_action == "signup":
 
 is_auth = st.session_state.get("authenticated", False)
 profile = st.session_state.get("profile", {})
+auth_error = st.session_state.get("auth_error", None)
 
 # =========================================================================
 # 1. AUTHENTICATED STATE: THE ORIGINAL PREDICTION & EXPLAINABILITY SYSTEM
@@ -345,7 +343,7 @@ if is_auth:
             """, unsafe_allow_html=True)
 
 # =========================================================================
-# 2. UNAUTHENTICATED STATE: 3D PERSPECTIVE TILT AUTH CARD WITH REAL VALIDATION
+# 2. UNAUTHENTICATED STATE: 3D PERSPECTIVE TILT AUTH CARD WITH TARGET="_TOP"
 # =========================================================================
 else:
     # Native Streamlit Back Link
@@ -751,16 +749,17 @@ else:
                         <div class="toggle-btn" id="tabSignUp" onclick="switchTab('signup')">Create Account</div>
                     </div>
 
-                    <!-- SIGN IN FORM -->
-                    <form id="signInForm" class="auth-form-animated" onsubmit="handleRealAuth(event, 'signin')">
+                    <!-- SIGN IN FORM: Native target="_top" submission -->
+                    <form id="signInForm" class="auth-form-animated" action="/Staff_Portal" method="GET" target="_top" onsubmit="return handleSignInSubmit()">
+                        <input type="hidden" name="action" value="signin" />
                         <div class="input-underline-group" id="grp_login_email">
                             <div class="floating-letters-wrapper" id="lbl_login_email"></div>
-                            <input type="email" class="underline-field" id="login_email" autocomplete="off" required />
+                            <input type="email" name="email" class="underline-field" id="login_email" autocomplete="off" required />
                         </div>
 
                         <div class="input-underline-group" id="grp_login_password">
                             <div class="floating-letters-wrapper" id="lbl_login_password"></div>
-                            <input type="password" class="underline-field" id="login_password" autocomplete="off" required />
+                            <input type="password" name="password" class="underline-field" id="login_password" autocomplete="off" required />
                             <div class="password-toggle-btn" onclick="togglePasswordEye('login_password', this)">
                                 <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
@@ -791,38 +790,39 @@ else:
                         </button>
                     </form>
 
-                    <!-- SIGN UP FORM -->
-                    <form id="signUpForm" class="auth-form-animated" style="display: none;" onsubmit="handleRealAuth(event, 'signup')">
+                    <!-- SIGN UP FORM: Native target="_top" submission -->
+                    <form id="signUpForm" class="auth-form-animated" style="display: none;" action="/Staff_Portal" method="GET" target="_top" onsubmit="return handleSignUpSubmit()">
+                        <input type="hidden" name="action" value="signup" />
                         <div class="input-group-grid">
                             <div class="input-underline-group" id="grp_signup_fname">
                                 <div class="floating-letters-wrapper" id="lbl_signup_fname"></div>
-                                <input type="text" class="underline-field" id="signup_fname" autocomplete="off" required />
+                                <input type="text" name="fname" class="underline-field" id="signup_fname" autocomplete="off" required />
                             </div>
                             <div class="input-underline-group" id="grp_signup_lname">
                                 <div class="floating-letters-wrapper" id="lbl_signup_lname"></div>
-                                <input type="text" class="underline-field" id="signup_lname" autocomplete="off" required />
+                                <input type="text" name="lname" class="underline-field" id="signup_lname" autocomplete="off" required />
                             </div>
                         </div>
 
                         <div class="input-underline-group" id="grp_signup_staffid">
                             <div class="floating-letters-wrapper" id="lbl_signup_staffid"></div>
-                            <input type="text" class="underline-field" id="signup_staffid" autocomplete="off" required />
+                            <input type="text" name="staffid" class="underline-field" id="signup_staffid" autocomplete="off" required />
                         </div>
 
                         <div class="input-underline-group" id="grp_signup_dept">
                             <div class="floating-letters-wrapper" id="lbl_signup_dept"></div>
-                            <input type="text" class="underline-field" id="signup_dept" autocomplete="off" required />
+                            <input type="text" name="dept" class="underline-field" id="signup_dept" autocomplete="off" required />
                         </div>
 
                         <div class="input-underline-group" id="grp_signup_email">
                             <div class="floating-letters-wrapper" id="lbl_signup_email"></div>
-                            <input type="email" class="underline-field" id="signup_email" autocomplete="off" required />
+                            <input type="email" name="email" class="underline-field" id="signup_email" autocomplete="off" required />
                         </div>
 
                         <div class="input-group-grid">
                             <div class="input-underline-group" id="grp_signup_pass">
                                 <div class="floating-letters-wrapper" id="lbl_signup_pass"></div>
-                                <input type="password" class="underline-field" id="signup_pass" autocomplete="off" required />
+                                <input type="password" name="password" class="underline-field" id="signup_pass" autocomplete="off" required />
                                 <div class="password-toggle-btn" onclick="togglePasswordEye('signup_pass', this)">
                                     <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
@@ -832,7 +832,7 @@ else:
                             </div>
                             <div class="input-underline-group" id="grp_signup_cpass">
                                 <div class="floating-letters-wrapper" id="lbl_signup_cpass"></div>
-                                <input type="password" class="underline-field" id="signup_cpass" autocomplete="off" required />
+                                <input type="password" name="c_password" class="underline-field" id="signup_cpass" autocomplete="off" required />
                                 <div class="password-toggle-btn" onclick="togglePasswordEye('signup_cpass', this)">
                                     <svg class="eye-svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
@@ -1039,70 +1039,52 @@ else:
             attachOriginRipple('btnSignInOrigin');
             attachOriginRipple('btnSignUpOrigin');
 
-            // 6. REAL FORM VALIDATION & AUTHENTICATION SUBMISSION
-            function handleRealAuth(event, action) {{
-                event.preventDefault();
+            // 6. REAL FORM VALIDATION (Returns boolean to native HTML form submission)
+            function handleSignInSubmit() {{
                 hideError();
+                const email = document.getElementById('login_email').value.trim();
+                const pass = document.getElementById('login_password').value;
 
-                if (action === 'signin') {{
-                    const email = document.getElementById('login_email').value.trim();
-                    const pass = document.getElementById('login_password').value;
-
-                    if (!email || !pass) {{
-                        showError('Please enter both your email address and password.');
-                        return;
-                    }}
-
-                    const btn = document.getElementById('btnSignInOrigin');
-                    const label = btn.querySelector('.button-label');
-                    label.innerHTML = '<span>Verifying credentials...</span>';
-
-                    const targetUrl = `/Staff_Portal?action=signin&email=${{encodeURIComponent(email)}}&password=${{encodeURIComponent(pass)}}`;
-                    try {{
-                        if (window.parent && window.parent.location) {{
-                            window.parent.location.assign(targetUrl);
-                            return;
-                        }}
-                    }} catch(e) {{}}
-                    window.location.assign(targetUrl);
-
-                }} else if (action === 'signup') {{
-                    const fname = document.getElementById('signup_fname').value.trim();
-                    const lname = document.getElementById('signup_lname').value.trim();
-                    const staffid = document.getElementById('signup_staffid').value.trim();
-                    const dept = document.getElementById('signup_dept').value.trim();
-                    const email = document.getElementById('signup_email').value.trim();
-                    const pass = document.getElementById('signup_pass').value;
-                    const cpass = document.getElementById('signup_cpass').value;
-
-                    if (!fname || !lname || !staffid || !dept || !email || !pass || !cpass) {{
-                        showError('All fields are required for staff registration.');
-                        return;
-                    }}
-
-                    if (pass !== cpass) {{
-                        showError('Passwords do not match! Please check and re-enter.');
-                        return;
-                    }}
-
-                    if (pass.length < 6) {{
-                        showError('Password must be at least 6 characters long.');
-                        return;
-                    }}
-
-                    const btn = document.getElementById('btnSignUpOrigin');
-                    const label = btn.querySelector('.button-label');
-                    label.innerHTML = '<span>Registering credentials...</span>';
-
-                    const targetUrl = `/Staff_Portal?action=signup&email=${{encodeURIComponent(email)}}&password=${{encodeURIComponent(pass)}}&c_password=${{encodeURIComponent(cpass)}}&fname=${{encodeURIComponent(fname)}}&lname=${{encodeURIComponent(lname)}}&staffid=${{encodeURIComponent(staffid)}}&dept=${{encodeURIComponent(dept)}}`;
-                    try {{
-                        if (window.parent && window.parent.location) {{
-                            window.parent.location.assign(targetUrl);
-                            return;
-                        }}
-                    }} catch(e) {{}}
-                    window.location.assign(targetUrl);
+                if (!email || !pass) {{
+                    showError('Please enter both your email address and password.');
+                    return false;
                 }}
+
+                const btn = document.getElementById('btnSignInOrigin');
+                const label = btn.querySelector('.button-label');
+                label.innerHTML = '<span>Verifying credentials...</span>';
+                return true;
+            }}
+
+            function handleSignUpSubmit() {{
+                hideError();
+                const fname = document.getElementById('signup_fname').value.trim();
+                const lname = document.getElementById('signup_lname').value.trim();
+                const staffid = document.getElementById('signup_staffid').value.trim();
+                const dept = document.getElementById('signup_dept').value.trim();
+                const email = document.getElementById('signup_email').value.trim();
+                const pass = document.getElementById('signup_pass').value;
+                const cpass = document.getElementById('signup_cpass').value;
+
+                if (!fname || !lname || !staffid || !dept || !email || !pass || !cpass) {{
+                    showError('All fields are required for staff registration.');
+                    return false;
+                }}
+
+                if (pass !== cpass) {{
+                    showError('Passwords do not match! Please check and re-enter.');
+                    return false;
+                }}
+
+                if (pass.length < 6) {{
+                    showError('Password must be at least 6 characters long.');
+                    return false;
+                }}
+
+                const btn = document.getElementById('btnSignUpOrigin');
+                const label = btn.querySelector('.button-label');
+                label.innerHTML = '<span>Registering credentials...</span>';
+                return true;
             }}
         </script>
     </body>
