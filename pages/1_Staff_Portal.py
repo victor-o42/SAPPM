@@ -259,17 +259,17 @@ if is_auth:
                 body {{
                     background: transparent;
                     color: #FFFFFF;
-                    padding: 4px 6px;
+                    padding: 6px 8px;
                 }}
                 .slider-group-wrap {{
                     position: relative;
-                    margin-bottom: 22px;
+                    margin-bottom: 24px;
                 }}
                 .slider-label-row {{
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 6px;
+                    margin-bottom: 8px;
                 }}
                 .slider-title {{
                     font-size: 0.85rem;
@@ -298,7 +298,7 @@ if is_auth:
                 .slider-05-container {{
                     position: relative;
                     width: 100%;
-                    padding-top: 28px;
+                    padding-top: 36px;
                 }}
                 .slider-05-track {{
                     position: relative;
@@ -318,7 +318,7 @@ if is_auth:
                 .slider-05-track.is-active {{
                     height: 84px;
                     padding-bottom: 16px;
-                    border-color: rgba(255, 255, 255, 0.35);
+                    border-color: rgba(255, 255, 255, 0.4);
                 }}
                 .bars-wrapper {{
                     display: flex;
@@ -331,35 +331,36 @@ if is_auth:
                     height: 10px;
                     border-radius: 9999px;
                     background: rgba(255, 255, 255, 0.15);
-                    transition: background 0.3s ease, height 0.08s ease-out;
+                    transition: background 0.25s ease;
                     will-change: height;
                 }}
                 .equalizer-bar.is-filled {{
                     background: #FFFFFF;
                     z-index: 10;
                 }}
+                /* Tooltip exactly as in 21st.dev */
                 .floating-tooltip {{
                     position: absolute;
-                    top: -6px;
-                    transform: translateX(-50%) scale(0.8);
+                    top: 0px;
+                    transform: translate(-50%, 10px) scale(0.8);
                     opacity: 0;
                     pointer-events: none;
                     background: #1E293B;
                     color: #FFFFFF;
                     font-family: 'JetBrains Mono', monospace;
-                    font-size: 1.05rem;
-                    font-weight: 700;
-                    padding: 4px 14px;
-                    border-radius: 12px;
-                    border: 1px solid rgba(255, 255, 255, 0.15);
-                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
-                    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    font-size: 1.15rem;
+                    font-weight: 800;
+                    padding: 5px 16px;
+                    border-radius: 14px;
+                    border: 1px solid rgba(255, 255, 255, 0.18);
+                    box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.7);
+                    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
                     z-index: 30;
                     white-space: nowrap;
                 }}
                 .slider-05-container.is-active .floating-tooltip {{
                     opacity: 1;
-                    transform: translateX(-50%) translateY(-18px) scale(1);
+                    transform: translate(-50%, -24px) scale(1);
                 }}
                 .predict-action-btn {{
                     width: 100%;
@@ -377,7 +378,7 @@ if is_auth:
                     align-items: center;
                     justify-content: center;
                     gap: 10px;
-                    margin-top: 16px;
+                    margin-top: 18px;
                 }}
                 .predict-action-btn:hover {{
                     transform: translateY(-2px);
@@ -496,70 +497,23 @@ if is_auth:
                     const badge = document.getElementById('badge_' + key);
 
                     barsWrapper.innerHTML = '';
-                    const barElements = [];
+                    const barItems = [];
 
                     for (let i = 0; i < NUM_BARS; i++) {{
                         const bar = document.createElement('div');
                         bar.className = 'equalizer-bar';
                         barsWrapper.appendChild(bar);
-                        barElements.push(bar);
+                        barItems.push({{
+                            el: bar,
+                            currentHeight: 10,
+                            targetHeight: 10
+                        }});
                     }}
 
                     let isDragging = false;
                     let isHovering = false;
-                    let mouseX = 0;
-
-                    function updateBars(currentMouseX, active) {{
-                        const trackRect = track.getBoundingClientRect();
-                        const width = trackRect.width || 400;
-                        const innerWidth = width - PADDING * 2;
-                        const progress = (config.value - config.min) / (config.max - config.min);
-
-                        const normalHeight = 10;
-                        const hoverBaseHeight = 50;
-                        const dipHeight = 20;
-                        const maxDistance = 140;
-
-                        barElements.forEach((bar, idx) => {{
-                            const barProgress = idx / (NUM_BARS - 1);
-                            const isFilled = barProgress <= progress;
-
-                            if (isFilled) {{
-                                bar.classList.add('is-filled');
-                            }} else {{
-                                bar.classList.remove('is-filled');
-                            }}
-
-                            if (!active) {{
-                                bar.style.height = normalHeight + 'px';
-                            }} else {{
-                                const barX = PADDING + barProgress * innerWidth;
-                                const dist = Math.abs(currentMouseX - barX);
-                                let targetHeight = hoverBaseHeight;
-
-                                if (dist < maxDistance) {{
-                                    const relDist = dist / maxDistance;
-                                    const dip = (Math.cos(relDist * Math.PI) + 1) / 2;
-                                    targetHeight = hoverBaseHeight - dip * (hoverBaseHeight - dipHeight);
-                                }}
-
-                                if (isFilled) {{
-                                    const activeRange = barProgress / Math.max(progress, 0.01);
-                                    const activeArc = Math.sin(activeRange * Math.PI) * 6;
-                                    targetHeight += activeArc;
-                                }}
-
-                                bar.style.height = Math.max(10, Math.round(targetHeight)) + 'px';
-                            }}
-                        }});
-
-                        // Tooltip placement matching NumberFlow / React component
-                        if (active) {{
-                            const clampedX = Math.max(PADDING, Math.min(width - PADDING, currentMouseX));
-                            tooltip.style.left = clampedX + 'px';
-                            tooltip.textContent = config.value + config.suffix;
-                        }}
-                    }}
+                    let targetMouseX = 0;
+                    let smoothMouseX = 0;
 
                     function calculateValueFromX(x) {{
                         const rect = track.getBoundingClientRect();
@@ -576,20 +530,84 @@ if is_auth:
                     function handlePointerUpdate(e, shouldChangeVal) {{
                         const rect = track.getBoundingClientRect();
                         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                        mouseX = Math.max(0, Math.min(rect.width, clientX - rect.left));
+                        targetMouseX = Math.max(0, Math.min(rect.width, clientX - rect.left));
 
                         if (shouldChangeVal || isDragging) {{
-                            const newVal = calculateValueFromX(mouseX);
+                            const newVal = calculateValueFromX(targetMouseX);
                             config.value = newVal;
                             badge.textContent = newVal + config.suffix;
                         }}
-                        updateBars(mouseX, true);
                     }}
 
-                    track.addEventListener('mouseenter', () => {{
+                    // Continuous 60fps Spring Physics Engine
+                    function renderFrame() {{
+                        const active = isHovering || isDragging;
+                        const rect = track.getBoundingClientRect();
+                        const width = rect.width || 400;
+                        const innerWidth = width - PADDING * 2;
+                        const progress = (config.value - config.min) / (config.max - config.min);
+
+                        // Spring interpolation for smoothMouseX (matches motion spring damping:20 stiffness:300)
+                        smoothMouseX += (targetMouseX - smoothMouseX) * 0.22;
+
+                        const normalHeight = 10;
+                        const hoverBaseHeight = 50;
+                        const dipHeight = 20;
+                        const maxDistance = 140;
+
+                        barItems.forEach((item, idx) => {{
+                            const barProgress = idx / (NUM_BARS - 1);
+                            const isFilled = barProgress <= progress;
+
+                            if (isFilled) {{
+                                item.el.classList.add('is-filled');
+                            }} else {{
+                                item.el.classList.remove('is-filled');
+                            }}
+
+                            if (!active) {{
+                                item.targetHeight = normalHeight;
+                            }} else {{
+                                const barX = PADDING + barProgress * innerWidth;
+                                const dist = Math.abs(smoothMouseX - barX);
+                                let tHeight = hoverBaseHeight;
+
+                                if (dist < maxDistance) {{
+                                    const relDist = dist / maxDistance;
+                                    const dip = (Math.cos(relDist * Math.PI) + 1) / 2;
+                                    tHeight = hoverBaseHeight - dip * (hoverBaseHeight - dipHeight);
+                                }}
+
+                                if (isFilled) {{
+                                    const activeRange = barProgress / Math.max(progress, 0.01);
+                                    const activeArc = Math.sin(activeRange * Math.PI) * 6;
+                                    tHeight += activeArc;
+                                }}
+
+                                item.targetHeight = Math.max(10, tHeight);
+                            }}
+
+                            // Smooth Spring height transition for each bar
+                            item.currentHeight += (item.targetHeight - item.currentHeight) * 0.28;
+                            item.el.style.height = item.currentHeight.toFixed(1) + 'px';
+                        }});
+
+                        // Tooltip following spring cursor
+                        if (active) {{
+                            const clampedX = Math.max(PADDING, Math.min(width - PADDING, smoothMouseX));
+                            tooltip.style.left = clampedX.toFixed(1) + 'px';
+                            tooltip.textContent = config.value + config.suffix;
+                        }}
+
+                        requestAnimationFrame(renderFrame);
+                    }}
+
+                    track.addEventListener('mouseenter', (e) => {{
                         isHovering = true;
                         container.classList.add('is-active');
                         track.classList.add('is-active');
+                        handlePointerUpdate(e, false);
+                        smoothMouseX = targetMouseX;
                     }});
 
                     track.addEventListener('mouseleave', () => {{
@@ -597,7 +615,6 @@ if is_auth:
                         if (!isDragging) {{
                             container.classList.remove('is-active');
                             track.classList.remove('is-active');
-                            updateBars(0, false);
                         }}
                     }});
 
@@ -618,17 +635,17 @@ if is_auth:
                             if (!isHovering) {{
                                 container.classList.remove('is-active');
                                 track.classList.remove('is-active');
-                                updateBars(0, false);
                             }}
                         }}
                     }});
 
-                    // Touch events
+                    // Touch support
                     track.addEventListener('touchstart', (e) => {{
                         isDragging = true;
                         container.classList.add('is-active');
                         track.classList.add('is-active');
                         handlePointerUpdate(e, true);
+                        smoothMouseX = targetMouseX;
                     }});
 
                     track.addEventListener('touchmove', (e) => {{
@@ -639,11 +656,10 @@ if is_auth:
                         isDragging = false;
                         container.classList.remove('is-active');
                         track.classList.remove('is-active');
-                        updateBars(0, false);
                     }});
 
-                    // Initial draw
-                    updateBars(0, false);
+                    // Start continuous animation loop
+                    requestAnimationFrame(renderFrame);
                 }}
 
                 createSlider05('study', sliderConfigs.study);
