@@ -219,6 +219,11 @@ if is_auth:
     """, unsafe_allow_html=True)
 
     # Load trained model and label encoder
+    model = None
+    encoder = None
+    explainer = None
+    model_loaded = False
+
     try:
         model = joblib.load("models/random_forest_model.pkl")
         encoder = joblib.load("models/label_encoder.pkl")
@@ -268,7 +273,7 @@ if is_auth:
         predict_btn = st.button("Predict Grade", type="primary", use_container_width=True)
 
     with c_right:
-        if predict_btn and model_loaded:
+        if predict_btn and model_loaded and model is not None and encoder is not None and explainer is not None:
             student_data = pd.DataFrame([{
                 "weekly_self_study_hours": study_hours,
                 "attendance_percentage": attendance,
@@ -326,6 +331,8 @@ if is_auth:
             for spine in ax2.spines.values():
                 spine.set_color('rgba(255,255,255,0.1)')
             st.pyplot(fig2)
+        elif predict_btn and not model_loaded:
+            st.error("Model assets could not be loaded. Please ensure model files are present in the models directory.")
         elif not predict_btn:
             st.markdown("""
                 <div style="background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 4rem 2rem; text-align: center; margin-top: 1.5rem;">
