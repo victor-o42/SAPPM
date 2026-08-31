@@ -1,8 +1,6 @@
 """
 Staff Portal & Authentication Page for S.A.P.P.M
 Engineered to 21st.dev Premium Standards:
-- Zero iframe nesting with Frame Buster security
-- Zero stacked scrollbars (global scrollbar suppression)
 - Ultra-premium 21st.dev Double-Bezel Glass Back Button with kinetic sliding chevron arrow
 - 3D Perspective Tilt Card with continuous 360° circulating laser border beam
 - Staggered Spring Letter-Wave Underline Inputs (Zinc/Off-white)
@@ -25,43 +23,47 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Global Scrollbar Killer & Full Viewport Lock
+# Global Scrollbar & Layout Styling
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
 
-    /* Kill all scrollbars globally */
+    /* Clean Scrollbar Styling */
     ::-webkit-scrollbar {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
+        width: 6px;
+        height: 6px;
     }
-    * {
-        scrollbar-width: none !important;
-        -ms-overflow-style: none !important;
+    ::-webkit-scrollbar-track {
+        background: #05070E;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
     }
 
     [data-testid="stSidebar"] { display: none !important; }
     header[data-testid="stHeader"] { display: none !important; }
     #MainMenu, footer { visibility: hidden !important; }
 
-    html, body, [class*="css"], .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
+    html, body, [class*="css"], .stApp {
         background-color: #05070E !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #FFFFFF !important;
-        overflow: hidden !important;
-        height: 100vh !important;
-        width: 100% !important;
+        overflow-x: hidden !important;
+    }
+
+    .main .block-container {
+        max-width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
     }
 
-    iframe, [data-testid="stCustomComponentV1"] {
+    iframe {
         width: 100% !important;
         border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow: hidden !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -123,28 +125,20 @@ else:
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
 
-            /* Suppress all scrollbars */
-            ::-webkit-scrollbar {
-                display: none !important;
-                width: 0 !important;
-                height: 0 !important;
-            }
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
                 font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
                 user-select: none;
-                scrollbar-width: none !important;
-                -ms-overflow-style: none !important;
             }
 
-            html, body {
+            body {
                 background-color: #05070E;
                 color: #FFFFFF;
                 width: 100%;
-                height: 100vh;
-                overflow: hidden;
+                min-height: 100vh;
+                overflow-x: hidden;
                 position: relative;
                 display: flex;
                 flex-direction: column;
@@ -673,13 +667,6 @@ else:
         </div>
 
         <script>
-            // FRAME BUSTER: Prevent infinite iframe nesting permanently!
-            if (window.self !== window.top) {
-                try {
-                    window.top.location.href = window.location.href;
-                } catch(e) {}
-            }
-
             // 1. 3D Perspective Mouse Tilt Physics
             const tiltCardWrapper = document.getElementById('tiltCardWrapper');
             document.addEventListener('mousemove', (e) => {
