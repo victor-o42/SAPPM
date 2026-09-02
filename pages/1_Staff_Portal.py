@@ -164,7 +164,62 @@ st.markdown("""
     }
 
     div[data-testid="stTextInput"] input::placeholder {
-        color: transparent !important;
+        color: rgba(148, 163, 184, 0.45) !important;
+        font-size: 0.9rem !important;
+        font-weight: 400 !important;
+        opacity: 1 !important;
+    }
+
+    /* 21st.dev Animated Tab Icons & Micro-interactions */
+    div[data-baseweb="tab-list"] {
+        gap: 8px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    button[data-baseweb="tab"] {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 10px 22px !important;
+        border-radius: 12px 12px 0 0 !important;
+        background: transparent !important;
+        color: #94A3B8 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 0.92rem !important;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    button[data-baseweb="tab"]:hover {
+        color: #FFFFFF !important;
+        background: rgba(255, 255, 255, 0.04) !important;
+    }
+
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        border-bottom: 2px solid #818CF8 !important;
+    }
+
+    .tab-icon-svg {
+        width: 17px;
+        height: 17px;
+        stroke: #94A3B8;
+        display: inline-block;
+        vertical-align: middle;
+        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), stroke 0.25s ease, filter 0.25s ease;
+    }
+
+    button[data-baseweb="tab"]:hover .tab-icon-svg {
+        stroke: #FFFFFF;
+        transform: scale(1.22) rotate(-8deg);
+        filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.7));
+    }
+
+    button[data-baseweb="tab"][aria-selected="true"] .tab-icon-svg {
+        stroke: #818CF8;
+        transform: scale(1.12);
+        filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.85));
     }
     </style>
 """, unsafe_allow_html=True)
@@ -288,7 +343,7 @@ if is_auth:
             <div style="padding: 1rem 0 0.5rem 0;">
                 <h1 style="font-size: 2.2rem; font-weight: 900; margin: 0; color: #FFFFFF;">Student Academic Performance Prediction System</h1>
                 <p style="color: #94A3B8; font-size: 1rem; margin-top: 0.4rem;">
-                    Staff Advisor: <strong style="color: #FFFFFF;">{profile.get('full_name', 'Faculty Staff Member')}</strong> 
+                    Logged in as: <strong style="color: #FFFFFF;">{profile.get('full_name', 'Faculty Staff Member')}</strong> 
                     &nbsp;|&nbsp; Dept: <strong style="color: #818CF8;">{profile.get('department', 'Academic Affairs')}</strong>
                     &nbsp;|&nbsp; Staff ID: <strong style="color: #34D399;">{profile.get('staff_id', 'STF-001')}</strong>
                 </p>
@@ -303,8 +358,8 @@ if is_auth:
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # Clean Navigation Tabs: Performance Predictor & Prediction History
-    tab_predict, tab_history = st.tabs(["🔮 Performance Predictor", "📜 Prediction History"])
+    # Clean Navigation Tabs: Performance Predictor & Prediction History (Zero Emojis)
+    tab_predict, tab_history = st.tabs(["Performance Predictor", "Prediction History"])
 
     with tab_predict:
         st.markdown("""
@@ -333,9 +388,43 @@ if is_auth:
         with col_reg:
             reg_no = st.text_input("Registration Number", placeholder="e.g. 2024/SC/0142", key="stu_regno")
 
-        # Bertix UI 21st.dev Staggered Spring Letter Wave Physics
+        # 21st.dev Reactive Animated Tab Icons & Staggered Spring Letter Wave Physics
         components.html("""
         <script>
+            // 1. Inject 21st.dev Animated SVG Icons into Navigation Tabs
+            function attachTabAnimatedIcons() {
+                try {
+                    const doc = window.parent.document;
+                    if (!doc) return;
+                    const tabs = doc.querySelectorAll('button[data-baseweb="tab"]');
+                    if (tabs.length >= 2) {
+                        // Tab 1: Performance Predictor (Sparkles / AI Activity)
+                        const tab1 = tabs[0];
+                        if (!tab1.dataset.iconInjected) {
+                            tab1.dataset.iconInjected = 'true';
+                            const svg1 = document.createElement('span');
+                            svg1.innerHTML = `<svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>`;
+                            svg1.style.display = 'inline-flex';
+                            svg1.style.alignItems = 'center';
+                            svg1.style.marginRight = '8px';
+                            tab1.insertBefore(svg1, tab1.firstChild);
+                        }
+                        // Tab 2: Prediction History (Clock / Database Audit)
+                        const tab2 = tabs[1];
+                        if (!tab2.dataset.iconInjected) {
+                            tab2.dataset.iconInjected = 'true';
+                            const svg2 = document.createElement('span');
+                            svg2.innerHTML = `<svg class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+                            svg2.style.display = 'inline-flex';
+                            svg2.style.alignItems = 'center';
+                            svg2.style.marginRight = '8px';
+                            tab2.insertBefore(svg2, tab2.firstChild);
+                        }
+                    }
+                } catch(e) {}
+            }
+
+            // 2. Bertix UI Staggered Spring Letter Wave Physics with Visible Placeholders
             function attachSpringLetterWave() {
                 try {
                     const doc = window.parent.document;
@@ -348,23 +437,22 @@ if is_auth:
                         if (!labelEl || !inputEl) return;
                         
                         const text = labelEl.textContent.trim();
-                        if (!text || text.includes('🔍')) return;
+                        if (!text || text.toLowerCase().includes('search')) return;
                         
                         wrapper.dataset.springWaveApplied = 'true';
                         wrapper.style.position = 'relative';
-                        wrapper.style.paddingTop = '16px';
+                        wrapper.style.paddingTop = '2px';
                         
                         labelEl.innerHTML = '';
-                        labelEl.style.position = 'absolute';
-                        labelEl.style.top = '18px';
-                        labelEl.style.left = '0';
-                        labelEl.style.pointerEvents = 'none';
+                        labelEl.style.position = 'relative';
                         labelEl.style.display = 'flex';
                         labelEl.style.color = '#94A3B8';
-                        labelEl.style.fontSize = '0.92rem';
-                        labelEl.style.fontWeight = '500';
-                        labelEl.style.letterSpacing = '0.01em';
-                        labelEl.style.transformOrigin = 'left bottom';
+                        labelEl.style.fontSize = '0.78rem';
+                        labelEl.style.fontWeight = '700';
+                        labelEl.style.letterSpacing = '0.06em';
+                        labelEl.style.textTransform = 'uppercase';
+                        labelEl.style.marginBottom = '6px';
+                        labelEl.style.pointerEvents = 'none';
                         
                         text.split('').forEach((char, idx) => {
                             const span = document.createElement('span');
@@ -382,13 +470,13 @@ if is_auth:
                             const spans = labelEl.querySelectorAll('.letter-wave-char');
                             spans.forEach(s => {
                                 if (isActive) {
-                                    s.style.transform = 'translateY(-24px) scale(0.82)';
+                                    s.style.transform = 'translateY(-3px) scale(1.06)';
                                     s.style.color = '#FFFFFF';
-                                    s.style.fontWeight = '700';
+                                    s.style.fontWeight = '800';
                                 } else {
                                     s.style.transform = 'translateY(0px) scale(1)';
                                     s.style.color = '#94A3B8';
-                                    s.style.fontWeight = '500';
+                                    s.style.fontWeight = '700';
                                 }
                             });
                         };
@@ -400,7 +488,11 @@ if is_auth:
                     });
                 } catch(e) {}
             }
-            setInterval(attachSpringLetterWave, 180);
+
+            setInterval(() => {
+                attachTabAnimatedIcons();
+                attachSpringLetterWave();
+            }, 180);
         </script>
         """, height=0)
 
@@ -446,7 +538,7 @@ if is_auth:
 
             if predict_btn:
                 if not first_name.strip() or not last_name.strip() or not reg_no.strip():
-                    st.warning("⚠️ Please fill in the student's **First Name**, **Last Name**, and **Registration Number** before generating a prediction.")
+                    st.warning("Please fill in the student's **First Name**, **Last Name**, and **Registration Number** before generating a prediction.", icon=":material/warning:")
                 else:
                     student_full_name = f"{first_name.strip()} {last_name.strip()}"
                     clean_reg_no = reg_no.strip().upper()
@@ -482,8 +574,8 @@ if is_auth:
                         )
 
                         # Render Results
-                        st.success(f"🎯 Predicted Grade for **{student_full_name}** ({clean_reg_no}): **Grade {predicted_grade}**")
-                        st.info(f"✨ Prediction Confidence: **{confidence:.2f}%** &nbsp;|&nbsp; 💾 *Saved to Prediction History*")
+                        st.success(f"Predicted Grade for **{student_full_name}** ({clean_reg_no}): **Grade {predicted_grade}**", icon=":material/verified:")
+                        st.info(f"Prediction Confidence: **{confidence:.2f}%** &nbsp;|&nbsp; Saved to Prediction History", icon=":material/insights:")
 
                         # Probability Chart
                         st.subheader("Grade Prediction Probabilities")
@@ -573,7 +665,7 @@ if is_auth:
             st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
             # Search Filter
-            search_query = st.text_input("🔍 Search History by Student Name or Reg No", placeholder="e.g. John or SC", key="history_search")
+            search_query = st.text_input("Search History by Student Name or Reg No", placeholder="e.g. John or SC", key="history_search")
 
             filtered_records = history_records
             if search_query.strip():
