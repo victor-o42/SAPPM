@@ -803,26 +803,45 @@ if is_auth:
             total_records = len(history_records)
             grades_list = [r["predicted_grade"] for r in history_records]
             grade_a_count = grades_list.count("A")
+            low_performer_count = sum(1 for g in grades_list if g in ["D", "F"])
             avg_conf = sum(r["confidence"] for r in history_records) / total_records
 
-            m_col1, m_col2, m_col3 = st.columns(3)
+            m_col1, m_col2, m_col3, m_col4 = st.columns(4)
             with m_col1:
                 st.metric("My Evaluations Recorded", total_records)
             with m_col2:
                 st.metric("Average Confidence", f"{avg_conf:.1f}%")
             with m_col3:
                 st.metric("High Performers (Grade A)", grade_a_count)
+            with m_col4:
+                st.metric("Low Performers (Grade D & F)", low_performer_count)
 
             st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
-            # Search Filter
-            search_query = st.text_input("Search History by Student Name or Reg No", placeholder="e.g. John or SC", key="history_search")
+            # Search & Tier Filter Controls
+            col_search, col_filter = st.columns([2.3, 1.2], gap="medium")
+            with col_search:
+                search_query = st.text_input("Search History by Student Name or Reg No", placeholder="e.g. John or SC", key="history_search")
+            with col_filter:
+                tier_filter = st.selectbox(
+                    "Filter by Performance Tier",
+                    options=["All Evaluations", "High Performers (Grade A)", "Low Performers / Failing (Grade D & F)"],
+                    key="history_tier_filter"
+                )
 
             filtered_records = history_records
+
+            # Apply Performance Tier Filter
+            if tier_filter == "High Performers (Grade A)":
+                filtered_records = [r for r in filtered_records if r["predicted_grade"] == "A"]
+            elif tier_filter == "Low Performers / Failing (Grade D & F)":
+                filtered_records = [r for r in filtered_records if r["predicted_grade"] in ["D", "F"]]
+
+            # Apply Search Query
             if search_query.strip():
                 q = search_query.strip().lower()
                 filtered_records = [
-                    r for r in history_records
+                    r for r in filtered_records
                     if q in r["student_name"].lower() or q in r["reg_no"].lower()
                 ]
 

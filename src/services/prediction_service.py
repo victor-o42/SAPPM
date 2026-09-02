@@ -108,7 +108,7 @@ def predict_student_grade(
             "weekly_self_study_hours": float(study_hours),
             "attendance_percentage": float(attendance),
             "class_participation": float(participation),
-            "total_score": float(total_score),
+            "total_score": float(total_score) if total_score is not None else 0.0,
             "created_by": user_id
         }
         student_res = supabase.table("student_data").insert(student_row).execute()
