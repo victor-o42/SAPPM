@@ -17,6 +17,7 @@ import joblib
 import matplotlib.pyplot as plt
 import shap
 from src.auth import sign_in_staff, sign_up_staff, sign_out_staff
+from src.db.prediction_db import save_student_prediction, get_all_prediction_history
 
 st.set_page_config(
     page_title="Staff Portal - S.A.P.P.M",
@@ -202,7 +203,7 @@ def get_ml_pipeline():
         return None, None, None, False
 
 # =========================================================================
-# 1. AUTHENTICATED STATE: THE ORIGINAL PREDICTION & EXPLAINABILITY SYSTEM
+# 1. AUTHENTICATED STATE: STUDENT PREDICTOR & HISTORY MANAGEMENT
 # =========================================================================
 if is_auth:
     # Top navigation bar with active session badge & logout
@@ -210,7 +211,7 @@ if is_auth:
         <div style="max-width: 1200px; margin: 0 auto; padding: 24px 32px 10px 32px; display: flex; justify-content: space-between; align-items: center;">
             <a href="/" target="_top" style="font-size: 1.35rem; font-weight: 900; color: #FFFFFF; text-decoration: none;">SAPPM</a>
             <div style="display: flex; gap: 32px;">
-                <span style="color: #FFFFFF; font-size: 0.92rem; font-weight: 700;">Predictor Dashboard</span>
+                <span style="color: #FFFFFF; font-size: 0.92rem; font-weight: 700;">Predictor & Records Portal</span>
             </div>
             <div>
                 <span style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 9999px; color: #34D399; font-size: 0.8rem; font-weight: 700;">
@@ -224,10 +225,10 @@ if is_auth:
     col_hdr, col_out = st.columns([4, 1])
     with col_hdr:
         st.markdown(f"""
-            <div style="padding: 1rem 0; margin-bottom: 1rem;">
+            <div style="padding: 1rem 0 0.5rem 0;">
                 <h1 style="font-size: 2.2rem; font-weight: 900; margin: 0; color: #FFFFFF;">Student Academic Performance Prediction System</h1>
                 <p style="color: #94A3B8; font-size: 1rem; margin-top: 0.4rem;">
-                    Logged in as: <strong style="color: #FFFFFF;">{profile.get('full_name', 'Faculty Staff Member')}</strong> 
+                    Staff Advisor: <strong style="color: #FFFFFF;">{profile.get('full_name', 'Faculty Staff Member')}</strong> 
                     &nbsp;|&nbsp; Dept: <strong style="color: #818CF8;">{profile.get('department', 'Academic Affairs')}</strong>
                     &nbsp;|&nbsp; Staff ID: <strong style="color: #34D399;">{profile.get('staff_id', 'STF-001')}</strong>
                 </p>
@@ -242,129 +243,233 @@ if is_auth:
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("""
-        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 16px 20px; margin-bottom: 24px;">
-            <p style="margin: 0; color: #CBD5E1; font-size: 0.95rem;">
-                This system predicts a student's academic grade using Machine Learning. It also explains why the prediction was made using Explainable AI (SHAP).
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
+    # Clean Navigation Tabs: Performance Predictor & Prediction History
+    tab_predict, tab_history = st.tabs(["🔮 Performance Predictor", "📜 Prediction History"])
 
-    # Instant cached ML pipeline retrieval
-    model, encoder, explainer, model_loaded = get_ml_pipeline()
+    with tab_predict:
+        st.markdown("""
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 14px 20px; margin-bottom: 20px;">
+                <p style="margin: 0; color: #CBD5E1; font-size: 0.95rem;">
+                    Enter the student's identification details and academic indicators below to generate an ML-backed grade forecast and SHAP explanation.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
 
-    # Two column layout: Input Controls & Prediction Analytics
-    c_left, c_right = st.columns([1, 1], gap="large")
+        # 1. Student Identification Input Row
+        st.markdown("<h4 style='font-size: 1.05rem; font-weight: 700; color: #E2E8F0; margin-bottom: 0.8rem;'>1. Student Identification</h4>", unsafe_allow_html=True)
+        col_fn, col_ln, col_reg = st.columns([1, 1, 1])
+        with col_fn:
+            first_name = st.text_input("First Name", placeholder="e.g. David", key="stu_fname")
+        with col_ln:
+            last_name = st.text_input("Last Name", placeholder="e.g. Adeleke", key="stu_lname")
+        with col_reg:
+            reg_no = st.text_input("Registration Number", placeholder="e.g. 2024/CSC/0142", key="stu_regno")
 
-    with c_left:
-        st.markdown("<h3 style='font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin-bottom: 1.2rem;'>Enter Student Information</h3>", unsafe_allow_html=True)
-        
-        study_hours = st.slider(
-            "Weekly Self Study Hours",
-            min_value=0.0,
-            max_value=40.0,
-            value=10.0,
-            step=0.5
-        )
+        st.markdown("<hr style='border: none; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 1.5rem 0;'>", unsafe_allow_html=True)
 
-        attendance = st.slider(
-            "Attendance Percentage",
-            min_value=0.0,
-            max_value=100.0,
-            value=75.0,
-            step=1.0
-        )
+        # 2. Academic Sliders & Output Layout
+        c_left, c_right = st.columns([1, 1.15], gap="large")
 
-        participation = st.slider(
-            "Class Participation",
-            min_value=0.0,
-            max_value=10.0,
-            value=5.0,
-            step=0.5
-        )
+        with c_left:
+            st.markdown("<h4 style='font-size: 1.05rem; font-weight: 700; color: #E2E8F0; margin-bottom: 0.8rem;'>2. Academic & Behavioral Indicators</h4>", unsafe_allow_html=True)
+            
+            study_hours = st.slider(
+                "Weekly Self Study Hours",
+                min_value=0.0,
+                max_value=40.0,
+                value=10.0,
+                step=0.5,
+                help="Average hours the student spends on private self-study per week."
+            )
 
-        total_score = st.slider(
-            "Total Score",
-            min_value=0.0,
-            max_value=100.0,
-            value=50.0,
-            step=1.0
-        )
+            attendance = st.slider(
+                "Attendance Percentage",
+                min_value=0.0,
+                max_value=100.0,
+                value=75.0,
+                step=1.0,
+                help="Overall lecture and lab attendance rate."
+            )
 
-        predict_btn = st.button("Predict Grade", type="primary", use_container_width=True)
+            participation = st.slider(
+                "Class Participation",
+                min_value=0.0,
+                max_value=10.0,
+                value=5.0,
+                step=0.5,
+                help="Active engagement rating during classes and seminars (0 to 10 scale)."
+            )
 
-    with c_right:
-        if predict_btn and model_loaded and model is not None and encoder is not None and explainer is not None:
-            student_data = pd.DataFrame([{
-                "weekly_self_study_hours": study_hours,
-                "attendance_percentage": attendance,
-                "class_participation": participation,
-                "total_score": total_score
-            }])
+            predict_btn = st.button("Predict Grade", type="primary", use_container_width=True)
 
-            # Make prediction
-            prediction = model.predict(student_data)
-            probabilities = model.predict_proba(student_data)
-            predicted_grade = encoder.inverse_transform(prediction)
-            confidence = probabilities.max() * 100
+        with c_right:
+            st.markdown("<h4 style='font-size: 1.05rem; font-weight: 700; color: #E2E8F0; margin-bottom: 0.8rem;'>3. Prediction & Explainability Analysis</h4>", unsafe_allow_html=True)
 
-            st.success(f"Predicted Grade: **{predicted_grade[0]}**")
-            st.info(f"Prediction Confidence: **{confidence:.2f}%**")
+            if predict_btn:
+                if not first_name.strip() or not last_name.strip() or not reg_no.strip():
+                    st.warning("⚠️ Please fill in the student's **First Name**, **Last Name**, and **Registration Number** before generating a prediction.")
+                else:
+                    student_full_name = f"{first_name.strip()} {last_name.strip()}"
+                    clean_reg_no = reg_no.strip().upper()
 
-            # Probability Chart
-            st.subheader("Grade Prediction Probabilities")
-            grades = encoder.classes_
-            fig, ax = plt.subplots(figsize=(6, 3))
-            fig.patch.set_facecolor('#05070E')
-            ax.set_facecolor('#090D1A')
-            ax.bar(grades, probabilities[0], color='#818CF8', edgecolor='#CBD5E1', alpha=0.9)
-            ax.tick_params(colors='#CBD5E1')
-            ax.set_xlabel("Grades", color='#94A3B8')
-            ax.set_ylabel("Probability", color='#94A3B8')
-            ax.set_title("Prediction Probability Distribution", color='#FFFFFF')
-            for spine in ax.spines.values():
-                spine.set_color('#334155')
-            st.pyplot(fig)
+                    # Model inference
+                    model, encoder, explainer, model_loaded = get_ml_pipeline()
+                    if model_loaded and model is not None and encoder is not None and explainer is not None:
+                        # Estimate total score continuously from study metrics for the model pipeline
+                        derived_score = min(100.0, max(10.0, (attendance * 0.45) + (study_hours * 2.5) + (participation * 2.0)))
+                        
+                        student_data = pd.DataFrame([{
+                            "weekly_self_study_hours": float(study_hours),
+                            "attendance_percentage": float(attendance),
+                            "class_participation": float(participation),
+                            "total_score": float(derived_score)
+                        }])
 
-            # SHAP Explainability Section
-            st.subheader("SHAP Prediction Explanation")
-            shap_values = explainer.shap_values(student_data)
-            shap_fig, shap_ax = plt.subplots(figsize=(6, 3))
-            shap_fig.patch.set_facecolor('#05070E')
-            shap_ax.set_facecolor('#090D1A')
-            shap.summary_plot(shap_values, student_data, plot_type="bar", show=False)
-            shap_ax.tick_params(colors='#CBD5E1')
-            for spine in shap_ax.spines.values():
-                spine.set_color('#334155')
-            st.pyplot(shap_fig)
+                        prediction = model.predict(student_data)
+                        probabilities = model.predict_proba(student_data)
+                        predicted_grade = str(encoder.inverse_transform(prediction)[0])
+                        confidence = float(probabilities.max() * 100)
 
-            # Feature Importance Section
-            st.subheader("Feature Importance")
-            importance = model.feature_importances_
-            features = ["Study Hours", "Attendance", "Participation", "Total Score"]
-            fig2, ax2 = plt.subplots(figsize=(6, 3))
-            fig2.patch.set_facecolor('#05070E')
-            ax2.set_facecolor('#090D1A')
-            ax2.bar(features, importance, color='#38BDF8', edgecolor='#CBD5E1', alpha=0.9)
-            ax2.tick_params(colors='#CBD5E1')
-            ax2.set_ylabel("Importance", color='#94A3B8')
-            ax2.set_title("Model Feature Importance", color='#FFFFFF')
-            for spine in ax2.spines.values():
-                spine.set_color('#334155')
-            st.pyplot(fig2)
-        elif predict_btn and not model_loaded:
-            st.error("Model assets could not be loaded. Please ensure model files are present in the models directory.")
+                        # Save prediction to database
+                        save_student_prediction(
+                            student_name=student_full_name,
+                            reg_no=clean_reg_no,
+                            study_hours=study_hours,
+                            attendance=attendance,
+                            participation=participation,
+                            predicted_grade=predicted_grade,
+                            confidence=confidence,
+                            predicted_by=profile.get("full_name", "Staff Member")
+                        )
+
+                        # Render Results
+                        st.success(f"🎯 Predicted Grade for **{student_full_name}** ({clean_reg_no}): **Grade {predicted_grade}**")
+                        st.info(f"✨ Prediction Confidence: **{confidence:.2f}%** &nbsp;|&nbsp; 💾 *Saved to Prediction History*")
+
+                        # Probability Chart
+                        st.subheader("Grade Prediction Probabilities")
+                        grades = encoder.classes_
+                        fig, ax = plt.subplots(figsize=(6, 3))
+                        fig.patch.set_facecolor('#05070E')
+                        ax.set_facecolor('#090D1A')
+                        ax.bar(grades, probabilities[0], color='#818CF8', edgecolor='#CBD5E1', alpha=0.9)
+                        ax.tick_params(colors='#CBD5E1')
+                        ax.set_xlabel("Grades", color='#94A3B8')
+                        ax.set_ylabel("Probability", color='#94A3B8')
+                        ax.set_title("Prediction Probability Distribution", color='#FFFFFF')
+                        for spine in ax.spines.values():
+                            spine.set_color('#334155')
+                        st.pyplot(fig)
+
+                        # SHAP Explainability Section
+                        st.subheader("SHAP Prediction Explanation")
+                        shap_values = explainer.shap_values(student_data)
+                        shap_fig, shap_ax = plt.subplots(figsize=(6, 3))
+                        shap_fig.patch.set_facecolor('#05070E')
+                        shap_ax.set_facecolor('#090D1A')
+                        shap.summary_plot(shap_values, student_data, plot_type="bar", show=False)
+                        shap_ax.tick_params(colors='#CBD5E1')
+                        for spine in shap_ax.spines.values():
+                            spine.set_color('#334155')
+                        st.pyplot(shap_fig)
+
+                        # Feature Importance Section
+                        st.subheader("Feature Importance")
+                        importance = model.feature_importances_
+                        features = ["Study Hours", "Attendance", "Participation", "Total Score"]
+                        fig2, ax2 = plt.subplots(figsize=(6, 3))
+                        fig2.patch.set_facecolor('#05070E')
+                        ax2.set_facecolor('#090D1A')
+                        ax2.bar(features, importance, color='#38BDF8', edgecolor='#CBD5E1', alpha=0.9)
+                        ax2.tick_params(colors='#CBD5E1')
+                        ax2.set_ylabel("Importance", color='#94A3B8')
+                        ax2.set_title("Model Feature Importance", color='#FFFFFF')
+                        for spine in ax2.spines.values():
+                            spine.set_color('#334155')
+                        st.pyplot(fig2)
+                    else:
+                        st.error("ML model files could not be loaded. Please ensure models directory is populated.")
+            else:
+                st.markdown("""
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 4rem 2rem; text-align: center; margin-top: 0.5rem;">
+                        <div style="display: flex; justify-content: center; margin-bottom: 1.2rem;">
+                            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+                            </svg>
+                        </div>
+                        <h3 style="color: #FFFFFF; margin: 0 0 0.5rem 0;">Awaiting Prediction Request</h3>
+                        <p style="color: #94A3B8; font-size: 0.92rem; max-width: 380px; margin: 0 auto;">
+                            Enter the student's name, reg number, adjust the 3 sliders on the left, and click <strong>Predict Grade</strong> to evaluate performance.
+                        </p>
+                    </div>
+                """, unsafe_allow_html=True)
+
+    # History Review Tab
+    with tab_history:
+        st.markdown("""
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 14px 20px; margin-bottom: 20px;">
+                <p style="margin: 0; color: #CBD5E1; font-size: 0.95rem;">
+                    Audit log of all student academic evaluations recorded in the database.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+
+        history_records = get_all_prediction_history(limit=150)
+
+        if history_records and len(history_records) > 0:
+            # Metric Summary Cards
+            total_records = len(history_records)
+            grades_list = [r["predicted_grade"] for r in history_records]
+            grade_a_count = grades_list.count("A")
+            avg_conf = sum(r["confidence"] for r in history_records) / total_records
+
+            m_col1, m_col2, m_col3 = st.columns(3)
+            with m_col1:
+                st.metric("Total Evaluations Recorded", total_records)
+            with m_col2:
+                st.metric("Average Confidence", f"{avg_conf:.1f}%")
+            with m_col3:
+                st.metric("High Performers (Grade A)", grade_a_count)
+
+            st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
+
+            # Search Filter
+            search_query = st.text_input("🔍 Search History by Student Name or Reg No", placeholder="e.g. David or CSC", key="history_search")
+
+            filtered_records = history_records
+            if search_query.strip():
+                q = search_query.strip().lower()
+                filtered_records = [
+                    r for r in history_records
+                    if q in r["student_name"].lower() or q in r["reg_no"].lower()
+                ]
+
+            # Format Clean Table
+            table_data = []
+            for r in filtered_records:
+                table_data.append({
+                    "Student Name": r["student_name"],
+                    "Reg No": r["reg_no"],
+                    "Weekly Study Hrs": f"{r['study_hours']:.1f} hrs",
+                    "Attendance %": f"{r['attendance']:.0f}%",
+                    "Class Participation": f"{r['participation']:.1f} / 10",
+                    "Prediction Result": f"Grade {r['predicted_grade']} ({r['confidence']:.1f}%)",
+                    "Date Recorded": r["created_at"]
+                })
+
+            df_history = pd.DataFrame(table_data)
+            st.dataframe(df_history, use_container_width=True, hide_index=True)
         else:
             st.markdown("""
-                <div style="background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 4rem 2rem; text-align: center; margin-top: 1.5rem;">
+                <div style="background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 4rem 2rem; text-align: center; margin-top: 1rem;">
                     <div style="display: flex; justify-content: center; margin-bottom: 1.2rem;">
                         <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
                         </svg>
                     </div>
-                    <h3 style="color: #FFFFFF; margin: 0 0 0.5rem 0;">Awaiting Input Submission</h3>
+                    <h3 style="color: #FFFFFF; margin: 0 0 0.5rem 0;">No Prediction History Found</h3>
                     <p style="color: #94A3B8; font-size: 0.92rem; max-width: 380px; margin: 0 auto;">
-                        Adjust the student metrics on the left and click <strong>Predict Grade</strong> to generate real-time grade forecasts, confidence attributions, and SHAP decision explanations.
+                        Evaluations generated in the <strong>Performance Predictor</strong> tab will automatically be logged and displayed here.
                     </p>
                 </div>
             """, unsafe_allow_html=True)
