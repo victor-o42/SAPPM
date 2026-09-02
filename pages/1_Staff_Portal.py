@@ -679,14 +679,11 @@ if is_auth:
                     # Model inference & SHAP computation WHILE morph loader is displaying (eliminates blank screen)
                     model, encoder, explainer, model_loaded = get_ml_pipeline()
                     if model_loaded and model is not None and encoder is not None and explainer is not None:
-                        # Estimate total score continuously from study metrics for the model pipeline
-                        derived_score = min(100.0, max(10.0, (attendance * 0.45) + (study_hours * 2.5) + (participation * 2.0)))
-                        
+                        # Clean 3 academic & behavioral indicators strictly without total_score
                         student_data = pd.DataFrame([{
                             "weekly_self_study_hours": float(study_hours),
                             "attendance_percentage": float(attendance),
-                            "class_participation": float(participation),
-                            "total_score": float(derived_score)
+                            "class_participation": float(participation)
                         }])
 
                         prediction = model.predict(student_data)
@@ -735,9 +732,8 @@ if is_auth:
                             spine.set_color('#334155')
                         st.pyplot(fig)
 
-                        # SHAP Explainability Section
+                        # SHAP Explainability Section (Strictly 3 features without total_score)
                         st.subheader("SHAP Prediction Explanation")
-                        shap_values = explainer.shap_values(student_data)
                         shap_fig, shap_ax = plt.subplots(figsize=(6, 3))
                         shap_fig.patch.set_facecolor('#05070E')
                         shap_ax.set_facecolor('#090D1A')
@@ -747,10 +743,10 @@ if is_auth:
                             spine.set_color('#334155')
                         st.pyplot(shap_fig)
 
-                        # Feature Importance Section
+                        # Feature Importance Section (Strictly 3 features without total_score)
                         st.subheader("Feature Importance")
                         importance = model.feature_importances_
-                        features = ["Study Hours", "Attendance", "Participation", "Total Score"]
+                        features = ["Study Hours", "Attendance", "Participation"]
                         fig2, ax2 = plt.subplots(figsize=(6, 3))
                         fig2.patch.set_facecolor('#05070E')
                         ax2.set_facecolor('#090D1A')

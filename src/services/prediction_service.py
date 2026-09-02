@@ -34,7 +34,7 @@ def predict_student_grade(
     study_hours: float,
     attendance: float,
     participation: float,
-    total_score: float,
+    total_score: Optional[float] = 0.0,
     student_name: Optional[str] = "Student",
     matric_number: Optional[str] = None,
     user_id: Optional[str] = None
@@ -44,12 +44,11 @@ def predict_student_grade(
     """
     model, encoder, explainer = get_model_assets()
 
-    # Structure feature DataFrame matching training columns
+    # Structure feature DataFrame matching training columns (strictly without total_score)
     student_df = pd.DataFrame([{
         "weekly_self_study_hours": float(study_hours),
         "attendance_percentage": float(attendance),
-        "class_participation": float(participation),
-        "total_score": float(total_score)
+        "class_participation": float(participation)
     }])
 
     # Run model prediction and probabilities
@@ -79,18 +78,17 @@ def predict_student_grade(
     if isinstance(shap_values, list):
         # Multiclass list of arrays
         class_idx = int(pred_encoded[0])
-        feature_shap = shap_values[class_idx][0].tolist() if len(shap_values) > class_idx else [0,0,0,0]
+        feature_shap = shap_values[class_idx][0].tolist() if len(shap_values) > class_idx else [0,0,0]
     elif hasattr(shap_values, "ndim") and shap_values.ndim == 3:
         class_idx = int(pred_encoded[0])
         feature_shap = shap_values[0, :, class_idx].tolist()
     else:
-        feature_shap = shap_values[0].tolist() if len(shap_values) > 0 else [0,0,0,0]
+        feature_shap = shap_values[0].tolist() if len(shap_values) > 0 else [0,0,0]
 
     shap_breakdown = {
         "weekly_self_study_hours": feature_shap[0] if len(feature_shap) > 0 else 0,
         "attendance_percentage": feature_shap[1] if len(feature_shap) > 1 else 0,
-        "class_participation": feature_shap[2] if len(feature_shap) > 2 else 0,
-        "total_score": feature_shap[3] if len(feature_shap) > 3 else 0
+        "class_participation": feature_shap[2] if len(feature_shap) > 2 else 0
     }
 
     # Grade probability dictionary for charting

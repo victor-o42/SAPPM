@@ -11,11 +11,9 @@ from xgboost import XGBClassifier
 # Load dataset
 df = pd.read_csv("data/student_performance.csv")
 
-# Drop unnecessary column
-df = df.drop("student_id", axis=1)
-
-# Features and target
-X = df.drop("grade", axis=1)
+# Features and target (strictly without total_score)
+features = ["weekly_self_study_hours", "attendance_percentage", "class_participation"]
+X = df[features]
 y = df["grade"]
 
 # Encode labels
