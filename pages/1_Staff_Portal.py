@@ -234,6 +234,83 @@ st.markdown("""
         transform: scale(1.12);
         filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.85));
     }
+
+    /* 21st.dev Morph Loading Keyframes */
+    @keyframes morph-0 {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+        border-radius: 0%;
+      }
+      25% {
+        transform: translate(20px, -20px) scale(1.2);
+        border-radius: 50%;
+      }
+      50% {
+        transform: translate(40px, 0) scale(0.8);
+        border-radius: 25%;
+      }
+      75% {
+        transform: translate(20px, 20px) scale(1.1);
+        border-radius: 75%;
+      }
+    }
+
+    @keyframes morph-1 {
+      0%, 100% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        border-radius: 0%;
+      }
+      25% {
+        transform: translate(-20px, -20px) scale(1.3) rotate(90deg);
+        border-radius: 50%;
+      }
+      50% {
+        transform: translate(-40px, 0) scale(0.7) rotate(180deg);
+        border-radius: 25%;
+      }
+      75% {
+        transform: translate(-20px, 20px) scale(1.2) rotate(270deg);
+        border-radius: 75%;
+      }
+    }
+
+    @keyframes morph-2 {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+        border-radius: 0%;
+      }
+      25% {
+        transform: translate(-20px, 20px) scale(0.9);
+        border-radius: 100%;
+      }
+      50% {
+        transform: translate(0, 40px) scale(1.4);
+        border-radius: 0%;
+      }
+      75% {
+        transform: translate(20px, 20px) scale(0.8);
+        border-radius: 50%;
+      }
+    }
+
+    @keyframes morph-3 {
+      0%, 100% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        border-radius: 0%;
+      }
+      25% {
+        transform: translate(20px, 20px) scale(1.1) rotate(-90deg);
+        border-radius: 25%;
+      }
+      50% {
+        transform: translate(0, -40px) scale(1.3) rotate(-180deg);
+        border-radius: 100%;
+      }
+      75% {
+        transform: translate(-20px, -20px) scale(0.9) rotate(-270deg);
+        border-radius: 75%;
+      }
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -582,30 +659,24 @@ if is_auth:
                     student_full_name = f"{first_name.strip()} {last_name.strip()}"
                     clean_reg_no = reg_no.strip().upper()
 
-                    # Dynamic 21st.dev Motion "Bars" Predicting Loader
+                    # 21st.dev Unique Morph Loading Animation
                     predict_loader = st.empty()
                     predict_loader.markdown("""
-                        <div style="background: rgba(11, 15, 28, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 20px; padding: 3.5rem 2rem; text-align: center; margin-top: 0.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 16px 40px -10px rgba(0,0,0,0.7), inset 0 1px 1px 0 rgba(255,255,255,0.15);">
-                            <div style="display: flex; gap: 7px; height: 38px; margin-bottom: 18px;">
-                                <span style="width: 6px; height: 38px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: predictBarsAnim 0.9s cubic-bezier(0.42, 0, 0.58, 1) infinite; box-shadow: 0 0 14px rgba(129, 140, 248, 0.85);"></span>
-                                <span style="width: 6px; height: 38px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: predictBarsAnim 0.9s cubic-bezier(0.42, 0, 0.58, 1) 0.12s infinite; box-shadow: 0 0 14px rgba(129, 140, 248, 0.85);"></span>
-                                <span style="width: 6px; height: 38px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: predictBarsAnim 0.9s cubic-bezier(0.42, 0, 0.58, 1) 0.24s infinite; box-shadow: 0 0 14px rgba(129, 140, 248, 0.85);"></span>
-                                <span style="width: 6px; height: 38px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: predictBarsAnim 0.9s cubic-bezier(0.42, 0, 0.58, 1) 0.36s infinite; box-shadow: 0 0 14px rgba(129, 140, 248, 0.85);"></span>
+                        <div style="background: rgba(11, 15, 28, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 20px; padding: 4rem 2rem; text-align: center; margin-top: 0.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 16px 40px -10px rgba(0,0,0,0.7), inset 0 1px 1px 0 rgba(255,255,255,0.15);">
+                            <div style="position: relative; width: 96px; height: 96px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+                                <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;">
+                                    <div style="position: absolute; width: 16px; height: 16px; background: #FFFFFF; animation: morph-0 2s infinite ease-in-out; animation-delay: 0s; box-shadow: 0 0 14px rgba(255, 255, 255, 0.9);"></div>
+                                    <div style="position: absolute; width: 16px; height: 16px; background: #FFFFFF; animation: morph-1 2s infinite ease-in-out; animation-delay: 0.2s; box-shadow: 0 0 14px rgba(129, 140, 248, 0.9);"></div>
+                                    <div style="position: absolute; width: 16px; height: 16px; background: #FFFFFF; animation: morph-2 2s infinite ease-in-out; animation-delay: 0.4s; box-shadow: 0 0 14px rgba(56, 189, 248, 0.9);"></div>
+                                    <div style="position: absolute; width: 16px; height: 16px; background: #FFFFFF; animation: morph-3 2s infinite ease-in-out; animation-delay: 0.6s; box-shadow: 0 0 14px rgba(255, 255, 255, 0.9);"></div>
+                                </div>
                             </div>
-                            <div style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.01em;">Predicting...</div>
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.01em;">Predicting...</div>
                             <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 6px; font-family: 'Plus Jakarta Sans', sans-serif;">Synthesizing academic trajectory & SHAP factors...</div>
                         </div>
-                        <style>
-                            @keyframes predictBarsAnim {
-                                0%, 100% { transform: scaleY(0.24); opacity: 0.45; }
-                                50% { transform: scaleY(1.0); opacity: 1; filter: drop-shadow(0 0 12px #38BDF8); }
-                            }
-                        </style>
                     """, unsafe_allow_html=True)
-                    time.sleep(1.0)
-                    predict_loader.empty()
 
-                    # Model inference
+                    # Model inference & SHAP computation WHILE morph loader is displaying (eliminates blank screen)
                     model, encoder, explainer, model_loaded = get_ml_pipeline()
                     if model_loaded and model is not None and encoder is not None and explainer is not None:
                         # Estimate total score continuously from study metrics for the model pipeline
@@ -635,6 +706,15 @@ if is_auth:
                             predicted_by=profile.get("full_name", "Staff Member"),
                             user_id=profile.get("id")
                         )
+
+                        # Pre-compute SHAP values before clearing loader
+                        shap_values = explainer.shap_values(student_data)
+
+                        # Smooth animation display time
+                        time.sleep(1.2)
+
+                        # Clear loader and render results IMMEDIATELY with zero blank screen gap
+                        predict_loader.empty()
 
                         # Render Results
                         st.success(f"Predicted Grade for **{student_full_name}** ({clean_reg_no}): **Grade {predicted_grade}**", icon=":material/verified:")
