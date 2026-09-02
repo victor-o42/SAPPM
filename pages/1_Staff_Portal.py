@@ -123,53 +123,48 @@ st.markdown("""
         color: inherit !important;
     }
 
-    /* Auth-style Underline Input Styling for Student Inputs */
+    /* Bertix UI 21st.dev Pure Monochromatic Underline Input Styling */
     div[data-testid="stTextInput"] {
-        margin-bottom: 6px !important;
+        margin-bottom: 8px !important;
+        position: relative !important;
     }
 
     div[data-testid="stTextInput"] label {
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
-        font-size: 0.78rem !important;
-        font-weight: 700 !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+        font-size: 0.88rem !important;
+        font-weight: 500 !important;
         color: #94A3B8 !important;
-        letter-spacing: 0.06em !important;
-        text-transform: uppercase !important;
-        margin-bottom: 2px !important;
+        letter-spacing: 0.01em !important;
+        text-transform: none !important;
+        margin-bottom: 0px !important;
         transition: color 0.25s ease !important;
-    }
-
-    div[data-testid="stTextInput"]:hover label,
-    div[data-testid="stTextInput"]:focus-within label {
-        color: #FFFFFF !important;
     }
 
     div[data-testid="stTextInput"] div[data-baseweb="input"] {
         background-color: transparent !important;
         border: none !important;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.2) !important;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.22) !important;
         border-radius: 0px !important;
         box-shadow: none !important;
         transition: border-bottom-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease !important;
     }
 
     div[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within {
-        border-bottom: 2px solid #818CF8 !important;
-        box-shadow: 0 4px 15px -3px rgba(129, 140, 248, 0.4) !important;
+        border-bottom: 2px solid #FFFFFF !important;
+        box-shadow: 0 4px 15px -2px rgba(255, 255, 255, 0.35) !important;
     }
 
     div[data-testid="stTextInput"] input {
         background-color: transparent !important;
         color: #FFFFFF !important;
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
         font-size: 0.95rem !important;
-        font-weight: 600 !important;
+        font-weight: 500 !important;
         padding: 6px 0 8px 0 !important;
     }
 
     div[data-testid="stTextInput"] input::placeholder {
-        color: rgba(148, 163, 184, 0.45) !important;
-        font-weight: 400 !important;
+        color: transparent !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -338,7 +333,7 @@ if is_auth:
         with col_reg:
             reg_no = st.text_input("Registration Number", placeholder="e.g. 2024/CSC/0142", key="stu_regno")
 
-        # Staggered Spring Letter Wave Character Physics (Matches Auth Screen 1:1)
+        # Bertix UI 21st.dev Staggered Spring Letter Wave Physics
         components.html("""
         <script>
             function attachSpringLetterWave() {
@@ -357,19 +352,19 @@ if is_auth:
                         
                         wrapper.dataset.springWaveApplied = 'true';
                         wrapper.style.position = 'relative';
-                        wrapper.style.paddingTop = '14px';
+                        wrapper.style.paddingTop = '16px';
                         
                         labelEl.innerHTML = '';
                         labelEl.style.position = 'absolute';
-                        labelEl.style.top = '16px';
+                        labelEl.style.top = '18px';
                         labelEl.style.left = '0';
                         labelEl.style.pointerEvents = 'none';
                         labelEl.style.display = 'flex';
                         labelEl.style.color = '#94A3B8';
-                        labelEl.style.fontSize = '0.78rem';
-                        labelEl.style.fontWeight = '700';
-                        labelEl.style.letterSpacing = '0.06em';
-                        labelEl.style.textTransform = 'uppercase';
+                        labelEl.style.fontSize = '0.92rem';
+                        labelEl.style.fontWeight = '500';
+                        labelEl.style.letterSpacing = '0.01em';
+                        labelEl.style.transformOrigin = 'left bottom';
                         
                         text.split('').forEach((char, idx) => {
                             const span = document.createElement('span');
@@ -387,13 +382,13 @@ if is_auth:
                             const spans = labelEl.querySelectorAll('.letter-wave-char');
                             spans.forEach(s => {
                                 if (isActive) {
-                                    s.style.transform = 'translateY(-22px) scale(0.85)';
-                                    s.style.color = '#818CF8';
-                                    s.style.fontWeight = '800';
+                                    s.style.transform = 'translateY(-24px) scale(0.82)';
+                                    s.style.color = '#FFFFFF';
+                                    s.style.fontWeight = '700';
                                 } else {
                                     s.style.transform = 'translateY(0px) scale(1)';
                                     s.style.color = '#94A3B8';
-                                    s.style.fontWeight = '700';
+                                    s.style.fontWeight = '500';
                                 }
                             });
                         };
@@ -405,7 +400,7 @@ if is_auth:
                     });
                 } catch(e) {}
             }
-            setInterval(attachSpringLetterWave, 200);
+            setInterval(attachSpringLetterWave, 180);
         </script>
         """, height=0)
 
