@@ -179,7 +179,7 @@ auth_action = st.query_params.get("action")
 
 if auth_action in ["signin", "signup"]:
     # Full-screen kinetic Motion "Bars" loader during server-side verification (eliminates blank dark screen)
-    status_text = "Authenticating staff session..." if auth_action == "signin" else "Registering staff account..."
+    status_text = "Signing in..." if auth_action == "signin" else "Creating account..."
     st.markdown(f"""
         <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #05070E; z-index: 9999999; display: flex; flex-direction: column; justify-content: center; align-items: center;">
             <div style="display: flex; gap: 7px; height: 42px; margin-bottom: 20px;">
@@ -189,7 +189,6 @@ if auth_action in ["signin", "signup"]:
                 <span style="width: 7px; height: 42px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: authBarsPulsate 1s cubic-bezier(0.42, 0, 0.58, 1) 0.36s infinite; box-shadow: 0 0 16px rgba(129, 140, 248, 0.8);"></span>
             </div>
             <div style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; letter-spacing: -0.02em;">{status_text}</div>
-            <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 6px; font-family: 'Plus Jakarta Sans', sans-serif;">Verifying institutional credentials with Supabase...</div>
         </div>
         <style>
             @keyframes authBarsPulsate {{
