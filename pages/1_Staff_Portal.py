@@ -123,50 +123,62 @@ st.markdown("""
         color: inherit !important;
     }
 
-    /* Bertix UI 21st.dev Pure Monochromatic Underline Input Styling */
+    /* Complete Annihilation of Box Containers on All Inputs (Matching input.tsx 1:1) */
     div[data-testid="stTextInput"] {
-        margin-bottom: 8px !important;
+        margin-bottom: 20px !important;
         position: relative !important;
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+
+    div[data-testid="stTextInput"] [data-testid="stTextInputRootElement"],
+    div[data-testid="stTextInput"] div[data-baseweb="base-input"],
+    div[data-testid="stTextInput"] div[data-baseweb="input"],
+    div[data-testid="stTextInput"] > div {
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        border-radius: 0px !important;
+        box-shadow: none !important;
+        outline: none !important;
     }
 
     div[data-testid="stTextInput"] label {
-        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
-        font-size: 0.88rem !important;
-        font-weight: 500 !important;
-        color: #94A3B8 !important;
-        letter-spacing: 0.01em !important;
-        text-transform: none !important;
-        margin-bottom: 0px !important;
-        transition: color 0.25s ease !important;
+        display: none !important; /* Managed dynamically via Bertix UI Spring Motion */
     }
 
-    div[data-testid="stTextInput"] div[data-baseweb="input"] {
+    div[data-testid="stTextInput"] input {
+        background: transparent !important;
         background-color: transparent !important;
         border: none !important;
         border-bottom: 2px solid rgba(255, 255, 255, 0.22) !important;
         border-radius: 0px !important;
         box-shadow: none !important;
+        color: #FFFFFF !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        padding: 10px 0 8px 0 !important;
+        outline: none !important;
+        width: 100% !important;
         transition: border-bottom-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease !important;
     }
 
-    div[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within {
+    div[data-testid="stTextInput"] input:focus,
+    div[data-testid="stTextInput"]:focus-within input {
         border-bottom: 2px solid #FFFFFF !important;
-        box-shadow: 0 4px 15px -2px rgba(255, 255, 255, 0.35) !important;
-    }
-
-    div[data-testid="stTextInput"] input {
-        background-color: transparent !important;
-        color: #FFFFFF !important;
-        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
-        font-size: 0.95rem !important;
-        font-weight: 500 !important;
-        padding: 6px 0 8px 0 !important;
+        box-shadow: 0 4px 15px -2px rgba(255, 255, 255, 0.4) !important;
     }
 
     div[data-testid="stTextInput"] input::placeholder {
-        color: rgba(148, 163, 184, 0.45) !important;
-        font-size: 0.9rem !important;
+        color: rgba(148, 163, 184, 0.35) !important;
+        font-size: 0.92rem !important;
         font-weight: 400 !important;
+        opacity: 0 !important;
+        transition: opacity 0.2s ease !important;
+    }
+
+    div[data-testid="stTextInput"]:focus-within input::placeholder {
         opacity: 1 !important;
     }
 
@@ -424,67 +436,93 @@ if is_auth:
                 } catch(e) {}
             }
 
-            // 2. Bertix UI Staggered Spring Letter Wave Physics with Visible Placeholders
+            // 2. 21st.dev input.tsx Staggered Character Motion Engine (Matching input.tsx 1:1)
             function attachSpringLetterWave() {
                 try {
                     const doc = window.parent.document;
                     if (!doc) return;
                     const textInputs = doc.querySelectorAll('div[data-testid="stTextInput"]');
                     textInputs.forEach(wrapper => {
-                        if (wrapper.dataset.springWaveApplied) return;
-                        const labelEl = wrapper.querySelector('label p') || wrapper.querySelector('label');
                         const inputEl = wrapper.querySelector('input');
-                        if (!labelEl || !inputEl) return;
-                        
-                        const text = labelEl.textContent.trim();
-                        if (!text || text.toLowerCase().includes('search')) return;
-                        
-                        wrapper.dataset.springWaveApplied = 'true';
+                        if (!inputEl) return;
+
+                        // Ensure pure underline with ZERO container boxes
+                        wrapper.style.background = 'transparent';
                         wrapper.style.position = 'relative';
-                        wrapper.style.paddingTop = '2px';
+                        wrapper.style.paddingTop = '10px';
+                        wrapper.style.border = 'none';
+
+                        const rootEl = wrapper.querySelector('[data-testid="stTextInputRootElement"]') || wrapper.querySelector('div[data-baseweb="base-input"]');
+                        if (rootEl) {
+                            rootEl.style.background = 'transparent';
+                            rootEl.style.backgroundColor = 'transparent';
+                            rootEl.style.border = 'none';
+                            rootEl.style.boxShadow = 'none';
+                        }
+
+                        if (wrapper.dataset.springWaveApplied) return;
+                        const labelEl = wrapper.querySelector('label');
                         
-                        labelEl.innerHTML = '';
-                        labelEl.style.position = 'relative';
-                        labelEl.style.display = 'flex';
-                        labelEl.style.color = '#94A3B8';
-                        labelEl.style.fontSize = '0.78rem';
-                        labelEl.style.fontWeight = '700';
-                        labelEl.style.letterSpacing = '0.06em';
-                        labelEl.style.textTransform = 'uppercase';
-                        labelEl.style.marginBottom = '6px';
-                        labelEl.style.pointerEvents = 'none';
-                        
-                        text.split('').forEach((char, idx) => {
+                        let labelText = '';
+                        if (labelEl) {
+                            labelText = labelEl.textContent.trim();
+                        } else if (inputEl.getAttribute('aria-label')) {
+                            labelText = inputEl.getAttribute('aria-label').trim();
+                        }
+                        if (!labelText) return;
+
+                        wrapper.dataset.springWaveApplied = 'true';
+
+                        // Create the motion label overlay matching input.tsx
+                        const motionLabel = document.createElement('div');
+                        motionLabel.className = 'motion-floating-label';
+                        motionLabel.style.position = 'absolute';
+                        motionLabel.style.top = '16px';
+                        motionLabel.style.left = '0';
+                        motionLabel.style.pointerEvents = 'none';
+                        motionLabel.style.display = 'flex';
+                        motionLabel.style.zIndex = '3';
+
+                        labelText.split('').forEach((char, idx) => {
                             const span = document.createElement('span');
-                            span.className = 'letter-wave-char';
+                            span.className = 'letter-motion-char';
                             span.textContent = char === ' ' ? '\u00A0' : char;
                             span.style.display = 'inline-block';
+                            span.style.fontSize = '0.95rem';
+                            span.style.color = '#94A3B8';
+                            span.style.fontWeight = '500';
+                            span.style.fontFamily = "'Plus Jakarta Sans', -apple-system, sans-serif";
                             span.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease';
-                            span.style.transitionDelay = (idx * 0.03) + 's';
+                            span.style.transitionDelay = (idx * 0.05) + 's';
                             span.style.willChange = 'transform';
-                            labelEl.appendChild(span);
+                            motionLabel.appendChild(span);
                         });
-                        
-                        const update = () => {
-                            const isActive = (doc.activeElement === inputEl || inputEl.value.trim().length > 0);
-                            const spans = labelEl.querySelectorAll('.letter-wave-char');
-                            spans.forEach(s => {
-                                if (isActive) {
-                                    s.style.transform = 'translateY(-3px) scale(1.06)';
-                                    s.style.color = '#FFFFFF';
-                                    s.style.fontWeight = '800';
+
+                        wrapper.appendChild(motionLabel);
+
+                        const updateState = () => {
+                            const isFocused = (doc.activeElement === inputEl);
+                            const hasValue = (inputEl.value && inputEl.value.trim().length > 0);
+                            const showLabel = isFocused || hasValue;
+                            const chars = motionLabel.querySelectorAll('.letter-motion-char');
+                            
+                            chars.forEach(c => {
+                                if (showLabel) {
+                                    c.style.transform = 'translateY(-24px) scale(0.82)';
+                                    c.style.color = '#FFFFFF';
+                                    c.style.fontWeight = '700';
                                 } else {
-                                    s.style.transform = 'translateY(0px) scale(1)';
-                                    s.style.color = '#94A3B8';
-                                    s.style.fontWeight = '700';
+                                    c.style.transform = 'translateY(0px) scale(1)';
+                                    c.style.color = '#94A3B8';
+                                    c.style.fontWeight = '500';
                                 }
                             });
                         };
-                        
-                        inputEl.addEventListener('focus', update);
-                        inputEl.addEventListener('blur', update);
-                        inputEl.addEventListener('input', update);
-                        update();
+
+                        inputEl.addEventListener('focus', updateState);
+                        inputEl.addEventListener('blur', updateState);
+                        inputEl.addEventListener('input', updateState);
+                        updateState();
                     });
                 } catch(e) {}
             }
