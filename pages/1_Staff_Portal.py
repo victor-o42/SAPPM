@@ -327,11 +327,11 @@ if is_auth:
 
         col_fn, col_ln, col_reg = st.columns([1, 1, 1])
         with col_fn:
-            first_name = st.text_input("First Name", placeholder="e.g. David", key="stu_fname")
+            first_name = st.text_input("First Name", placeholder="e.g. John", key="stu_fname")
         with col_ln:
-            last_name = st.text_input("Last Name", placeholder="e.g. Adeleke", key="stu_lname")
+            last_name = st.text_input("Last Name", placeholder="e.g. Doe", key="stu_lname")
         with col_reg:
-            reg_no = st.text_input("Registration Number", placeholder="e.g. 2024/CSC/0142", key="stu_regno")
+            reg_no = st.text_input("Registration Number", placeholder="e.g. 2024/SC/0142", key="stu_regno")
 
         # Bertix UI 21st.dev Staggered Spring Letter Wave Physics
         components.html("""
@@ -573,7 +573,7 @@ if is_auth:
             st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
             # Search Filter
-            search_query = st.text_input("🔍 Search History by Student Name or Reg No", placeholder="e.g. David or CSC", key="history_search")
+            search_query = st.text_input("🔍 Search History by Student Name or Reg No", placeholder="e.g. John or SC", key="history_search")
 
             filtered_records = history_records
             if search_query.strip():
