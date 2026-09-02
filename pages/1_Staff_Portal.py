@@ -403,7 +403,7 @@ profile = st.session_state.get("profile", {})
 auth_error = st.session_state.get("auth_error", None)
 
 @st.cache_resource(show_spinner=False)
-def get_ml_pipeline():
+def load_trained_prediction_pipeline(model_mtime: float):
     try:
         model = joblib.load("models/random_forest_model.pkl")
         encoder = joblib.load("models/label_encoder.pkl")
@@ -411,6 +411,11 @@ def get_ml_pipeline():
         return model, encoder, explainer, True
     except Exception as e:
         return None, None, None, False
+
+def get_ml_pipeline():
+    model_path = "models/random_forest_model.pkl"
+    mtime = os.path.getmtime(model_path) if os.path.exists(model_path) else 0.0
+    return load_trained_prediction_pipeline(mtime)
 
 # =========================================================================
 # 1. AUTHENTICATED STATE: STUDENT PREDICTOR & HISTORY MANAGEMENT
