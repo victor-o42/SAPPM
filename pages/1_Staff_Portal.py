@@ -122,6 +122,55 @@ st.markdown("""
         margin: 0 !important;
         color: inherit !important;
     }
+
+    /* Auth-style Underline Input Styling for Student Inputs */
+    div[data-testid="stTextInput"] {
+        margin-bottom: 6px !important;
+    }
+
+    div[data-testid="stTextInput"] label {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.78rem !important;
+        font-weight: 700 !important;
+        color: #94A3B8 !important;
+        letter-spacing: 0.06em !important;
+        text-transform: uppercase !important;
+        margin-bottom: 2px !important;
+        transition: color 0.25s ease !important;
+    }
+
+    div[data-testid="stTextInput"]:hover label,
+    div[data-testid="stTextInput"]:focus-within label {
+        color: #FFFFFF !important;
+    }
+
+    div[data-testid="stTextInput"] div[data-baseweb="input"] {
+        background-color: transparent !important;
+        border: none !important;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 0px !important;
+        box-shadow: none !important;
+        transition: border-bottom-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease !important;
+    }
+
+    div[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within {
+        border-bottom: 2px solid #818CF8 !important;
+        box-shadow: 0 4px 15px -3px rgba(129, 140, 248, 0.4) !important;
+    }
+
+    div[data-testid="stTextInput"] input {
+        background-color: transparent !important;
+        color: #FFFFFF !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.95rem !important;
+        font-weight: 600 !important;
+        padding: 6px 0 8px 0 !important;
+    }
+
+    div[data-testid="stTextInput"] input::placeholder {
+        color: rgba(148, 163, 184, 0.45) !important;
+        font-weight: 400 !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -256,7 +305,15 @@ if is_auth:
         """, unsafe_allow_html=True)
 
         # 1. Student Identification Input Row
-        st.markdown("<h4 style='font-size: 1.05rem; font-weight: 700; color: #E2E8F0; margin-bottom: 0.8rem;'>1. Student Identification</h4>", unsafe_allow_html=True)
+        st.markdown("""
+            <div style="background: rgba(11, 15, 28, 0.65); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 18px 24px 14px 24px; margin-bottom: 24px; box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #818CF8; background: rgba(129, 140, 248, 0.12); border: 1px solid rgba(129, 140, 248, 0.3); padding: 3px 10px; border-radius: 9999px;">Step 1</span>
+                    <span style="font-size: 0.95rem; font-weight: 700; color: #FFFFFF;">Student Identification</span>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+
         col_fn, col_ln, col_reg = st.columns([1, 1, 1])
         with col_fn:
             first_name = st.text_input("First Name", placeholder="e.g. David", key="stu_fname")
@@ -265,7 +322,7 @@ if is_auth:
         with col_reg:
             reg_no = st.text_input("Registration Number", placeholder="e.g. 2024/CSC/0142", key="stu_regno")
 
-        st.markdown("<hr style='border: none; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 1.5rem 0;'>", unsafe_allow_html=True)
+        st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
 
         # 2. Academic Sliders & Output Layout
         c_left, c_right = st.columns([1, 1.15], gap="large")
