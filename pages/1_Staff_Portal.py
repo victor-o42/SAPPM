@@ -255,17 +255,12 @@ def get_ml_pipeline():
 # 1. AUTHENTICATED STATE: STUDENT PREDICTOR & HISTORY MANAGEMENT
 # =========================================================================
 if is_auth:
-    # Top navigation bar with active session badge & logout
+    # Top navigation bar & clean portal title
     st.markdown("""
         <div style="max-width: 1200px; margin: 0 auto; padding: 24px 32px 10px 32px; display: flex; justify-content: space-between; align-items: center;">
             <a href="/" target="_top" style="font-size: 1.35rem; font-weight: 900; color: #FFFFFF; text-decoration: none;">SAPPM</a>
             <div style="display: flex; gap: 32px;">
-                <span style="color: #FFFFFF; font-size: 0.92rem; font-weight: 700;">Predictor & Records Portal</span>
-            </div>
-            <div>
-                <span style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 9999px; color: #34D399; font-size: 0.8rem; font-weight: 700;">
-                    <span style="width: 7px; height: 7px; border-radius: 50%; background: #34D399; display: inline-block; box-shadow: 0 0 8px #34D399;"></span> Active Staff Session
-                </span>
+                <span style="color: #94A3B8; font-size: 0.92rem; font-weight: 700;">Predictor & Records Portal</span>
             </div>
         </div>
     """, unsafe_allow_html=True)
