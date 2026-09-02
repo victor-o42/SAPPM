@@ -177,65 +177,87 @@ st.markdown("""
 # Process incoming Supabase Auth requests from query params
 auth_action = st.query_params.get("action")
 
-if auth_action == "signin":
-    email = st.query_params.get("email", "").strip()
-    password = st.query_params.get("password", "")
-    
-    if email and password:
-        res = sign_in_staff(email, password)
-        if res.get("success"):
-            st.session_state["authenticated"] = True
-            st.session_state["profile"] = res.get("profile", {})
-            st.session_state["auth_error"] = None
+if auth_action in ["signin", "signup"]:
+    # Full-screen kinetic Motion "Bars" loader during server-side verification (eliminates blank dark screen)
+    status_text = "Authenticating staff session..." if auth_action == "signin" else "Registering staff account..."
+    st.markdown(f"""
+        <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #05070E; z-index: 9999999; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div style="display: flex; gap: 7px; height: 42px; margin-bottom: 20px;">
+                <span style="width: 7px; height: 42px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: authBarsPulsate 1s cubic-bezier(0.42, 0, 0.58, 1) infinite; box-shadow: 0 0 16px rgba(129, 140, 248, 0.8);"></span>
+                <span style="width: 7px; height: 42px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: authBarsPulsate 1s cubic-bezier(0.42, 0, 0.58, 1) 0.12s infinite; box-shadow: 0 0 16px rgba(129, 140, 248, 0.8);"></span>
+                <span style="width: 7px; height: 42px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: authBarsPulsate 1s cubic-bezier(0.42, 0, 0.58, 1) 0.24s infinite; box-shadow: 0 0 16px rgba(129, 140, 248, 0.8);"></span>
+                <span style="width: 7px; height: 42px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: authBarsPulsate 1s cubic-bezier(0.42, 0, 0.58, 1) 0.36s infinite; box-shadow: 0 0 16px rgba(129, 140, 248, 0.8);"></span>
+            </div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; letter-spacing: -0.02em;">{status_text}</div>
+            <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 6px; font-family: 'Plus Jakarta Sans', sans-serif;">Verifying institutional credentials with Supabase...</div>
+        </div>
+        <style>
+            @keyframes authBarsPulsate {{
+                0%, 100% {{ transform: scaleY(0.24); opacity: 0.45; }}
+                50% {{ transform: scaleY(1.0); opacity: 1; filter: drop-shadow(0 0 12px #38BDF8); }}
+            }}
+        </style>
+    """, unsafe_allow_html=True)
+
+    if auth_action == "signin":
+        email = st.query_params.get("email", "").strip()
+        password = st.query_params.get("password", "")
+        
+        if email and password:
+            res = sign_in_staff(email, password)
+            if res.get("success"):
+                st.session_state["authenticated"] = True
+                st.session_state["profile"] = res.get("profile", {})
+                st.session_state["auth_error"] = None
+                st.query_params.clear()
+                st.rerun()
+            else:
+                st.session_state["auth_error"] = res.get("message", "Invalid email or password.")
+                st.query_params.clear()
+                st.rerun()
+
+    elif auth_action == "signup":
+        email = st.query_params.get("email", "").strip()
+        password = st.query_params.get("password", "")
+        c_password = st.query_params.get("c_password", "")
+        fname = st.query_params.get("fname", "").strip()
+        lname = st.query_params.get("lname", "").strip()
+        staffid = st.query_params.get("staffid", "").strip()
+        dept = st.query_params.get("dept", "Academic Affairs").strip()
+
+        if password != c_password:
+            st.session_state["auth_error"] = "Registration failed: Passwords do not match!"
+            st.query_params.clear()
+            st.rerun()
+        elif len(password) < 6:
+            st.session_state["auth_error"] = "Registration failed: Password must be at least 6 characters long."
             st.query_params.clear()
             st.rerun()
         else:
-            st.session_state["auth_error"] = res.get("message", "Invalid email or password.")
-            st.query_params.clear()
-            st.rerun()
-
-elif auth_action == "signup":
-    email = st.query_params.get("email", "").strip()
-    password = st.query_params.get("password", "")
-    c_password = st.query_params.get("c_password", "")
-    fname = st.query_params.get("fname", "").strip()
-    lname = st.query_params.get("lname", "").strip()
-    staffid = st.query_params.get("staffid", "").strip()
-    dept = st.query_params.get("dept", "Academic Affairs").strip()
-
-    if password != c_password:
-        st.session_state["auth_error"] = "Registration failed: Passwords do not match!"
-        st.query_params.clear()
-        st.rerun()
-    elif len(password) < 6:
-        st.session_state["auth_error"] = "Registration failed: Password must be at least 6 characters long."
-        st.query_params.clear()
-        st.rerun()
-    else:
-        res = sign_up_staff(
-            email=email,
-            password=password,
-            first_name=fname,
-            last_name=lname,
-            staff_id=staffid,
-            department=dept
-        )
-        if res.get("success"):
-            sign_in_res = sign_in_staff(email, password)
-            st.session_state["authenticated"] = True
-            st.session_state["profile"] = sign_in_res.get("profile", {
-                "full_name": f"{fname} {lname}".strip(),
-                "role": "Academic Staff",
-                "department": dept,
-                "staff_id": staffid
-            })
-            st.session_state["auth_error"] = None
-            st.query_params.clear()
-            st.rerun()
-        else:
-            st.session_state["auth_error"] = res.get("message", "Registration failed. Please check inputs.")
-            st.query_params.clear()
-            st.rerun()
+            res = sign_up_staff(
+                email=email,
+                password=password,
+                first_name=fname,
+                last_name=lname,
+                staff_id=staffid,
+                department=dept
+            )
+            if res.get("success"):
+                sign_in_res = sign_in_staff(email, password)
+                st.session_state["authenticated"] = True
+                st.session_state["profile"] = sign_in_res.get("profile", {
+                    "full_name": f"{fname} {lname}".strip(),
+                    "role": "Academic Staff",
+                    "department": dept,
+                    "staff_id": staffid
+                })
+                st.session_state["auth_error"] = None
+                st.query_params.clear()
+                st.rerun()
+            else:
+                st.session_state["auth_error"] = res.get("message", "Registration failed. Please check inputs.")
+                st.query_params.clear()
+                st.rerun()
 
 is_auth = st.session_state.get("authenticated", False)
 profile = st.session_state.get("profile", {})
@@ -316,6 +338,77 @@ if is_auth:
             last_name = st.text_input("Last Name", placeholder="e.g. Adeleke", key="stu_lname")
         with col_reg:
             reg_no = st.text_input("Registration Number", placeholder="e.g. 2024/CSC/0142", key="stu_regno")
+
+        # Staggered Spring Letter Wave Character Physics (Matches Auth Screen 1:1)
+        components.html("""
+        <script>
+            function attachSpringLetterWave() {
+                try {
+                    const doc = window.parent.document;
+                    if (!doc) return;
+                    const textInputs = doc.querySelectorAll('div[data-testid="stTextInput"]');
+                    textInputs.forEach(wrapper => {
+                        if (wrapper.dataset.springWaveApplied) return;
+                        const labelEl = wrapper.querySelector('label p') || wrapper.querySelector('label');
+                        const inputEl = wrapper.querySelector('input');
+                        if (!labelEl || !inputEl) return;
+                        
+                        const text = labelEl.textContent.trim();
+                        if (!text || text.includes('🔍')) return;
+                        
+                        wrapper.dataset.springWaveApplied = 'true';
+                        wrapper.style.position = 'relative';
+                        wrapper.style.paddingTop = '14px';
+                        
+                        labelEl.innerHTML = '';
+                        labelEl.style.position = 'absolute';
+                        labelEl.style.top = '16px';
+                        labelEl.style.left = '0';
+                        labelEl.style.pointerEvents = 'none';
+                        labelEl.style.display = 'flex';
+                        labelEl.style.color = '#94A3B8';
+                        labelEl.style.fontSize = '0.78rem';
+                        labelEl.style.fontWeight = '700';
+                        labelEl.style.letterSpacing = '0.06em';
+                        labelEl.style.textTransform = 'uppercase';
+                        
+                        text.split('').forEach((char, idx) => {
+                            const span = document.createElement('span');
+                            span.className = 'letter-wave-char';
+                            span.textContent = char === ' ' ? '\u00A0' : char;
+                            span.style.display = 'inline-block';
+                            span.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease';
+                            span.style.transitionDelay = (idx * 0.03) + 's';
+                            span.style.willChange = 'transform';
+                            labelEl.appendChild(span);
+                        });
+                        
+                        const update = () => {
+                            const isActive = (doc.activeElement === inputEl || inputEl.value.trim().length > 0);
+                            const spans = labelEl.querySelectorAll('.letter-wave-char');
+                            spans.forEach(s => {
+                                if (isActive) {
+                                    s.style.transform = 'translateY(-22px) scale(0.85)';
+                                    s.style.color = '#818CF8';
+                                    s.style.fontWeight = '800';
+                                } else {
+                                    s.style.transform = 'translateY(0px) scale(1)';
+                                    s.style.color = '#94A3B8';
+                                    s.style.fontWeight = '700';
+                                }
+                            });
+                        };
+                        
+                        inputEl.addEventListener('focus', update);
+                        inputEl.addEventListener('blur', update);
+                        inputEl.addEventListener('input', update);
+                        update();
+                    });
+                } catch(e) {}
+            }
+            setInterval(attachSpringLetterWave, 200);
+        </script>
+        """, height=0)
 
         st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
 
