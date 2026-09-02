@@ -274,16 +274,60 @@ if is_auth:
                 .slider-title {{
                     font-size: 0.85rem;
                     font-weight: 700;
-                    color: #E2E8F0;
+                    color: #CBD5E1;
                     letter-spacing: 0.02em;
                     display: inline-flex;
                     align-items: center;
-                    gap: 8px;
+                    gap: 10px;
+                    cursor: pointer;
+                    transition: color 0.25s ease;
                 }}
-                .slider-title svg {{
-                    width: 16px;
-                    height: 16px;
+                .slider-group-wrap:hover .slider-title {{
+                    color: #FFFFFF;
+                }}
+                .icon-box {{
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 8px;
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+                }}
+                .slider-group-wrap:hover .icon-box {{
+                    background: rgba(255, 255, 255, 0.12);
+                    border-color: rgba(255, 255, 255, 0.3);
+                    transform: scale(1.14);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+                }}
+                .icon-box svg {{
+                    width: 15px;
+                    height: 15px;
                     stroke: #94A3B8;
+                    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+                }}
+                /* Interactive reactive hover animations per icon */
+                .slider-group-wrap:hover .icon-study svg {{
+                    stroke: #818CF8;
+                    transform: rotate(-12deg) scale(1.18);
+                    filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.8));
+                }}
+                .slider-group-wrap:hover .icon-att svg {{
+                    stroke: #38BDF8;
+                    transform: rotate(12deg) scale(1.18);
+                    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.8));
+                }}
+                .slider-group-wrap:hover .icon-part svg {{
+                    stroke: #34D399;
+                    transform: translateY(-3px) scale(1.2);
+                    filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.8));
+                }}
+                .slider-group-wrap:hover .icon-score svg {{
+                    stroke: #FBBF24;
+                    transform: rotate(18deg) scale(1.18);
+                    filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.8));
                 }}
                 .slider-badge-val {{
                     font-family: 'JetBrains Mono', monospace;
@@ -294,6 +338,12 @@ if is_auth:
                     border: 1px solid rgba(255, 255, 255, 0.12);
                     padding: 2px 10px;
                     border-radius: 8px;
+                    transition: all 0.25s ease;
+                }}
+                .slider-group-wrap:hover .slider-badge-val {{
+                    border-color: rgba(255, 255, 255, 0.3);
+                    background: rgba(255, 255, 255, 0.1);
+                    box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
                 }}
                 .slider-05-container {{
                     position: relative;
@@ -380,9 +430,15 @@ if is_auth:
                     gap: 10px;
                     margin-top: 18px;
                 }}
+                .predict-action-btn svg {{
+                    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                }}
                 .predict-action-btn:hover {{
                     transform: translateY(-2px);
                     box-shadow: 0 16px 35px rgba(255, 255, 255, 0.4), 0 0 25px rgba(56, 189, 248, 0.4);
+                }}
+                .predict-action-btn:hover svg {{
+                    transform: translateX(5px) scale(1.15);
                 }}
                 .predict-action-btn:active {{
                     transform: translateY(0);
@@ -394,10 +450,12 @@ if is_auth:
             <div class="slider-group-wrap">
                 <div class="slider-label-row">
                     <span class="slider-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                        </svg>
+                        <span class="icon-box icon-study">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                            </svg>
+                        </span>
                         Weekly Self Study Hours
                     </span>
                     <span class="slider-badge-val" id="badge_study">{init_study} hrs</span>
@@ -414,10 +472,12 @@ if is_auth:
             <div class="slider-group-wrap">
                 <div class="slider-label-row">
                     <span class="slider-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                        </svg>
+                        <span class="icon-box icon-att">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                            </svg>
+                        </span>
                         Attendance Percentage
                     </span>
                     <span class="slider-badge-val" id="badge_att">{init_att}%</span>
@@ -434,9 +494,11 @@ if is_auth:
             <div class="slider-group-wrap">
                 <div class="slider-label-row">
                     <span class="slider-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        </svg>
+                        <span class="icon-box icon-part">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </span>
                         Class Participation
                     </span>
                     <span class="slider-badge-val" id="badge_part">{init_part} / 10</span>
@@ -453,10 +515,12 @@ if is_auth:
             <div class="slider-group-wrap">
                 <div class="slider-label-row">
                     <span class="slider-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="8" r="7"></circle>
-                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-                        </svg>
+                        <span class="icon-box icon-score">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="7"></circle>
+                                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                            </svg>
+                        </span>
                         Total Score
                     </span>
                     <span class="slider-badge-val" id="badge_score">{init_score} / 100</span>
