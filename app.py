@@ -582,9 +582,9 @@ roobinium_full_viewport_html = """
 
     <!-- 2. Centered Typography -->
     <section class="hero-section">
-        <h1 class="hero-title">Elevate Academic Intelligence</h1>
+        <h1 class="hero-title">Predict Student Academic Performance</h1>
         <p class="hero-subtitle">
-            Forecast student performance trajectories with 99.81% precision, powered by Extreme Gradient Boosting & SHAP.
+            An AI system that predicts student grades from study hours, attendance, and class participation — helping educators spot at-risk students and intervene early.
         </p>
         
         <!-- BUTTON 1: ORIGIN BUTTON (Evaluate Performance) -->
