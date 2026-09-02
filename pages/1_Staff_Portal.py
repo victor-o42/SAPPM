@@ -53,6 +53,28 @@ st.markdown("""
         background-color: #05070E !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #FFFFFF !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Eliminate Streamlit default block-container max-width and padding — same as landing page */
+    .main .block-container {
+        max-width: 100% !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin: 0 !important;
+    }
+
+    [data-testid="stAppViewBlockContainer"] {
+        overflow-x: hidden !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    iframe {
+        width: 100% !important;
+        border: none !important;
     }
 
     /* Double-Bezel Native Back to Home Pill */
