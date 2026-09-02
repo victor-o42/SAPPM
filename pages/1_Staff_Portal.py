@@ -8,6 +8,7 @@ Staff Portal & Authentication Page for S.A.P.P.M
 
 import os
 import sys
+import time
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import streamlit as st
@@ -581,6 +582,29 @@ if is_auth:
                     student_full_name = f"{first_name.strip()} {last_name.strip()}"
                     clean_reg_no = reg_no.strip().upper()
 
+                    # Dynamic 21st.dev Motion "Bars" Predicting Loader
+                    predict_loader = st.empty()
+                    predict_loader.markdown("""
+                        <div style="background: rgba(11, 15, 28, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 20px; padding: 3.5rem 2rem; text-align: center; margin-top: 0.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 16px 40px -10px rgba(0,0,0,0.7), inset 0 1px 1px 0 rgba(255,255,255,0.15);">
+                            <div style="display: flex; gap: 7px; height: 38px; margin-bottom: 18px;">
+                                <span style="width: 6px; height: 38px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: predictBarsAnim 0.9s cubic-bezier(0.42, 0, 0.58, 1) infinite; box-shadow: 0 0 14px rgba(129, 140, 248, 0.85);"></span>
+                                <span style="width: 6px; height: 38px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: predictBarsAnim 0.9s cubic-bezier(0.42, 0, 0.58, 1) 0.12s infinite; box-shadow: 0 0 14px rgba(129, 140, 248, 0.85);"></span>
+                                <span style="width: 6px; height: 38px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: predictBarsAnim 0.9s cubic-bezier(0.42, 0, 0.58, 1) 0.24s infinite; box-shadow: 0 0 14px rgba(129, 140, 248, 0.85);"></span>
+                                <span style="width: 6px; height: 38px; border-radius: 9999px; background: linear-gradient(180deg, #FFFFFF 0%, #818CF8 55%, #38BDF8 100%); animation: predictBarsAnim 0.9s cubic-bezier(0.42, 0, 0.58, 1) 0.36s infinite; box-shadow: 0 0 14px rgba(129, 140, 248, 0.85);"></span>
+                            </div>
+                            <div style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.01em;">Predicting...</div>
+                            <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 6px; font-family: 'Plus Jakarta Sans', sans-serif;">Synthesizing academic trajectory & SHAP factors...</div>
+                        </div>
+                        <style>
+                            @keyframes predictBarsAnim {
+                                0%, 100% { transform: scaleY(0.24); opacity: 0.45; }
+                                50% { transform: scaleY(1.0); opacity: 1; filter: drop-shadow(0 0 12px #38BDF8); }
+                            }
+                        </style>
+                    """, unsafe_allow_html=True)
+                    time.sleep(1.0)
+                    predict_loader.empty()
+
                     # Model inference
                     model, encoder, explainer, model_loaded = get_ml_pipeline()
                     if model_loaded and model is not None and encoder is not None and explainer is not None:
@@ -608,7 +632,8 @@ if is_auth:
                             participation=participation,
                             predicted_grade=predicted_grade,
                             confidence=confidence,
-                            predicted_by=profile.get("full_name", "Staff Member")
+                            predicted_by=profile.get("full_name", "Staff Member"),
+                            user_id=profile.get("id")
                         )
 
                         # Render Results
@@ -673,17 +698,24 @@ if is_auth:
                     </div>
                 """, unsafe_allow_html=True)
 
-    # History Review Tab
+    # History Review Tab (Strictly Personal to Current Staff)
     with tab_history:
-        st.markdown("""
+        current_staff_name = profile.get("full_name", "Staff Member")
+        current_user_id = profile.get("id")
+
+        st.markdown(f"""
             <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 14px 20px; margin-bottom: 20px;">
                 <p style="margin: 0; color: #CBD5E1; font-size: 0.95rem;">
-                    Audit log of all student academic evaluations recorded in the database.
+                    Personal evaluation records logged by <strong style="color: #FFFFFF;">{current_staff_name}</strong>.
                 </p>
             </div>
         """, unsafe_allow_html=True)
 
-        history_records = get_all_prediction_history(limit=150)
+        history_records = get_all_prediction_history(
+            limit=150, 
+            user_id=current_user_id, 
+            predicted_by=current_staff_name
+        )
 
         if history_records and len(history_records) > 0:
             # Metric Summary Cards
@@ -694,7 +726,7 @@ if is_auth:
 
             m_col1, m_col2, m_col3 = st.columns(3)
             with m_col1:
-                st.metric("Total Evaluations Recorded", total_records)
+                st.metric("My Evaluations Recorded", total_records)
             with m_col2:
                 st.metric("Average Confidence", f"{avg_conf:.1f}%")
             with m_col3:
@@ -736,9 +768,9 @@ if is_auth:
                             <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
                         </svg>
                     </div>
-                    <h3 style="color: #FFFFFF; margin: 0 0 0.5rem 0;">No Prediction History Found</h3>
+                    <h3 style="color: #FFFFFF; margin: 0 0 0.5rem 0;">No Personal Evaluations Yet</h3>
                     <p style="color: #94A3B8; font-size: 0.92rem; max-width: 380px; margin: 0 auto;">
-                        Evaluations generated in the <strong>Performance Predictor</strong> tab will automatically be logged and displayed here.
+                        You have not generated any student predictions yet. Use the Predictor tab to evaluate student performance and your personal records will appear here.
                     </p>
                 </div>
             """, unsafe_allow_html=True)

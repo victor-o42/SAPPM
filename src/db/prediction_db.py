@@ -113,22 +113,25 @@ def save_student_prediction(
     return True
 
 
-def get_all_prediction_history(limit: int = 100) -> List[Dict[str, Any]]:
+def get_all_prediction_history(
+    limit: int = 100, 
+    user_id: Optional[str] = None, 
+    predicted_by: Optional[str] = None
+) -> List[Dict[str, Any]]:
     """
-    Retrieves prediction history records from Supabase or local SQLite cache.
+    Retrieves personal prediction history records for the logged-in staff member.
     """
     records = []
 
     # Try fetching from Supabase first
     try:
         supabase = get_supabase()
-        res = (
-            supabase.table("prediction_output")
-            .select("*, student_data(*)")
-            .order("prediction_date", desc=True)
-            .limit(limit)
-            .execute()
-        )
+        query = supabase.table("prediction_output").select("*, student_data(*)")
+        
+        if user_id:
+            query = query.eq("predicted_by", user_id)
+            
+        res = query.order("prediction_date", desc=True).limit(limit).execute()
         if res.data and len(res.data) > 0:
             for item in res.data:
                 stu = item.get("student_data") or {}
@@ -152,18 +155,27 @@ def get_all_prediction_history(limit: int = 100) -> List[Dict[str, Any]]:
     except Exception as e:
         print(f"Supabase fetch fallback to SQLite: {e}")
 
-    # Fallback to local SQLite
+    # Fallback to local SQLite with personal filtering
     try:
         init_sqlite_db()
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
-            cursor.execute("""
-                SELECT student_name, reg_no, study_hours, attendance, participation, predicted_grade, confidence, created_at
-                FROM prediction_history
-                ORDER BY id DESC
-                LIMIT ?
-            """, (limit,))
+            if predicted_by:
+                cursor.execute("""
+                    SELECT student_name, reg_no, study_hours, attendance, participation, predicted_grade, confidence, created_at
+                    FROM prediction_history
+                    WHERE predicted_by = ?
+                    ORDER BY id DESC
+                    LIMIT ?
+                """, (predicted_by, limit))
+            else:
+                cursor.execute("""
+                    SELECT student_name, reg_no, study_hours, attendance, participation, predicted_grade, confidence, created_at
+                    FROM prediction_history
+                    ORDER BY id DESC
+                    LIMIT ?
+                """, (limit,))
             rows = cursor.fetchall()
             for r in rows:
                 records.append({
